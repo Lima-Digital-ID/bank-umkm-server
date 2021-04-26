@@ -14,4 +14,9 @@ class Nasabah extends Model
     {
         return $this->hasMany('App\Models\Pinjaman');
     }
+
+    public function tipe()
+    {
+        return $this->belongsTo('\App\Models\TipeNasabah');
+    }
 }

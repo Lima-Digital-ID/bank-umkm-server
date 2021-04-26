@@ -73,6 +73,13 @@
             >
           </li>
           
+          <li class="nav-item {{Request::segment(1) == 'tipe-nasabah' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('tipe-nasabah')}}">
+              <i class="fas fa-fw fa-layer-group"></i>
+              <span>Tipe Nasabah</span></a
+            >
+          </li>
+
           <li class="nav-item {{Request::segment(1) == 'nasabah' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('nasabah')}}">
               <i class="fas fa-fw fa-users"></i>
@@ -105,11 +112,21 @@
                 <a class="nav-link" href="{{url('pinjaman?t=Terima')}}">
                   <span>Pinjaman Berjalan</span>
                 </a>
+                <a class="nav-link" href="{{url('pinjaman?t=Lunas')}}">
+                  <span>Pinjaman Telah Lunas</span>
+                </a>
                 <a class="nav-link" href="{{url('pinjaman?t=Tolak')}}">
                   <span>Pinjaman Ditolak</span>
                 </a>
               </div>
             </div>
+          </li>
+
+          <li class="nav-item {{Request::segment(1) == 'pelunasan' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('pelunasan')}}">
+              <i class="fas fa-fw fa-hand-holding-usd"></i>
+              <span>Pelunasan</span></a
+            >
           </li>
 
           
@@ -142,7 +159,7 @@
             {{-- <span class="my-auto">{{ Auth::user()->name }}</span> --}}
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-6000 small">{{\Auth::user()->name}}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-6000 small">{{auth()->user()->name}}</span>
                 <i class="fa fa-user"></i>
               </a>
               <!-- Dropdown - User Information -->

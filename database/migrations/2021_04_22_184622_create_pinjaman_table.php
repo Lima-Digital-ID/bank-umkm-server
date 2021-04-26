@@ -22,7 +22,9 @@ class CreatePinjamanTable extends Migration
             $table->integer('nominal');
             $table->enum('status', ['Pending', 'Terima', 'Tolak', 'Lunas']);
             $table->date('tanggal_diterima')->nullable();
+            $table->date('tanggal_batas_pelunasan')->nullable();
             $table->date('tanggal_lunas')->nullable();
+            $table->integer('terbayar')->default(0);
             $table->timestamps();
 
             $table->foreign('id_nasabah')->references('id')->on('nasabah');

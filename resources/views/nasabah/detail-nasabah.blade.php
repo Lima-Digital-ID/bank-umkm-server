@@ -96,7 +96,7 @@
                     </tr>
                   </table>
                 </div>
-                <a href="{{ url('nasabah/update-status', $nasabah->id) }}" class="btn btn-{{$nasabah->status == 'Aktif' ? 'danger' : 'success'}}">{{$nasabah->status == 'Aktif' ? 'Nonaktifkan' : 'Aktifkan'}}</a>
+                {{-- <a href="{{ url('nasabah/update-status', $nasabah->id) }}" class="btn btn-{{$nasabah->status == 'Aktif' ? 'danger' : 'success'}}" onclick="return confirm('Anda yakin?')">{{$nasabah->status == 'Aktif' ? 'Nonaktifkan' : 'Aktifkan'}}</a> --}}
               </div>
             </div>
           </div>

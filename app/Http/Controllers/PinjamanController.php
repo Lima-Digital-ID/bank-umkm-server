@@ -24,8 +24,22 @@ class PinjamanController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
         }
-                
-        return \view('pinjaman.list-pinjaman', $this->param);
+
+        if ($tipe == 'Pending') {
+            return \view('pinjaman.list-pinjaman-pending', $this->param);
+        }
+        elseif($tipe == 'Terima'){
+            return \view('pinjaman.list-pinjaman-diterima', $this->param);
+        }
+        elseif($tipe == 'Lunas'){
+            return \view('pinjaman.list-pinjaman-lunas', $this->param);
+        }
+        elseif(($tipe == 'Tolak')){
+            return \view('pinjaman.list-pinjaman-ditolak', $this->param);
+        }
+        else{
+            return redirect()->back()->withError('Tipe tidak valid.');
+        }
     }
 
     public function create()
@@ -121,13 +135,10 @@ class PinjamanController extends Controller
             $this->param['pageInfo'] = 'Manage Pinjaman / Detail';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pinjaman.index');
-            $this->param['nasabah'] = Pinjaman::find($id);
+            $this->param['pinjaman'] = Pinjaman::with('nasabah')->find($id);
 
-            return \view('pinjaman.detail-nasabah', $this->param);
+            return \view('pinjaman.detail-pinjaman', $this->param);
             
-            // echo "<pre>";
-            // print_r ($this->param['nasabah']);
-            // echo "</pre>";
             
         }
         catch(\Exception $e){
@@ -156,13 +167,19 @@ class PinjamanController extends Controller
         }
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Request $request, $id)
     {
         try{
-            $nasabah = Pinjaman::find($id);
-            $setStatus = $nasabah->status == 'Aktif' ? 'Nonaktif' : 'Aktif';
-            $nasabah->status = $setStatus;
-            $nasabah->save();
+            $pinjaman = Pinjaman::find($id);
+            $setStatus = $request->get('status');
+            if ($setStatus == 'Terima') {
+                $date = date('Y-m-d');
+                $pinjaman->tanggal_diterima = $date;
+                $pinjaman->id_user = auth()->user()->id;
+                $pinjaman->tanggal_batas_pelunasan =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
+            }
+            $pinjaman->status = $setStatus;
+            $pinjaman->save();
 
             return back()->withStatus('Data berhasil diperbarui.');
         }

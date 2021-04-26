@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Nasabah;
+use \App\Models\TipeNasabah;
 
 class NasabahController extends Controller
 {
@@ -18,10 +19,10 @@ class NasabahController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $nasabah = Nasabah::where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
+                $nasabah = Nasabah::with('tipe')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
-                $nasabah = Nasabah::paginate(10);
+                $nasabah = Nasabah::with('tipe')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -35,6 +36,7 @@ class NasabahController extends Controller
         $this->param['pageInfo'] = 'Manage Nasabah / Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('nasabah.index');
+        $this->param['tipeNasabah'] = TipeNasabah::get();
 
         return \view('nasabah.tambah-nasabah', $this->param);
     }
@@ -51,6 +53,7 @@ class NasabahController extends Controller
             'scan_ktp' => 'required',
             'foto_dengan_ktp' => 'required',
             'email' => 'required|email|unique:nasabah',
+            'id_tipe' => 'required',
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -86,6 +89,7 @@ class NasabahController extends Controller
             $newNasabah->nik = $request->get('nik');
             $newNasabah->no_hp = $request->get('no_hp');
             $newNasabah->alamat = $request->get('alamat');
+            $newNasabah->id_tipe = $request->get('id_tipe');
             // $newNasabah->profil = $newProfil;
             $newNasabah->scan_ktp = $newScanKtp;
             $newNasabah->foto_dengan_ktp = $newSelfie;
@@ -123,7 +127,7 @@ class NasabahController extends Controller
             $this->param['pageInfo'] = 'Manage Nasabah / Detail';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
-            $this->param['nasabah'] = Nasabah::find($id);
+            $this->param['nasabah'] = Nasabah::with('tipe')->find($id);
 
             return \view('nasabah.detail-nasabah', $this->param);
             
@@ -146,6 +150,7 @@ class NasabahController extends Controller
             $this->param['pageInfo'] = 'Manage Nasabah / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
+            $this->param['tipeNasabah'] = TipeNasabah::get();
             $this->param['nasabah'] = Nasabah::find($id);
 
             return \view('nasabah.edit-nasabah', $this->param);
@@ -182,34 +187,80 @@ class NasabahController extends Controller
 
         $isUnique = $nasabah->email == $request->email ? '' : '|unique:nasabah';
         $isUniqueNik = $nasabah->nik == $request->nik ? '' : '|unique:nasabah';
-        $isUniqueUsername = $nasabah->username == $request->username ? '' : '|unique:nasabah';
+        // $isUniqueUsername = $nasabah->username == $request->username ? '' : '|unique:nasabah';
         $validatedData = $request->validate([
             'nama' => 'required',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
-            'nik' => 'required|'.$isUniqueNik,
+            'nik' => 'required'.$isUniqueNik,
             'no_hp' => 'required',
             'alamat' => 'required',
             'email' => 'required|email'.$isUnique,
-            'username' => 'required'.$isUniqueUsername,
+            'id_tipe' => 'required',
+            'status' => 'required',
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
-            'unique' => ':attribute telah terdaftar.',
-            'date' => ':attribute harus berupa tanggal.',
+            'email' => 'Masukan email yang valid.',
+            'unique' => ':attribute telah terdaftar.'
         ]);
         try{
 
+            $uploadPath = 'upload/nasabah/'.$nasabah->nik;
+
+            if ($request->file('scan_ktp')) {
+                $scanKtp = $request->file('scan_ktp');
+                $newScanKtp = time().'_'.$scanKtp->getClientOriginalName(); 
+            }
+
+            if ($request->file('foto_dengan_ktp')) {
+                $selfie = $request->file('foto_dengan_ktp');
+                $newSelfie = time().'_'.$selfie->getClientOriginalName(); 
+            }
+
+            if ($request->file('npwp')) {
+                $npwp = $request->file('npwp');
+                $newNpwp = time().'_'.$npwp->getClientOriginalName(); 
+            }
+
+            if ($request->file('surat_nikah')) {
+                $suratNikah = $request->file('surat_nikah');
+                $newSuratNikah = time().'_'.$suratNikah->getClientOriginalName(); 
+            }
+
+            if ($request->file('surat_domisili_usaha')) {
+                $suratDomisiliUsaha = $request->file('surat_domisili_usaha');
+                $newSuratDomisiliUsaha = time().'_'.$suratDomisiliUsaha->getClientOriginalName();
+            }
+            
             $nasabah->nama = $request->get('nama');
             $nasabah->tanggal_lahir = $request->get('tanggal_lahir');
             $nasabah->jenis_kelamin = $request->get('jenis_kelamin');
             $nasabah->nik = $request->get('nik');
             $nasabah->no_hp = $request->get('no_hp');
             $nasabah->alamat = $request->get('alamat');
-            $nasabah->username = $request->get('username');
+            $nasabah->id_tipe = $request->get('id_tipe');
+            // $nasabah->profil = $newProfil;
+            if ($request->file('scan_ktp') || $request->file('foto_dengan_ktp') || $request->file('npwp') || $request->file('surat_nikah') || $request->file('surat_domisili_usaha') ) {
+                $nasabah->scan_ktp = $newScanKtp;
+                $nasabah->foto_dengan_ktp = $newSelfie;
+                $nasabah->npwp = $newNpwp;
+                $nasabah->surat_nikah = $newSuratNikah;
+                $nasabah->surat_domisili_usaha = $newSuratDomisiliUsaha;
+            }
+            $nasabah->username = $request->get('nik');
             $nasabah->email = $request->get('email');
-            // $nasabah->akses = $request->get('akses');
-            $nasabah->save();
+            $nasabah->status = $request->get('status');
+
+            if($nasabah->save()){
+                if ($request->file('scan_ktp') || $request->file('foto_dengan_ktp') || $request->file('npwp') || $request->file('surat_nikah') || $request->file('surat_domisili_usaha') ) {
+                    $scanKtp->move($uploadPath, $newScanKtp);
+                    $selfie->move($uploadPath, $newSelfie);
+                    $npwp->move($uploadPath, $newNpwp);
+                    $suratNikah->move($uploadPath, $newSuratNikah);
+                    $suratDomisiliUsaha->move($uploadPath, $newSuratDomisiliUsaha);
+                }
+            }
 
             return redirect()->route('nasabah.index')->withStatus('Data berhasil diperbarui.');
         }

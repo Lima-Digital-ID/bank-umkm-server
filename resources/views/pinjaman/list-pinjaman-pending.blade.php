@@ -39,36 +39,14 @@
             <div class="table-responsive">
                 <table class="table table-custom">
                     <thead>
-                        @if (Request::get('t') == 'Pending')
-                            <tr>
-                                <td>#</td>
-                                <td>Nama Peminjam</td>
-                                <td>Jangka Waktu</td>
-                                <td>Nominal</td>
-                                <td>Status</td>
-                                <td>Aksi</td>
-                            </tr>
-                        @elseif(Request::get('t') == 'Terima')
-                            <tr>
-                                <td>#</td>
-                                <td>Nama Peminjam</td>
-                                <td>Tanggal Pinjaman</td>
-                                <td>Tanggal Lunas</td>
-                                <td>Jangka Waktu</td>
-                                <td>Nominal</td>
-                                <td>Status</td>
-                                <td>Aksi</td>
-                            </tr>
-                        @else
-                            <tr>
-                                <td>#</td>
-                                <td>Nama Peminjam</td>
-                                <td>Jangka Waktu</td>
-                                <td>Nominal</td>
-                                <td>Status</td>
-                                <td>Aksi</td>
-                            </tr>
-                        @endif
+                        <tr>
+                            <td>#</td>
+                            <td>Nama Peminjam</td>
+                            <td>Jangka Waktu</td>
+                            <td>Nominal</td>
+                            <td>Status</td>
+                            <td>Aksi</td>
+                        </tr>
                     </thead>
                     <tbody>
                         @php
@@ -79,18 +57,14 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
-                                @if ($value->status == 'Terima')
-                                <td>{{date('d-m-Y', strtotime($value->tanggal_diterima))}}</td>
-                                <td>{{date('d-m-Y', strtotime($value->tanggal_lunas))}}</td>
-                                @endif
                                 <td>{{$value->jangka_waktu}}</td>
-                                <td>{{$value->nominal}}</td>
+                                <td>Rp {{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-{{$value->status == 'Pending' ? 'warning' : ($value->status == 'Terima' ? 'success' : 'warning')}}">{{$value->status}}</span></td>
                                 <td>
                                     <div class="form-inline">
                                         <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
-                                        <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                        <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Peminjam" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
+                                        <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-warning mr-2" title="Detail Pinjaman" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
+                                        <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Nasabah" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
                                         <form action="{{ route('pinjaman.destroy', $value) }}" method="post">
                                             @csrf
                                             @method('delete')

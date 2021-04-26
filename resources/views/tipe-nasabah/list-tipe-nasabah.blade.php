@@ -23,7 +23,7 @@
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div>
           <div class="col-auto ml-auto">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('nasabah.index') }}" method="get">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('tipe-nasabah.index') }}" method="get">
               <div class="input-group">
                 <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
                 <div class="input-group-append">
@@ -40,11 +40,8 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Nama</td>
-                        <td>Jenis Kelamin</td>
-                        <td>NIK</td>
-                        <td>Email</td>
-                        <td>Status</td>
+                        <td>Tipe</td>
+                        <td>Limit Pinjaman</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -53,19 +50,15 @@
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
-                    @foreach ($nasabah as $value)
+                    @foreach ($tipeNasabah as $value)
                         <tr>
                             <td>{{$no}}</td>
-                            <td>{{$value->nama}}</td>
-                            <td>{{$value->jenis_kelamin}}</td>
-                            <td>{{$value->nik}}</td>
-                            <td>{{$value->email}}</td>
-                            <td><span class="badge badge-{{$value->status == 'Aktif' ? 'success' : 'danger'}}">{{$value->status}}</span></td>
+                            <td>{{$value->tipe}}</td>
+                            <td>{{number_format($value->limit_pinjaman, 2, ',', '.' )}}</td>
                             <td>
                                 <div class="form-inline">
-                                    <a href="{{ route('nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
-                                    <a href="{{ route('nasabah.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                    <form action="{{ route('nasabah.destroy', $value) }}" method="post">
+                                    <a href="{{ route('tipe-nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('tipe-nasabah.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
@@ -81,6 +74,6 @@
                     @endforeach
                 </tbody>
             </table>
-            {{$nasabah->appends(Request::all())->links('vendor.pagination.custom')}}
+            {{$tipeNasabah->appends(Request::all())->links('vendor.pagination.custom')}}
         </div>
 @endsection

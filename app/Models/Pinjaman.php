@@ -19,4 +19,9 @@ class Pinjaman extends Model
     {
         return $this->belongsTo('App\Models\Nasabah', 'id_nasabah');
     }
+
+    public function pelunasan()
+    {
+        return $this->hasMany('\App\Models\Pelunasan', 'id_pinjaman');
+    }
 }
