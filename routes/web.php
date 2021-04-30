@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Nasabah;
 use Illuminate\Support\Facades\Route;
 
 
