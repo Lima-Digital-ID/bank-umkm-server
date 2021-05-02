@@ -76,4 +76,61 @@ class PinjamanController extends Controller
             ]);
         }
     }
+
+    public function getPinjamanByNasabah(Request $request)
+    {   
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $idNasabah = $request->get('idNasabah');
+            $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $pinjamanByNasabah;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
+    public function show($id)
+    {   
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $detailPinjaman = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id', $id)->get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $detailPinjaman;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
 }

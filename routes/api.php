@@ -23,6 +23,9 @@ Route::post('register', 'API\ApiAuthController@register');
 Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
 // pengajuan pinjaman
 Route::post('pinjaman', 'API\PinjamanController@store');
+Route::get('pinjaman/{id}', 'API\PinjamanController@show');
+// get pinjaman by nasabah
+Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
 // Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
