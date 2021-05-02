@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTipeInTableNasabah extends Migration
+class AlterNasabahTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddTipeInTableNasabah extends Migration
     public function up()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->bigInteger('id_tipe')->unsigned()->nullable()->after('status');
-            $table->foreign('id_tipe')->references('id')->on('tipe_nasabah');
+            $table->renameColumn('name', 'nama');
         });
     }
 
@@ -27,8 +26,7 @@ class AddTipeInTableNasabah extends Migration
     public function down()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->dropForeign('nasabah_id_tipe_foreign');
-            $table->dropColumn('id_tipe');
+            $table->renameColumn('nama', 'name');
         });
     }
 }

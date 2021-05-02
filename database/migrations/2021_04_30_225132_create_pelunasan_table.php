@@ -14,11 +14,11 @@ class CreatePelunasanTable extends Migration
     public function up()
     {
         Schema::create('pelunasan', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('id_pinjaman')->unsigned();
+            $table->increments('id');
+            $table->integer('id_pinjaman')->unsigned();
+            $table->integer('nominal_pembayaran');
             $table->date('tanggal_pembayaran');
-            $table->integer('nominal');
-            $table->integer('cicilan_ke');
+            $table->tinyInteger('cicilan_ke');
             $table->timestamps();
 
             $table->foreign('id_pinjaman')->references('id')->on('pinjaman');

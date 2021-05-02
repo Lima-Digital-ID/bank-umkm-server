@@ -17,8 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('register-user', 'API\ApiController@registerUser');
+// register
+Route::post('register', 'API\ApiAuthController@register');
+// jenis pinjaman
+Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
+// pengajuan pinjaman
+Route::post('pinjaman', 'API\PinjamanController@store');
+// Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
 Route::post('resend-verification', 'API\ApiController@resendVerificationCode');

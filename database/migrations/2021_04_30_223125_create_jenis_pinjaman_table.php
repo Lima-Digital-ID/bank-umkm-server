@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipeNabasahTable extends Migration
+class CreateJenisPinjamanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateTipeNabasahTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipe_nasabah', function (Blueprint $table) {
-            $table->id();
-            $table->string('tipe', 50);
+        Schema::create('jenis_pinjaman', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('jenis_pinjaman', 60);
             $table->integer('limit_pinjaman');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateTipeNabasahTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipe_nasabah');
+        Schema::dropIfExists('jenis_pinjaman');
     }
 }

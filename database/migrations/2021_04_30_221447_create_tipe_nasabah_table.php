@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTokenToNasabahTable extends Migration
+class CreateTipeNasabahTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddTokenToNasabahTable extends Migration
      */
     public function up()
     {
-        Schema::table('nasabah', function (Blueprint $table) {
-            $table->string('token')->nullable()->after('id_tipe');
+        Schema::create('tipe_nasabah', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('tipe', 60);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddTokenToNasabahTable extends Migration
      */
     public function down()
     {
-        Schema::table('nasabah', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('tipe_nasabah');
     }
 }

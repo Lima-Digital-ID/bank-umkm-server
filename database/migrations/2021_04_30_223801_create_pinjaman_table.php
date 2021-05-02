@@ -14,21 +14,22 @@ class CreatePinjamanTable extends Migration
     public function up()
     {
         Schema::create('pinjaman', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('id_nasabah')->unsigned();
-            $table->bigInteger('id_user')->unsigned()->nullable();
-            $table->date('tanggal_pengajuan');
-            $table->tinyInteger('jangka_waktu');
+            $table->increments('id');
+            $table->integer('id_nasabah')->unsigned();
+            $table->integer('id_user')->unsigned()->nullable();
+            $table->integer('id_jenis_pinjaman')->unsigned();
             $table->integer('nominal');
+            $table->tinyInteger('jangka_waktu');
             $table->enum('status', ['Pending', 'Terima', 'Tolak', 'Lunas']);
             $table->date('tanggal_diterima')->nullable();
-            $table->date('tanggal_batas_pelunasan')->nullable();
+            $table->date('jatuh_tempo')->nullable();
             $table->date('tanggal_lunas')->nullable();
-            $table->integer('terbayar')->default(0);
+            $table->integer('terbayar')->nullable()->default(0);
             $table->timestamps();
-
+            
             $table->foreign('id_nasabah')->references('id')->on('nasabah');
             $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_jenis_pinjaman')->references('id')->on('jenis_pinjaman');
         });
     }
 
