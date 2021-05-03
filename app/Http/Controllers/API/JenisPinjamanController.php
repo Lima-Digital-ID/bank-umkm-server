@@ -21,11 +21,11 @@ class JenisPinjamanController extends Controller
             $data = $jenisPinjaman;
         }catch(\Exception $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         finally{
             return response()->json([

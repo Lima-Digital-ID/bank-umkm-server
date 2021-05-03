@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $admin = new \App\Models\User();
-        $admin->name = 'Admin';
+        $admin->nama = 'Admin';
         $admin->username = 'admin';
         $admin->email = 'admin@mail.com';
         $admin->password = \Hash::make('mwb546hs51');

@@ -19,13 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 // register
 Route::post('register', 'API\ApiAuthController@register');
+Route::post('login', 'API\ApiAuthController@login');
 // jenis pinjaman
 Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
 // pengajuan pinjaman
-Route::post('pinjaman', 'API\PinjamanController@store');
-Route::get('pinjaman/{id}', 'API\PinjamanController@show');
+Route::post('pinjaman', 'API\PinjamanController@store'); // pengajuan pinjaman
+Route::get('pinjaman/{id}', 'API\PinjamanController@show'); // detail pinjaman
 // get pinjaman by nasabah
-Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
+Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah'); // get list pinjaman per nasabah
 // Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');

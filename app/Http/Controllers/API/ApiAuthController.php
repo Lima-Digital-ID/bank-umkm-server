@@ -39,18 +39,18 @@ class ApiAuthController extends Controller
             $newNasabah->save();
 
             $status = 'success';
-            $message = 'Berhasil register.';
+            $message = 'Berhasil register';
         } catch(\Exception $e){
             // return response()->json([
             //     'error' => true,
             //     'message' => 'Terjadi kesalahan.' . $e->getMessage()
             // ], 500);
             $status = 'failed';
-            $message = 'Gagal register.' . $e->getMessage();
+            $message = 'Gagal register' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'failed';
-            $message = 'Gagal register.' . $e->getMessage();
+            $message = 'Gagal register' . $e->getMessage();
         }
         finally{
             return response()->json([

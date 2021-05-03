@@ -63,11 +63,11 @@ class PinjamanController extends Controller
 
         } catch(\Exception $e){
             $status = 'failed';
-            $message = 'Pengajuan pinjaman gagal. ' . $e->getMessage();
+            $message = 'Pengajuan pinjaman gagal ' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'failed';
-            $message = 'Pengajuan pinjaman gagal. ' . $e->getMessage();
+            $message = 'Pengajuan pinjaman gagal ' . $e->getMessage();
         }
         finally{
             return response()->json([
@@ -85,17 +85,18 @@ class PinjamanController extends Controller
         try {
             $idNasabah = $request->get('idNasabah');
             $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
-
+            // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman')->where('id_nasabah', $idNasabah)->get();
+            
             $status = 'success';
             $message = 'Berhasil';
             $data = $pinjamanByNasabah;
         }catch(\Exception $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         finally{
             return response()->json([
@@ -119,11 +120,11 @@ class PinjamanController extends Controller
             $data = $detailPinjaman;
         }catch(\Exception $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'failed';
-            $message = 'Gagal. ' . $e->getMessage();
+            $message = 'Gagal ' . $e->getMessage();
         }
         finally{
             return response()->json([
