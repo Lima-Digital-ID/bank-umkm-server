@@ -80,6 +80,8 @@ class ApiAuthController extends Controller
             $newNasabah->no_hp = $request->get('no_hp');
             $newNasabah->email = $request->get('email');
             $newNasabah->password = \Hash::make($request->get('password'));
+            $newNasabah->limit_pinjaman = 0;
+            $newNasabah->alasan_penolakan = '';
 
             $newNasabah->save();
 

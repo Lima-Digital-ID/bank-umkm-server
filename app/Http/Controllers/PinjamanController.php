@@ -179,6 +179,9 @@ class PinjamanController extends Controller
                 $pinjaman->id_user = auth()->user()->id;
                 $pinjaman->tanggal_batas_pelunasan =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
             }
+            if($setStatus=='Tolak'){
+                $pinjaman->alasan_penolakan = $request->get('alasan');
+            }
             $pinjaman->status = $setStatus;
             $pinjaman->save();
 
@@ -258,5 +261,10 @@ class PinjamanController extends Controller
             return redirect()->route('pinjaman.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
         
+    }
+    public function cekNotif()
+    {
+        $count = Pinjaman::select(\DB::raw("count('id') as ttl"))->where('view','0')->get();
+        echo $count[0]->ttl;
     }
 }

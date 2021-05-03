@@ -27,6 +27,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('pinjaman/{id}', 'API\PinjamanController@show');
     // get pinjaman by nasabah
     Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
+
+    Route::post('pembayaran', 'API\ApiPembayaran@store');
 });
 // register
 Route::post('register', 'API\ApiAuthController@register');
@@ -37,3 +39,4 @@ Route::post('login', 'API\ApiAuthController@login');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
 Route::post('resend-verification', 'API\ApiController@resendVerificationCode');
+

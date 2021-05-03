@@ -13,9 +13,10 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('dashboard');
     Route::resource('user', 'UserController');
     Route::resource('tipe-nasabah', 'TipeNasabahController');
-    Route::get('nasabah/update-status/{id}', 'NasabahController@updateStatus');
+    Route::post('nasabah/update-status/{id}', 'NasabahController@updateStatus');
     Route::resource('nasabah', 'NasabahController');
-    Route::get('pinjaman/update-status/{id}', 'PinjamanController@updateStatus');
+    Route::post('pinjaman/update-status/{id}', 'PinjamanController@updateStatus');
+    Route::get('pinjaman/cekNotif', 'PinjamanController@cekNotif');
     Route::resource('pinjaman', 'PinjamanController');
     Route::resource('pelunasan', 'PelunasanController');
 });
