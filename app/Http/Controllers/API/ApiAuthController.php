@@ -8,6 +8,51 @@ use \App\Models\Nasabah;
 
 class ApiAuthController extends Controller
 {
+
+    public function login(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        
+        $status = '';
+        $message = '';
+        $token = '';
+        try {
+            $nasabah = Nasabah::where('email', $request->get('email'))->firstOrFail();
+
+            if (!$nasabah || !\Hash::check($request->get('password'), $nasabah->password)) {
+                $message = 'Unauthorized';
+                $status = 'Gagal login. Email atau password salah.';
+                return $this->error('Credentials not match', 401);
+            }
+            else{
+                $token = $nasabah->createToken('token')->plainTextToken;
+                $status = 'success';
+                $message = 'Berhasil login.';
+                $data = $nasabah;
+            }
+
+
+        } catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal login. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'success';
+            $message = 'Gagal login.' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $nasabah,
+                'token' => $token
+            ], 200);
+        }
+    }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -55,7 +100,36 @@ class ApiAuthController extends Controller
         finally{
             return response()->json([
                 'status' => $status,
-                'message' => $message
+                'message' => $message,
+            ], 200);
+        }
+    }
+
+    public function me(Request $request)
+    {
+        return auth()->user();
+    }
+
+    public function logout(Request $request)
+    {
+        $status = '';
+        $message = '';
+        try {
+            $request->user()->currentAccessToken()->delete();       
+            $status = 'success';
+            $message = 'Berhasil logout.';
+        } catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal logout. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'success';
+            $message = 'Gagal logout.' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
             ], 200);
         }
     }

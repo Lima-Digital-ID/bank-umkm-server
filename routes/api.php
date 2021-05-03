@@ -14,18 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('nasabah', 'API\NasabahController@index');
+    Route::get('me', 'API\ApiAuthController@me');
+    Route::get('logout', 'API\ApiAuthController@logout');
+    // jenis pinjaman
+    Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
+
+    // pengajuan pinjaman
+    Route::post('pinjaman', 'API\PinjamanController@store');
+    // detail pinjaman
+    Route::get('pinjaman/{id}', 'API\PinjamanController@show');
+    // get pinjaman by nasabah
+    Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
 });
 // register
 Route::post('register', 'API\ApiAuthController@register');
-// jenis pinjaman
-Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
-// pengajuan pinjaman
-Route::post('pinjaman', 'API\PinjamanController@store');
-Route::get('pinjaman/{id}', 'API\PinjamanController@show');
-// get pinjaman by nasabah
-Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
+// login
+Route::post('login', 'API\ApiAuthController@login');
+
 // Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');

@@ -34,7 +34,6 @@ class PinjamanController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'id_nasabah' => 'required',
             'id_jenis_pinjaman' => 'required',
             'jangka_waktu' => 'required',
             'nominal' => 'required',
@@ -48,8 +47,7 @@ class PinjamanController extends Controller
 
         try {
             $newPinjaman = new Pinjaman;
-            $newPinjaman->id_nasabah = $request->get('id_nasabah');
-            // $newPinjaman->id_nasabah = 1;
+            $newPinjaman->id_nasabah = auth()->user()->id;
             $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
             $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
             $newPinjaman->nominal = $request->get('nominal');
@@ -77,13 +75,10 @@ class PinjamanController extends Controller
         }
     }
 
-    public function getPinjamanByNasabah(Request $request)
+    public function getPinjamanByNasabah()
     {   
-        $status = '';
-        $message = '';
-        $data = '';
         try {
-            $idNasabah = $request->get('idNasabah');
+            $idNasabah = auth()->user()->id;
             $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
 
             $status = 'success';
