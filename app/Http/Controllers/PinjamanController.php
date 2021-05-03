@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
+use \App\Models\Nasabah;
 
 class PinjamanController extends Controller
 {
@@ -181,6 +182,11 @@ class PinjamanController extends Controller
             $pinjaman->status = $setStatus;
             $pinjaman->save();
 
+            $nasabah = Nasabah::find($pinjaman->id_nasabah);
+            $nasabah->saldo += $pinjaman->nominal;
+            $nasabah->hutang += $pinjaman->nominal;
+            $nasabah->save();
+            
             return back()->withStatus('Data berhasil diperbarui.');
         }
         catch(\Exception $e){
