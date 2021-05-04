@@ -60,7 +60,7 @@
                             <td>{{$value->jenis_kelamin}}</td>
                             <td>{{$value->nik}}</td>
                             <td>{{$value->email}}</td>
-                            <td><span class="badge badge-{{$value->status == 'Aktif' ? 'success' : 'danger'}}">{{$value->status}}</span></td>
+                            <td><span class="badge badge-{{$value->is_verified == '1' ? 'success' : 'danger'}}">{{$value->is_verified == '1' ? 'Terverifikasi' : 'Pending'}}</span></td>
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>

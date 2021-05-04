@@ -119,10 +119,40 @@
                 </div>
                 @if ($pinjaman->status == 'Pending')
                   <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a>
-                  <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Tolak" class="btn btn-danger" onclick="return confirm('Anda yakin?')">Tolak</a>
+                  <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
                 @endif
               </div>
             </div>
           </div>
         </div>
+        <div class="modal modal-tolak">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Alasan Penolakan</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="{{ url('pinjaman/update-status', $pinjaman->id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="tipe" value="tolak">
+                <input type="hidden" name="status" value="Tolak">
+                <label for="">Alasan</label>
+                <textarea name="alasan" class="form-control"  id="" rows="5"></textarea>
+                <div class="mt-4">
+                  <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                  &nbsp;
+                  <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+              </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>        
+
 @endsection

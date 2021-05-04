@@ -92,13 +92,90 @@
                     <tr>
                       <td>Status</td>
                       <td>:</td>
-                      <td><span class="badge badge-{{$nasabah->status == 'Aktif' ? 'success' : 'danger'}}">{{$nasabah->status}}</span></td>
+                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : 'danger'}}">{{$nasabah->is_verified=='0' ? 'Pending' : $nasabah->is_verified=='1' ? 'ACC' : 'Ditolak'}}</span></td>
+                    </tr>
+                    @if($nasabah->is_verified=='3')
+                    <tr>
+                      <td>Alasan Ditolak</td>
+                      <td>:</td>
+                      <td>{{$nasabah->alasan_penolakan}}</td>
+                    </tr>
+                    @endif
+
+                    <tr>
+                      <td>Limit Pinjaman</td>
+                      <td>:</td>
+                      <td>Rp. {{number_format($nasabah->limit_pinjaman,0,',','.')}}</td>
                     </tr>
                   </table>
                 </div>
-                {{-- <a href="{{ url('nasabah/update-status', $nasabah->id) }}" class="btn btn-{{$nasabah->status == 'Aktif' ? 'danger' : 'success'}}" onclick="return confirm('Anda yakin?')">{{$nasabah->status == 'Aktif' ? 'Nonaktifkan' : 'Aktifkan'}}</a> --}}
+
+                
+                @if($nasabah->is_verified==0)
+                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
+                  <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
+                @elseif($nasabah->is_verified==3)
+                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
+                @endif
               </div>
             </div>
           </div>
         </div>
+        <div class="modal modal-acc">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Limit Pinjaman</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="{{ url('nasabah/update-status', $nasabah->id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="tipe" value="acc">
+                <label for="">Limit Pinjaman</label>
+                <input type="number" name="limit" class="form-control">
+                <div class="mt-4">
+                  <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                  &nbsp;
+                  <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+              </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>        
+
+      <div class="modal modal-tolak">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Alasan Penolakan</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="{{ url('nasabah/update-status', $nasabah->id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="tipe" value="tolak">
+                <label for="">Alasan</label>
+                <textarea name="alasan" class="form-control"  id="" rows="5"></textarea>
+                <div class="mt-4">
+                  <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                  &nbsp;
+                  <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+              </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>        
 @endsection

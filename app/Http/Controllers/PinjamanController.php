@@ -184,6 +184,9 @@ class PinjamanController extends Controller
                 $nasabah->hutang += $pinjaman->nominal;
                 $nasabah->save();
             }
+            if($setStatus=='Tolak'){
+                $pinjaman->alasan_penolakan = $request->get('alasan');
+            }
             $pinjaman->status = $setStatus;
             $pinjaman->save();
 
@@ -259,5 +262,10 @@ class PinjamanController extends Controller
             return redirect()->route('pinjaman.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
         
+    }
+    public function cekNotif()
+    {
+        $count = Pinjaman::select(\DB::raw("count('id') as ttl"))->where('view','0')->get();
+        echo $count[0]->ttl;
     }
 }

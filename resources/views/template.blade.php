@@ -97,7 +97,7 @@
               aria-controls="pinjaman"
             >
             <i class="fas fa-fw fa-money-bill-wave "></i>
-              <span>Pinjaman</span>
+              <span>Pinjaman <i class="badge badge-success badge-notif"></i></span>
             </a>
             <div
               id="pinjaman"
@@ -295,6 +295,20 @@
     <script src="{{asset('vendor/sweetalert-master/dist/sweetalert-dev.js')}}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>
+/*       $(document).ready(function(){
+        setInterval(function(){
+          $.ajax({
+            type : "get",
+            url : "<?= url('pinjaman/cekNotif') ?>",
+            success : function(data){
+              if(data!=0){
+                $(".badge-notif").html(data)
+              }
+            }
+          })
+        })
+        }, 1000);
+ */
       const tel = document.getElementById('kode_rekening');
 
       tel.addEventListener('input', function() {
