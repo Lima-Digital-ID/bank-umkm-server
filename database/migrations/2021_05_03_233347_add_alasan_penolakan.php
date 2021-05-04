@@ -14,7 +14,7 @@ class AddAlasanPenolakan extends Migration
     public function up()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->text('alasan_penolakan')->after('is_verified');
+            $table->text('alasan_penolakan')->after('is_verified')->nullable();
         });
     }
 
@@ -25,6 +25,8 @@ class AddAlasanPenolakan extends Migration
      */
     public function down()
     {
-        $table->dropColumn('alasan_penolakan');
+        Schema::table('nasabah', function (Blueprint $table) {
+            $table->dropColumn('alasan_penolakan');
+        });
     }
 }

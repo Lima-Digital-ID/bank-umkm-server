@@ -29,6 +29,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
 
     Route::post('pembayaran', 'API\ApiPembayaran@store');
+
+    // get saldo per nasabah
+    Route::get('get-saldo-hutang-nasabah', 'API\NasabahController@getSaldoAndHutangPerNasabah');
+    
 });
 // register
 Route::post('register', 'API\ApiAuthController@register');

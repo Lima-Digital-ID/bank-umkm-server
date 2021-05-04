@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
+use App\Models\Nasabah;
 use \App\Models\Pelunasan;
 
 class ApiPembayaran extends Controller
@@ -33,6 +34,10 @@ class ApiPembayaran extends Controller
             $newPembayaran->cicilan_ke = count($getCicilan) > 0 ? $getCicilan[0]->cicilan_ke + 1 : 1;
 
             $newPembayaran->save();
+
+            $nasabah = Nasabah::find(auth()->user()->id);
+            $nasabah->hutang -= $request->get('nominal_pembayaran');
+            $nasabah->save();
 
             $status = 'success';
             $message = 'Pengajuan pembayaran berhasil.';
