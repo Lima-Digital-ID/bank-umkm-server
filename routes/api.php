@@ -14,20 +14,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('nasabah', 'API\NasabahController@index');
+    Route::get('me', 'API\ApiAuthController@me');
+    Route::get('logout', 'API\ApiAuthController@logout');
+    // melengkapi data profil
+    Route::post('lengkapi-data', 'API\ApiAuthController@lengkapiData');
+    // jenis pinjaman
+    Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
+
+    // pengajuan pinjaman
+    Route::post('pinjaman', 'API\PinjamanController@store');
+    // detail pinjaman
+    Route::get('pinjaman/{id}', 'API\PinjamanController@show');
+    // get pinjaman by nasabah
+    Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
+
+    // bank
+    Route::get('bank', 'API\PinjamanController@getBank');
+
+    Route::post('pembayaran', 'API\ApiPembayaran@store');
+
+    Route::get('status-cicilan/{id_pinjaman}/{cicilan_ke}', 'API\ApiPembayaran@getStatusCicilan');
 });
+// // pengajuan pinjaman
+// Route::post('pinjaman', 'API\PinjamanController@store');
 // register
 Route::post('register', 'API\ApiAuthController@register');
+// login
 Route::post('login', 'API\ApiAuthController@login');
-// jenis pinjaman
-Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
-// pengajuan pinjaman
-Route::post('pinjaman', 'API\PinjamanController@store'); // pengajuan pinjaman
-Route::get('pinjaman/{id}', 'API\PinjamanController@show'); // detail pinjaman
-// get pinjaman by nasabah
-Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah'); // get list pinjaman per nasabah
+
 // Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
 Route::post('resend-verification', 'API\ApiController@resendVerificationCode');
+

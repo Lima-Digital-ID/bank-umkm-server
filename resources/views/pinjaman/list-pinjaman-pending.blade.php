@@ -57,7 +57,7 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
-                                <td>{{$value->jangka_waktu}}</td>
+                                <td>{{$value->jangka_waktu}} bulan</td>
                                 <td>Rp {{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-{{$value->status == 'Pending' ? 'warning' : ($value->status == 'Terima' ? 'success' : 'warning')}}">{{$value->status}}</span></td>
                                 <td>

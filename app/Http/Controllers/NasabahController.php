@@ -163,12 +163,19 @@ class NasabahController extends Controller
         }
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Request $request, $id)
     {
         try{
             $nasabah = Nasabah::find($id);
-            $setStatus = $nasabah->status == 'Aktif' ? 'Nonaktif' : 'Aktif';
-            $nasabah->status = $setStatus;
+            if($request->tipe=="acc"){
+                $nasabah->limit_pinjaman = $request->get('limit');
+                $nasabah->alasan_penolakan = "";
+                $nasabah->is_verified = 1;
+            }
+            else if($request->tipe=="tolak"){
+                $nasabah->alasan_penolakan = $request->get('alasan');
+                $nasabah->is_verified = 3;
+            }
             $nasabah->save();
 
             return back()->withStatus('Data berhasil diperbarui.');

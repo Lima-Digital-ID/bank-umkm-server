@@ -65,7 +65,7 @@
                     </div>
                     <div class="right">
                         <div class="text">
-                            <h5>3R Challenges</h5>
+                            <h5>Bank UMKM</h5>
                             <p class="font-weight-light">Administrator</p>
                         </div>
                     </div>

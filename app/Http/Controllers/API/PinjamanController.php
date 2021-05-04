@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
+use App\Models\MasterBank;
 
 class PinjamanController extends Controller
 {
@@ -34,7 +35,6 @@ class PinjamanController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'id_nasabah' => 'required',
             'id_jenis_pinjaman' => 'required',
             'jangka_waktu' => 'required',
             'nominal' => 'required',
@@ -48,12 +48,12 @@ class PinjamanController extends Controller
 
         try {
             $newPinjaman = new Pinjaman;
-            $newPinjaman->id_nasabah = $request->get('id_nasabah');
-            // $newPinjaman->id_nasabah = 1;
+            $newPinjaman->id_nasabah = auth()->user()->id;
             $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
             $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
             $newPinjaman->nominal = $request->get('nominal');
             $newPinjaman->tanggal_pengajuan = date('Y-m-d');
+            $newPinjaman->alasan_penolakan = '-';
             $newPinjaman->status = 'Pending';
 
             $newPinjaman->save();
@@ -77,15 +77,12 @@ class PinjamanController extends Controller
         }
     }
 
-    public function getPinjamanByNasabah(Request $request)
+    public function getPinjamanByNasabah()
     {   
-        $status = '';
-        $message = '';
-        $data = '';
         try {
-            $idNasabah = $request->get('idNasabah');
-            $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
-            // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman')->where('id_nasabah', $idNasabah)->get();
+            $idNasabah = auth()->user()->id;
+            // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
+            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->get();
             
             $status = 'success';
             $message = 'Berhasil';
@@ -118,6 +115,34 @@ class PinjamanController extends Controller
             $status = 'success';
             $message = 'Berhasil';
             $data = $detailPinjaman;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
+    public function getBank()
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $getBank = MasterBank::get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $getBank;
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal ' . $e->getMessage();
