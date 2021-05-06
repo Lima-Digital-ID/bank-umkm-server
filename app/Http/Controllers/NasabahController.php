@@ -52,8 +52,8 @@ class NasabahController extends Controller
             'alamat' => 'required',
             'scan_ktp' => 'required',
             'foto_dengan_ktp' => 'required',
-            'email' => 'required|email|unique:nasabah',
-            'id_tipe' => 'required',
+            // 'email' => 'required|email|unique:nasabah',
+            // 'id_tipe' => 'required',
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -202,8 +202,8 @@ class NasabahController extends Controller
             'nik' => 'required'.$isUniqueNik,
             'no_hp' => 'required',
             'alamat' => 'required',
-            'email' => 'required|email'.$isUnique,
-            'id_tipe' => 'required',
+            // 'email' => 'required|email'.$isUnique,
+            // 'id_tipe' => 'required',
             'status' => 'required',
         ],
         [
@@ -246,7 +246,7 @@ class NasabahController extends Controller
             $nasabah->nik = $request->get('nik');
             $nasabah->no_hp = $request->get('no_hp');
             $nasabah->alamat = $request->get('alamat');
-            $nasabah->id_tipe = $request->get('id_tipe');
+            // $nasabah->id_tipe = $request->get('id_tipe');
             // $nasabah->profil = $newProfil;
             if ($request->file('scan_ktp') || $request->file('foto_dengan_ktp') || $request->file('npwp') || $request->file('surat_nikah') || $request->file('surat_domisili_usaha') ) {
                 $nasabah->scan_ktp = $newScanKtp;
@@ -255,9 +255,9 @@ class NasabahController extends Controller
                 $nasabah->surat_nikah = $newSuratNikah;
                 $nasabah->surat_domisili_usaha = $newSuratDomisiliUsaha;
             }
-            $nasabah->username = $request->get('nik');
-            $nasabah->email = $request->get('email');
-            $nasabah->status = $request->get('status');
+            $nasabah->username = $request->get('username');
+            // $nasabah->email = $request->get('email');
+            $nasabah->is_verified = $request->get('status');
 
             if($nasabah->save()){
                 if ($request->file('scan_ktp') || $request->file('foto_dengan_ktp') || $request->file('npwp') || $request->file('surat_nikah') || $request->file('surat_domisili_usaha') ) {

@@ -80,7 +80,7 @@
           </span>
       @endif
 
-      <br>
+      {{-- <br>
 
       <label>Email</label>
       <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email', $nasabah->email) }}" name="email" placeholder="ex : anthonydavis@mail.com">
@@ -88,7 +88,7 @@
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('email') }}</strong>
           </span>
-      @endif
+      @endif --}}
 
       <br>
 
@@ -183,12 +183,20 @@
       <br>
       <label for="">Status Nasabah</label>
       <br>
-      <div class="form-check form-check-inline">
+      {{-- <div class="form-check form-check-inline">
         <input class="form-check-input {{ $errors->has('status') ? ' is-invalid' : '' }}" type="radio" name="status" id="Nonaktif" value="Nonaktif" {{ old('status', $nasabah->status) == 'Nonaktif' ? 'checked' : '' }}>
         <label class="form-check-label {{ $errors->has('status') ? ' is-invalid' : '' }}" for="Nonaktif"><span class="badge badge-danger">Nonaktif</span></label>
       </div>
       <div class="form-check form-check-inline">
         <input class="form-check-input {{ $errors->has('status') ? ' is-invalid' : '' }}" type="radio" name="status" id="Aktif" value="Aktif" {{ old('status', $nasabah->status) == 'Aktif' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('status') ? ' is-invalid' : '' }}" for="Aktif"><span class="badge badge-success"> Aktif</span></label>
+      </div> --}}
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('status') ? ' is-invalid' : '' }}" type="radio" name="status" id="Nonaktif" value="0" {{ old('status', $nasabah->status) == 'Nonaktif' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('status') ? ' is-invalid' : '' }}" for="Nonaktif"><span class="badge badge-danger">Nonaktif</span></label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('status') ? ' is-invalid' : '' }}" type="radio" name="status" id="Aktif" value="1" {{ old('status', $nasabah->status) == 'Aktif' ? 'checked' : '' }}>
         <label class="form-check-label {{ $errors->has('status') ? ' is-invalid' : '' }}" for="Aktif"><span class="badge badge-success"> Aktif</span></label>
       </div>
       @if ($errors->has('status'))

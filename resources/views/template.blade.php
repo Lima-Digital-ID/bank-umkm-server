@@ -81,10 +81,32 @@
           </li>
 
           <li class="nav-item {{Request::segment(1) == 'nasabah' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('nasabah')}}">
-              <i class="fas fa-fw fa-users"></i>
-              <span>Nasabah</span></a
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#nasabah"
+              aria-expanded="true"
+              aria-controls="nasabah"
             >
+            <i class="fas fa-fw fa-users "></i>
+              <span>Nasabah <i class="badge badge-success badge-notif"></i></span>
+            </a>
+            <div
+              id="nasabah"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('nasabah')}}">
+                  <span>Nasabah</span>
+                </a>
+                <a class="nav-link" href="{{url('pengajuan-data-nasabah')}}">
+                  <span>Pengajuan Data Tambahan Nasabah</span>
+                </a>
+              </div>
+            </div>
           </li>
           
           <li class="nav-item {{Request::segment(1) == 'pinjaman' ? 'active' : ''}}">

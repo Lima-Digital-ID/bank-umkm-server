@@ -14,7 +14,7 @@ class AddLimitPinjaman extends Migration
     public function up()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->integer('limit_pinjaman')->after('nama');
+            $table->integer('limit_pinjaman')->after('nama')->default(0);
         });
     }
     

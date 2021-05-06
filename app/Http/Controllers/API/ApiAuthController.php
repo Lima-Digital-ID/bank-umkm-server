@@ -24,17 +24,23 @@ class ApiAuthController extends Controller
         $token = '';
         try {
             $nasabah = Nasabah::where('username', $request->get('username'))->first();
-
-            if (!$nasabah || !(\Hash::check($request->get('password'), $nasabah->password))) {
-                $status = 'Unauthorized';
-                $message = 'Gagal login. password salah.';
-                $nasabah = '';
-                // return $this->error('Credentials not match', 401);
+            if($nasabah == null) {
+                $status = 'failed';
+                $message = 'Gagal login. Akun tidak ditemukan';
+                // $nasabah = '';
             }
-            else{
-                $token = $nasabah->createToken('token')->plainTextToken;
-                $status = 'success';
-                $message = 'Berhasil login.';
+            else {
+                if (!$nasabah || !(\Hash::check($request->get('password'), $nasabah->password))) {
+                    $status = 'Unauthorized';
+                    $message = 'Gagal login. password salah.';
+                    $nasabah = '';
+                    // return $this->error('Credentials not match', 401);
+                }
+                else{
+                    $token = $nasabah->createToken('token')->plainTextToken;
+                    $status = 'success';
+                    $message = 'Berhasil login.';
+                }
             }
 
 
@@ -84,7 +90,7 @@ class ApiAuthController extends Controller
             $newNasabah->username = $request->get('username');
             $newNasabah->password = \Hash::make($request->get('password'));
             $newNasabah->limit_pinjaman = 5000000;
-            $newNasabah->is_verified = 1;
+            $newNasabah->is_verified = 0;
             $newNasabah->alasan_penolakan = '';
 
             $newNasabah->save();

@@ -177,7 +177,12 @@ class PinjamanController extends Controller
                 $date = date('Y-m-d');
                 $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
-                // $pinjaman->tanggal_batas_pelunasan =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
+                $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
+                
+                $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $nasabah->saldo += $pinjaman->nominal;
+                $nasabah->hutang += $pinjaman->nominal;
+                $nasabah->save();
             }
             if($setStatus=='Tolak'){
                 $pinjaman->alasan_penolakan = $request->get('alasan');
@@ -185,11 +190,7 @@ class PinjamanController extends Controller
             $pinjaman->status = $setStatus;
             $pinjaman->save();
 
-            $nasabah = Nasabah::find($pinjaman->id_nasabah);
-            $nasabah->saldo += $pinjaman->nominal;
-            $nasabah->hutang += $pinjaman->nominal;
-            $nasabah->save();
-            
+
             return back()->withStatus('Data berhasil diperbarui.');
         }
         catch(\Exception $e){

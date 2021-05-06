@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
+use App\Models\Nasabah;
 use \App\Models\Pelunasan;
 
 class ApiPembayaran extends Controller
@@ -22,7 +23,7 @@ class ApiPembayaran extends Controller
 
         $status = '';
         $message = '';
-
+        $hutang = '';
         
         try {
             $newPembayaran = new Pelunasan; 
@@ -34,6 +35,23 @@ class ApiPembayaran extends Controller
             $newPembayaran->cicilan_ke = count($getCicilan) > 0 ? $getCicilan[0]->cicilan_ke + 1 : 1;
 
             $newPembayaran->save();
+
+            $nasabah = Nasabah::find(auth()->user()->id);
+            $hutang = $nasabah->hutang - $request->get('nominal_pembayaran');
+
+            // $nasabah->hutang -= $request->get('nominal_pembayaran');
+            $nasabah->hutang = $hutang;
+            $nasabah->save();
+
+            if($hutang == 0) {
+                $pelunasanHutang = Pinjaman::find(auth()->user()->id);
+                $pelunasanHutang->status = 'Lunas';
+                $pelunasanHutang->tanggal_lunas = date("Y-m-d");
+                $pelunasanHutang->terbayar = 1;
+                $pelunasanHutang->updated_at = time();
+
+                $pelunasanHutang->save();
+            }
 
             $status = 'success';
             $message = 'pembayaran berhasil.';
@@ -48,7 +66,8 @@ class ApiPembayaran extends Controller
         finally{
             return response()->json([
                 'status' => $status,
-                'message' => $message
+                'message' => $message,
+                'hutang' => $hutang
             ]);
         }
 

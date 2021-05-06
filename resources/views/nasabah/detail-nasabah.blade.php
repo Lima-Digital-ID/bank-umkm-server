@@ -54,11 +54,11 @@
                       <td>:</td>
                       <td>{{$nasabah->no_hp}}</td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                       <td>Email</td>
                       <td>:</td>
                       <td>{{$nasabah->email}}</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                       <td>Alamat</td>
                       <td>:</td>
@@ -92,7 +92,9 @@
                     <tr>
                       <td>Status</td>
                       <td>:</td>
-                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : 'danger'}}">{{$nasabah->is_verified=='0' ? 'Pending' : $nasabah->is_verified=='1' ? 'ACC' : 'Ditolak'}}</span></td>
+                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : $nasabah->is_verified=='2' ? 'primary' : 'danger'}}">
+                        {{$nasabah->is_verified=='0' ? 'Pending' : $nasabah->is_verified=='1' ? 'ACC' : $nasabah->is_verified=='2' ? 'Pending' : 'Ditolak'}}
+                      </span></td>
                     </tr>
                     @if($nasabah->is_verified=='3')
                     <tr>

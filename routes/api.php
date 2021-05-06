@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('nasabah', 'API\NasabahController@index');
+    // data tambahan nasabah
+    Route::post('data-tambahan-nasabah', 'API\NasabahController@inputDataTambahan');
     Route::get('me', 'API\ApiAuthController@me');
     Route::get('logout', 'API\ApiAuthController@logout');
     // melengkapi data profil
@@ -36,6 +38,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('pembayaran', 'API\ApiPembayaran@store');
 
     Route::get('status-cicilan/{id_pinjaman}/{cicilan_ke}', 'API\ApiPembayaran@getStatusCicilan');
+    // get saldo per nasabah
+    Route::get('get-saldo-hutang-nasabah', 'API\NasabahController@getSaldoAndHutangPerNasabah');
+    
 });
 // // pengajuan pinjaman
 // Route::post('pinjaman', 'API\PinjamanController@store');
