@@ -102,7 +102,7 @@
                 <a class="nav-link" href="{{url('nasabah')}}">
                   <span>Nasabah</span>
                 </a>
-                <a class="nav-link" href="{{url('pengajuan-data-nasabah')}}">
+                <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
                   <span>Pengajuan Data Tambahan Nasabah</span>
                 </a>
               </div>

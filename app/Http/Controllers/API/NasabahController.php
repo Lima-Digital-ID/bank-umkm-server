@@ -61,7 +61,7 @@ class NasabahController extends Controller
             $nasabah = Nasabah::find($id);
             $nik = $nasabah->nik;
 
-            $folder = 'upload/nasabah/'.$nik;
+            $folder = 'upload/nasabah/'.$nik.'/data-tambahan';
             // Get canonicalized absolute pathname
             $path = realpath($folder);
             // If it exist, check if it's a directory
@@ -77,7 +77,7 @@ class NasabahController extends Controller
             $newData->tempat_tinggal = $request->get('tempat_tinggal');
 
             // upload npwp
-            if($request->get('scan_npwp') != null || $request->get('scan_npwp') != ''){
+            if($request->get('scan_npwp') != null || $request->get('npwp_filename') != ''){
                 $extension = explode('.', $request->get('npwp_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_npwp.'.$ext;
@@ -86,7 +86,7 @@ class NasabahController extends Controller
                 $newData->scan_npwp = $filename;
             }
             // upload ktp suami
-            if($request->get('ktp_suami') != null || $request->get('ktp_suami') != ''){
+            if($request->get('ktp_suami') != null || $request->get('ktp_suami_filename') != ''){
                 $extension = explode('.', $request->get('ktp_suami_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_ktp_suami.'.$ext;
@@ -95,7 +95,7 @@ class NasabahController extends Controller
                 $newData->ktp_suami = $filename;
             }
             // upload ktp istri
-            if($request->get('ktp_istri') != null || $request->get('ktp_istri') != ''){
+            if($request->get('ktp_istri') != null || $request->get('ktp_istri_filename') != ''){
                 $extension = explode('.', $request->get('ktp_istri_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_ktp_istri.'.$ext;
@@ -104,7 +104,7 @@ class NasabahController extends Controller
                 $newData->ktp_istri = $filename;
             }
             // upload surat nikah
-            if($request->get('surat_nikah') != null || $request->get('surat_nikah') != ''){
+            if($request->get('surat_nikah') != null || $request->get('surat_nikah_filename') != ''){
                 $extension = explode('.', $request->get('surat_nikah_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_surat_nikah.'.$ext;
@@ -113,7 +113,7 @@ class NasabahController extends Controller
                 $newData->surat_nikah = $filename;
             }
             // upload bpkb
-            if($request->get('bpkb') != null || $request->get('bpkb') != ''){
+            if($request->get('bpkb') != null || $request->get('bpkb_filename') != ''){
                 $extension = explode('.', $request->get('bpkb_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_bpkb.'.$ext;
@@ -122,7 +122,7 @@ class NasabahController extends Controller
                 $newData->bpkb = $filename;
             }
             // upload surat domisili usaha
-            if($request->get('domisili_usaha') != null || $request->get('domisili_usaha') != ''){
+            if($request->get('domisili_usaha') != null || $request->get('domisili_usaha_filename') != ''){
                 $extension = explode('.', $request->get('domisili_usaha_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_domisili_usaha.'.$ext;
@@ -134,7 +134,7 @@ class NasabahController extends Controller
 
             $status = 'success';
             $message = 'Berhasil';
-            $data = $newData->id;
+            $data = $request->get('ktp_suami')->getClientOriginalName();
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal. ' . $e->getMessage();

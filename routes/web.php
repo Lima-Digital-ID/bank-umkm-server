@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('pinjaman/cekNotif', 'PinjamanController@cekNotif');
     Route::resource('pinjaman', 'PinjamanController');
     Route::resource('pelunasan', 'PelunasanController');
+    Route::get('data-tambahan-nasabah/update-status/{id}', 'DataTambahanNasabahController@updateStatus');
+    Route::resource('data-tambahan-nasabah', 'DataTambahanNasabahController');
 });
 
 require __DIR__.'/auth.php';

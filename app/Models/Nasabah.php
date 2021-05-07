@@ -25,4 +25,9 @@ class Nasabah extends Model
     {
         return $this->belongsTo('\App\Models\TipeNasabah');
     }
+
+    public function dataTambahan()
+    {
+        return $this->hasOne('App\Models\DataTambahanNasabah','id_nasabah');
+    }
 }

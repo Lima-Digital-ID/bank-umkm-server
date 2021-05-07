@@ -14,7 +14,7 @@ class CreateDataTambahanNasabahTable extends Migration
     public function up()
     {
         Schema::create('data_tambahan_nasabah', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('id_nasabah')->unsigned();
             $table->string('tempat_tinggal', 50);
             $table->string('scan_npwp')->nullable();
