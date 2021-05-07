@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 06, 2021 at 09:06 AM
+-- Generation Time: May 07, 2021 at 04:08 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -46,7 +46,8 @@ CREATE TABLE `data_tambahan_nasabah` (
 --
 
 INSERT INTO `data_tambahan_nasabah` (`id`, `id_nasabah`, `tempat_tinggal`, `scan_npwp`, `ktp_suami`, `ktp_istri`, `surat_nikah`, `bpkb`, `domisili_usaha`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Apartemen', 'upload/nasabah/3511198765897871/202105061357174_npwp.jpg', 'upload/nasabah/3511198765897871/202105061357174_ktp_suami.jpg', 'upload/nasabah/3511198765897871/202105061357174_ktp_istri.jpg', 'upload/nasabah/3511198765897871/202105061357174_surat_nikah.jpg', 'upload/nasabah/3511198765897871/202105061357174_bpkb.jpg', 'upload/nasabah/3511198765897871/202105061357174_domisili_usaha.jpg', '2021-05-06 06:57:17', '2021-05-06 06:57:17');
+(1, 4, 'Apartemen', 'upload/nasabah/3511198765897871/202105061357174_npwp.jpg', 'upload/nasabah/3511198765897871/202105061357174_ktp_suami.jpg', 'upload/nasabah/3511198765897871/202105061357174_ktp_istri.jpg', 'upload/nasabah/3511198765897871/202105061357174_surat_nikah.jpg', 'upload/nasabah/3511198765897871/202105061357174_bpkb.jpg', 'upload/nasabah/3511198765897871/202105061357174_domisili_usaha.jpg', '2021-05-06 06:57:17', '2021-05-06 06:57:17'),
+(2, 1, 'Rumah Pribadi', 'upload/nasabah/3511182612000001/202105070028471_npwp.jpg', 'upload/nasabah/3511182612000001/202105070028471_ktp_suami.jpg', 'upload/nasabah/3511182612000001/202105070028471_ktp_istri.jpg', 'upload/nasabah/3511182612000001/202105070028471_surat_nikah.jpg', 'upload/nasabah/3511182612000001/202105070028471_bpkb.jpg', 'upload/nasabah/3511182612000001/202105070028471_domisili_usaha.jpg', '2021-05-06 17:28:47', '2021-05-06 17:28:47');
 
 -- --------------------------------------------------------
 
@@ -177,7 +178,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (24, '2021_05_03_233347_add_alasan_penolakan', 5),
 (25, '2021_05_03_235147_add_alasan_penolakan_pinjaman', 5),
 (26, '2021_05_04_232207_create_penjamin_table', 6),
-(28, '2021_05_06_100016_create_data_tambahan_nasabah_table', 7);
+(28, '2021_05_06_100016_create_data_tambahan_nasabah_table', 7),
+(29, '2021_05_06_220915_create_syarat_pinjaman_umroh_table', 8);
 
 -- --------------------------------------------------------
 
@@ -210,7 +212,8 @@ CREATE TABLE `nasabah` (
   `id_tipe_nasabah` int(10) UNSIGNED DEFAULT NULL,
   `limit_pinjaman` int(11) NOT NULL,
   `is_verified` tinyint(1) DEFAULT 0,
-  `kelengkapan_data` tinyint(1) NOT NULL DEFAULT 0,
+  `kelengkapan_data` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'syarat pinjaman diatas 5jt\r\n0 = belum verifikasi data 1 = verifikasi data diterima 2 = verfikasi data pending 3 = verifikasi data ditolak ',
+  `syarat_pinjaman_umroh` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 = belum verifikasi data\r\n1 = verifikasi data diterima\r\n2 = verfikasi data pending\r\n3 = verifikasi data ditolak',
   `alasan_penolakan` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -221,11 +224,11 @@ CREATE TABLE `nasabah` (
 -- Dumping data for table `nasabah`
 --
 
-INSERT INTO `nasabah` (`id`, `nama`, `tanggal_lahir`, `tempat_lahir`, `jenis_kelamin`, `nik`, `no_hp`, `alamat`, `pekerjaan`, `foto_profil`, `scan_ktp`, `selfie_ktp`, `npwp`, `surat_nikah`, `surat_jaminan`, `surat_domisili_usaha`, `saldo`, `hutang`, `email`, `username`, `password`, `id_tipe_nasabah`, `limit_pinjaman`, `is_verified`, `kelengkapan_data`, `alasan_penolakan`, `token`, `created_at`, `updated_at`) VALUES
-(1, 'Diablo', '1991-05-09', NULL, 'Laki-laki', '3511182612000001', '85331053300', 'Bondowoso', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 'diablo@gmail.com', 'diablo', '$2y$10$xiu4iuolcMlkdPHELTbO2ey19mUUaXy4LG0kHrcjbzF2efk4NBOPS', NULL, 2000000, 1, 0, '', NULL, '2021-05-02 19:51:57', '2021-05-02 19:51:57'),
-(2, 'Inant Kharisma', '1998-04-21', 'Banyuwangi', 'Laki-laki', '3511198675543625', '085118766885', 'Bondowoso', 'Pengusaha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'inant', '$2y$10$mL1kpbwYr0huU4EYViLIeeIr0blj500drNWItm4FDHzbu/Rigx9xK', NULL, 5000000, 0, 0, '', NULL, '2021-05-04 00:52:59', '2021-05-04 16:37:11'),
-(3, 'Marceline', NULL, NULL, 'Laki-laki', NULL, '081224563215', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'celine', '$2y$10$YKWAllFBHAgk2.XPeJ.x9u7GgHRy.glttRH1uDykXWhjSXqq9mVKG', NULL, 5000000, 0, 0, '', NULL, '2021-05-04 01:19:01', '2021-05-04 01:19:01'),
-(4, 'Amelia Kamila', '1991-06-13', 'Bondowoso', 'Laki-laki', '3511198765897871', '085331456632', 'Bondowoso, Sumber Wringin', 'Pengusaha', NULL, 'upload/nasabah/3511198765897871/202105050110124_ktp.jpg', 'upload/nasabah/3511198765897871/202105050110124_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 12200000, 6700000, NULL, 'amelia', '$2y$10$YKWAllFBHAgk2.XPeJ.x9u7GgHRy.glttRH1uDykXWhjSXqq9mVKG', NULL, 5000000, 1, 0, '', NULL, '2021-05-04 01:20:13', '2021-05-04 23:09:15');
+INSERT INTO `nasabah` (`id`, `nama`, `tanggal_lahir`, `tempat_lahir`, `jenis_kelamin`, `nik`, `no_hp`, `alamat`, `pekerjaan`, `foto_profil`, `scan_ktp`, `selfie_ktp`, `npwp`, `surat_nikah`, `surat_jaminan`, `surat_domisili_usaha`, `saldo`, `hutang`, `email`, `username`, `password`, `id_tipe_nasabah`, `limit_pinjaman`, `is_verified`, `kelengkapan_data`, `syarat_pinjaman_umroh`, `alasan_penolakan`, `token`, `created_at`, `updated_at`) VALUES
+(1, 'Diablo', '1991-05-09', NULL, 'Laki-laki', '3511182612000001', '85331053300', 'Bondowoso', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1000000, 166667, 'diablo@gmail.com', 'diablo', '$2y$10$xiu4iuolcMlkdPHELTbO2ey19mUUaXy4LG0kHrcjbzF2efk4NBOPS', NULL, 2000000, 1, 2, 2, '', NULL, '2021-05-02 19:51:57', '2021-05-06 17:56:37'),
+(2, 'Inant Kharisma', '1998-04-21', 'Banyuwangi', 'Laki-laki', '3511198675543625', '085118766885', 'Bondowoso', 'Pengusaha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'inant', '$2y$10$mL1kpbwYr0huU4EYViLIeeIr0blj500drNWItm4FDHzbu/Rigx9xK', NULL, 5000000, 0, 0, 0, '', NULL, '2021-05-04 00:52:59', '2021-05-04 16:37:11'),
+(3, 'Marceline', NULL, NULL, 'Laki-laki', NULL, '081224563215', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'celine', '$2y$10$YKWAllFBHAgk2.XPeJ.x9u7GgHRy.glttRH1uDykXWhjSXqq9mVKG', NULL, 5000000, 0, 0, 0, '', NULL, '2021-05-04 01:19:01', '2021-05-04 01:19:01'),
+(4, 'Amelia Kamila', '1991-06-13', 'Bondowoso', 'Laki-laki', '3511198765897871', '085331456632', 'Bondowoso, Sumber Wringin', 'Pengusaha', NULL, 'upload/nasabah/3511198765897871/202105050110124_ktp.jpg', 'upload/nasabah/3511198765897871/202105050110124_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 12200000, 6700000, NULL, 'amelia', '$2y$10$YKWAllFBHAgk2.XPeJ.x9u7GgHRy.glttRH1uDykXWhjSXqq9mVKG', NULL, 5000000, 1, 0, 0, '', NULL, '2021-05-04 01:20:13', '2021-05-04 23:09:15');
 
 -- --------------------------------------------------------
 
@@ -345,15 +348,6 @@ INSERT INTO `pelunasan` (`id`, `id_pinjaman`, `nominal_pembayaran`, `tanggal_pem
 (3, 1, 200000, '2021-08-01', 3, 'Alfamart', '2021-05-03 15:09:37', '2021-05-03 15:09:37'),
 (4, 3, 41667, '2021-05-04', 1, 'Indomaret', '2021-05-03 21:57:25', '2021-05-03 21:57:25'),
 (5, 3, 41667, '2021-05-04', 2, 'Indomaret', '2021-05-03 22:36:43', '2021-05-03 22:36:43'),
-(6, 3, 41667, '2021-05-04', 3, 'Alfamart', '2021-05-03 23:45:54', '2021-05-03 23:45:54'),
-(7, 3, 41667, '2021-05-04', 4, 'Bank UMKM', '2021-05-04 00:05:58', '2021-05-04 00:05:58'),
-(8, 3, 41667, '2021-05-04', 5, 'Bank UMKM', '2021-05-04 00:06:34', '2021-05-04 00:06:34'),
-(9, 3, 41667, '2021-05-04', 6, 'Alfamart', '2021-05-04 00:07:11', '2021-05-04 00:07:11'),
-(10, 3, 41667, '2021-05-04', 7, 'Indomaret', '2021-05-04 00:08:12', '2021-05-04 00:08:12'),
-(11, 3, 41667, '2021-05-04', 8, 'Bank UMKM', '2021-05-04 00:08:59', '2021-05-04 00:08:59'),
-(12, 3, 41667, '2021-05-04', 9, 'Alfamart', '2021-05-04 00:10:07', '2021-05-04 00:10:07'),
-(13, 3, 41667, '2021-05-04', 10, 'Bank UMKM', '2021-05-04 00:10:24', '2021-05-04 00:10:24'),
-(14, 3, 41667, '2021-05-04', 11, 'Alfamart', '2021-05-04 00:10:58', '2021-05-04 00:10:58'),
 (15, 4, 833333, '2021-05-04', 1, 'Alfamart', '2021-05-04 00:12:03', '2021-05-04 00:12:03'),
 (16, 4, 833333, '2021-05-04', 2, 'Bank UMKM', '2021-05-04 00:12:49', '2021-05-04 00:12:49'),
 (17, 4, 833333, '2021-05-04', 3, 'Bank UMKM', '2021-05-04 00:13:08', '2021-05-04 00:13:08'),
@@ -365,7 +359,10 @@ INSERT INTO `pelunasan` (`id`, `id_pinjaman`, `nominal_pembayaran`, `tanggal_pem
 (23, 23, 100000, '2021-05-05', 2, 'Alfamart', '2021-05-04 23:05:00', '2021-05-04 23:05:00'),
 (24, 23, 100000, '2021-05-05', 3, 'Indomaret', '2021-05-04 23:07:32', '2021-05-04 23:07:32'),
 (25, 23, 100000, '2021-05-05', 4, 'Indomaret', '2021-05-04 23:08:35', '2021-05-04 23:08:35'),
-(26, 23, 100000, '2021-05-05', 5, 'Bank UMKM', '2021-05-04 23:09:15', '2021-05-04 23:09:15');
+(26, 23, 100000, '2021-05-05', 5, 'Bank UMKM', '2021-05-04 23:09:15', '2021-05-04 23:09:15'),
+(27, 5, 833333, '2021-05-07', 1, 'Indomaret', '2021-05-06 17:52:17', '2021-05-06 17:52:17'),
+(28, 5, 833333, '2021-05-07', 2, 'Bank UMKM', '2021-05-06 17:54:21', '2021-05-06 17:54:21'),
+(29, 5, 833333, '2021-05-07', 3, 'Indomaret', '2021-05-06 17:56:37', '2021-05-06 17:56:37');
 
 -- --------------------------------------------------------
 
@@ -446,7 +443,17 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (39, 'App\\Models\\Nasabah', 4, 'token', '047eb1455bd2373d3c979f20c07d080fc277c098c0ca3fe8b9c795d6899f95d1', '[\"*\"]', NULL, '2021-05-04 22:44:01', '2021-05-04 22:44:01'),
 (43, 'App\\Models\\Nasabah', 4, 'token', '302b6b0fe542f1e9044efa0152fe1a0366b504bab8a7d467f6341ddbdb3b3e25', '[\"*\"]', NULL, '2021-05-06 05:37:58', '2021-05-06 05:37:58'),
 (44, 'App\\Models\\Nasabah', 4, 'token', '8acd73e78cea170eb11ced41b4b7e3f852b3347d4c32d50104df74890b317915', '[\"*\"]', NULL, '2021-05-06 06:00:02', '2021-05-06 06:00:02'),
-(45, 'App\\Models\\Nasabah', 4, 'token', 'ee36e5a26d44e56a1b7ef5466c70990aa0a0af9d4347e7585bf796009a9529b4', '[\"*\"]', '2021-05-06 06:57:20', '2021-05-06 06:03:24', '2021-05-06 06:57:20');
+(45, 'App\\Models\\Nasabah', 4, 'token', 'ee36e5a26d44e56a1b7ef5466c70990aa0a0af9d4347e7585bf796009a9529b4', '[\"*\"]', '2021-05-06 06:57:20', '2021-05-06 06:03:24', '2021-05-06 06:57:20'),
+(46, 'App\\Models\\Nasabah', 1, 'token', '0c827b4a84ea064e5a5f53ea12ddf78aabbcc70efdecbe23ee28e7d791e466bc', '[\"*\"]', '2021-05-06 16:10:25', '2021-05-06 16:10:23', '2021-05-06 16:10:25'),
+(47, 'App\\Models\\Nasabah', 1, 'token', '22a062ec2ef59171a3cdd3f4c850d2201107aa8854a955b5b180fd891f33ad98', '[\"*\"]', '2021-05-06 17:58:14', '2021-05-06 16:19:15', '2021-05-06 17:58:14'),
+(48, 'App\\Models\\Nasabah', 1, 'token', '03b685c8d9ec34e5c15492dfe39befc18b2cc87dbe9c795ae994572f582d894a', '[\"*\"]', NULL, '2021-05-06 16:26:31', '2021-05-06 16:26:31'),
+(49, 'App\\Models\\Nasabah', 1, 'token', 'd747504cdf244e2512fe715300b03d32a31f4597398219665c6df684e1cbefea', '[\"*\"]', NULL, '2021-05-06 16:29:26', '2021-05-06 16:29:26'),
+(50, 'App\\Models\\Nasabah', 1, 'token', '91877b87fa1726ac3c6200eb5c1579b649e09ac6986d838b38c0d8438bf82d9f', '[\"*\"]', NULL, '2021-05-06 16:30:47', '2021-05-06 16:30:47'),
+(51, 'App\\Models\\Nasabah', 1, 'token', '907650eaa3c8bd451a32806b5f3c0399f251c7eae39c3689c06d36fc1fe6c933', '[\"*\"]', NULL, '2021-05-06 16:31:26', '2021-05-06 16:31:26'),
+(52, 'App\\Models\\Nasabah', 1, 'token', '7f1b9fc51f2e1dc600c7a060997601bad079f1f97e1678c1266f1dc61a6ec282', '[\"*\"]', NULL, '2021-05-06 16:32:19', '2021-05-06 16:32:19'),
+(53, 'App\\Models\\Nasabah', 1, 'token', '03f3a51b3c9804189fd0bd01bc676cc977a61ecc2971ed8e7073d26a433ba4b1', '[\"*\"]', NULL, '2021-05-06 16:35:32', '2021-05-06 16:35:32'),
+(54, 'App\\Models\\Nasabah', 1, 'token', 'edaa649bfc9357323f8716dd284f30ecb97a3e271a85ea2ddf43bfd217540c41', '[\"*\"]', NULL, '2021-05-06 17:23:15', '2021-05-06 17:23:15'),
+(55, 'App\\Models\\Nasabah', 1, 'token', 'aa0d4c870b502bcd7e403904054c787d5b3edb5381f13536a3f39e44643bb891', '[\"*\"]', NULL, '2021-05-06 17:41:49', '2021-05-06 17:41:49');
 
 -- --------------------------------------------------------
 
@@ -480,9 +487,8 @@ CREATE TABLE `pinjaman` (
 INSERT INTO `pinjaman` (`id`, `id_nasabah`, `id_user`, `id_jenis_pinjaman`, `nominal`, `jangka_waktu`, `tanggal_pengajuan`, `status`, `alasan_penolakan`, `tanggal_diterima`, `jatuh_tempo`, `tanggal_lunas`, `terbayar`, `view`, `created_at`, `updated_at`) VALUES
 (1, 1, NULL, 2, 600000, 3, '2021-05-03', 'Lunas', '', '2021-05-05', '2021-08-05', '2021-08-04', 1, '0', '2021-05-02 20:07:40', '2021-05-02 20:07:40'),
 (2, 1, NULL, 2, 1000000, 6, '2021-05-03', 'Tolak', '', NULL, NULL, NULL, 0, '0', '2021-05-03 13:52:52', '2021-05-03 13:52:52'),
-(3, 1, NULL, 1, 500000, 12, '2021-05-03', 'Terima', '', '2021-05-05', '2022-05-05', NULL, 0, '0', '2021-05-03 13:57:03', '2021-05-03 13:57:03'),
 (4, 1, NULL, 3, 5000000, 6, '2021-05-03', 'Lunas', '', '2021-05-10', '2021-11-10', '2021-05-05', 1, '0', '2021-05-03 14:49:25', '2021-05-04 20:01:28'),
-(5, 1, NULL, 3, 5000000, 6, '2021-05-03', 'Pending', '', NULL, NULL, NULL, 0, '0', '2021-05-03 14:50:47', '2021-05-03 14:50:47'),
+(5, 1, NULL, 3, 5000000, 6, '2021-05-03', 'Terima', '', NULL, NULL, NULL, 0, '0', '2021-05-03 14:50:47', '2021-05-03 14:50:47'),
 (6, 1, NULL, 3, 8000000, 3, '2021-05-03', 'Pending', '', NULL, NULL, NULL, 0, '0', '2021-05-03 14:51:12', '2021-05-03 14:51:12'),
 (7, 1, NULL, 1, 5500000, 3, '2021-05-03', 'Pending', '', NULL, NULL, NULL, 0, '0', '2021-05-03 14:53:29', '2021-05-03 14:53:29'),
 (8, 1, NULL, 3, 5500000, 12, '2021-05-03', 'Pending', '', NULL, NULL, NULL, 0, '0', '2021-05-03 14:55:09', '2021-05-03 14:55:09'),
@@ -503,6 +509,32 @@ INSERT INTO `pinjaman` (`id`, `id_nasabah`, `id_user`, `id_jenis_pinjaman`, `nom
 (23, 4, 1, 2, 1200000, 12, '2021-05-05', 'Terima', '-', '2021-05-05', '2022-05-05', NULL, 0, '0', '2021-05-04 21:46:27', '2021-05-04 21:52:45'),
 (24, 4, 1, 2, 3000000, 6, '2021-05-05', 'Terima', '-', '2021-05-05', '2021-11-05', NULL, 0, '0', '2021-05-04 22:04:00', '2021-05-04 22:04:32'),
 (25, 4, 1, 2, 3000000, 3, '2021-05-05', 'Terima', '-', '2021-05-05', '2021-08-05', NULL, 0, '0', '2021-05-04 22:05:06', '2021-05-04 22:05:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `syarat_pinjaman_umroh`
+--
+
+CREATE TABLE `syarat_pinjaman_umroh` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `id_nasabah` int(10) UNSIGNED NOT NULL,
+  `suket_travel` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `selfie_usaha` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `siup` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nib` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scan_jaminan` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `syarat_pinjaman_umroh`
+--
+
+INSERT INTO `syarat_pinjaman_umroh` (`id`, `id_nasabah`, `suket_travel`, `selfie_usaha`, `siup`, `nib`, `scan_jaminan`, `created_at`, `updated_at`) VALUES
+(1, 1, 'upload/nasabah/3511182612000001/202105062324531_suket_travel.jpg', 'upload/nasabah/3511182612000001/202105062324531_selfie_usaha.jpg', 'upload/nasabah/3511182612000001/202105062324531_siup.jpg', 'upload/nasabah/3511182612000001/202105062324531_nib.jpg', 'upload/nasabah/3511182612000001/202105062324531_scan_jaminan.jpg', '2021-05-06 16:24:53', '2021-05-06 16:24:53'),
+(2, 1, 'upload/nasabah/3511182612000001/202105070025551_suket_travel.jpg', 'upload/nasabah/3511182612000001/202105070025551_selfie_usaha.jpg', 'upload/nasabah/3511182612000001/202105070025551_siup.jpg', 'upload/nasabah/3511182612000001/202105070025551_nib.jpg', 'upload/nasabah/3511182612000001/202105070025551_scan_jaminan.jpg', '2021-05-06 17:25:55', '2021-05-06 17:25:55');
 
 -- --------------------------------------------------------
 
@@ -666,6 +698,13 @@ ALTER TABLE `pinjaman`
   ADD KEY `pinjaman_id_jenis_pinjaman_foreign` (`id_jenis_pinjaman`);
 
 --
+-- Indexes for table `syarat_pinjaman_umroh`
+--
+ALTER TABLE `syarat_pinjaman_umroh`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `syarat_pinjaman_umroh_id_nasabah_foreign` (`id_nasabah`);
+
+--
 -- Indexes for table `tipe_nasabah`
 --
 ALTER TABLE `tipe_nasabah`
@@ -687,7 +726,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `data_tambahan_nasabah`
 --
 ALTER TABLE `data_tambahan_nasabah`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -717,7 +756,7 @@ ALTER TABLE `master_bank`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `nasabah`
@@ -741,7 +780,7 @@ ALTER TABLE `oauth_personal_access_clients`
 -- AUTO_INCREMENT for table `pelunasan`
 --
 ALTER TABLE `pelunasan`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `penjamin`
@@ -753,13 +792,19 @@ ALTER TABLE `penjamin`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `pinjaman`
 --
 ALTER TABLE `pinjaman`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `syarat_pinjaman_umroh`
+--
+ALTER TABLE `syarat_pinjaman_umroh`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tipe_nasabah`
@@ -815,6 +860,12 @@ ALTER TABLE `pinjaman`
   ADD CONSTRAINT `pinjaman_id_jenis_pinjaman_foreign` FOREIGN KEY (`id_jenis_pinjaman`) REFERENCES `jenis_pinjaman` (`id`),
   ADD CONSTRAINT `pinjaman_id_nasabah_foreign` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id`),
   ADD CONSTRAINT `pinjaman_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `syarat_pinjaman_umroh`
+--
+ALTER TABLE `syarat_pinjaman_umroh`
+  ADD CONSTRAINT `syarat_pinjaman_umroh_id_nasabah_foreign` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

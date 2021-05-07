@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('nasabah', 'API\NasabahController@index');
-    // data tambahan nasabah
+    // data tambahan nasabah (syarat pinjaman diatas 5jt)
     Route::post('data-tambahan-nasabah', 'API\NasabahController@inputDataTambahan');
+    // syarat pinjaman umroh
+    Route::post('syarat-pinjaman-umroh', 'API\NasabahController@inputSyaratPinjamanUmroh');
     Route::get('me', 'API\ApiAuthController@me');
     Route::get('logout', 'API\ApiAuthController@logout');
     // melengkapi data profil
