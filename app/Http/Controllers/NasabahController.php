@@ -19,15 +19,19 @@ class NasabahController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $nasabah = Nasabah::with('tipe')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
+                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
-                $nasabah = Nasabah::with('tipe')->paginate(10);
+                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
-                
+        
+        // echo "<pre>";
+        // print_r ($nasabah);
+        // echo "</pre>";
+        
         return \view('nasabah.list-nasabah', ['nasabah' => $nasabah], $this->param);
     }
 

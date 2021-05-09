@@ -21,10 +21,10 @@ class PelunasanController extends Controller
             //     $pelunasan = Pelunasan::where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
             // }
             // else{
-                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->paginate(10);
+                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal_pembayaran', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->paginate(10);
             // }
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withStatus('Terjadi Kesalahan');
+            return redirect()->back()->withStatus('Terjadi Kesalahan'. $e->getMessage());
         }
                 
         return \view('pelunasan.list-pelunasan', ['pelunasan' => $pelunasan], $this->param);

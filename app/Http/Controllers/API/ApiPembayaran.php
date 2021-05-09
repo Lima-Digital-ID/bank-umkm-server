@@ -43,14 +43,14 @@ class ApiPembayaran extends Controller
             $nasabah->hutang = $hutang;
             $nasabah->save();
 
-            if($hutang == 0) {
-                $pelunasanHutang = Pinjaman::find(auth()->user()->id);
-                $pelunasanHutang->status = 'Lunas';
-                $pelunasanHutang->tanggal_lunas = date("Y-m-d");
-                $pelunasanHutang->terbayar = 1;
-                $pelunasanHutang->updated_at = time();
+            $pinjaman = Pinjaman::find($request->get('id_pinjaman'));
+            $pinjaman->terbayar += $request->get('nominal_pembayaran');
+            $pinjaman->save();
 
-                $pelunasanHutang->save();
+            if($pinjaman->terbayar == $pinjaman->nominal) {
+                $pinjaman->status = 'Lunas';
+                $pinjaman->tanggal_lunas = date("Y-m-d");
+                $pinjaman->save();
             }
 
             $status = 'success';

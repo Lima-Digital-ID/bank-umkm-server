@@ -11,10 +11,8 @@ class Nasabah extends Model
     use HasApiTokens,HasFactory;
     protected $table = 'nasabah';
 
-    protected $hidden = [
-        'password',
-        'token',
-    ];
+    protected $hidden = array('password', 'token');
+
 
     public function pinjaman()
     {
@@ -29,5 +27,10 @@ class Nasabah extends Model
     public function dataTambahan()
     {
         return $this->hasOne('App\Models\DataTambahanNasabah','id_nasabah');
+    }
+    
+    public function syaratPinjamanUmroh()
+    {
+        return $this->hasOne('App\Models\SyaratPinjamanUmroh','id_nasabah');
     }
 }

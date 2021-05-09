@@ -56,7 +56,7 @@
                             <td>{{$no}}</td>
                             <td>{{$value->tanggal_pembayaran}}</td>
                             <td>{{$value->nama}}</td>
-                            <td>{{number_format($value->nominal, 2, ',', '.')}}</td>
+                            <td>{{number_format($value->nominal_pembayaran, 2, ',', '.')}}</td>
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('pelunasan.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>

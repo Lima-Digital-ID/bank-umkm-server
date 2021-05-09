@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldStatusKelengkapanDataNasabah extends Migration
+class AddFieldSyaratPinjamanUmroh extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddFieldStatusKelengkapanDataNasabah extends Migration
     public function up()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->tinyInteger('status_kelengkapan_data')
+            $table->tinyInteger('syarat_pinjaman_umroh')
                     ->default(0)
                     ->after('is_verified')
                     ->comment('Default 0 untuk belum mengajukan, 1 untuk diterima, 2 untuk pending, 3 untuk tolak');
@@ -29,7 +29,7 @@ class AddFieldStatusKelengkapanDataNasabah extends Migration
     public function down()
     {
         Schema::table('nasabah', function (Blueprint $table) {
-            $table->dropColumn('status_kelengkapan_data');
+            $table->dropColumn('syarat_pinjaman_umroh');
         });
     }
 }

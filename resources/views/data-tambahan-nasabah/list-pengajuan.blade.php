@@ -63,13 +63,13 @@
                                 <div class="form-inline">
                                     {{-- <a href="{{ route('data-tambahan-nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> --}}
                                     <a href="{{ route('data-tambahan-nasabah.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                    <form action="{{ route('data-tambahan-nasabah.destroy', $value) }}" method="post">
+                                    {{-- <form action="{{ route('data-tambahan-nasabah.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                             <span class="fa fa-minus-circle"></span>
                                         </button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>

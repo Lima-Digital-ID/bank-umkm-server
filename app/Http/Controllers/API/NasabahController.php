@@ -132,14 +132,13 @@ class NasabahController extends Controller
                 file_put_contents($filename, $img);
                 $newData->domisili_usaha = $filename;
             }
-            $newData->save();
-
+            
             if($newData->save()) {
                 $nasabah->kelengkapan_data = 2; // 2 = pending
                 $nasabah->updated_at = time();
 
                 $nasabah->save();
-                
+                    
                 if($nasabah->save()) {
                     $status = 'success';
                     $message = 'Berhasil';
@@ -154,7 +153,7 @@ class NasabahController extends Controller
 
             $status = 'success';
             $message = 'Berhasil';
-            $data = $request->get('ktp_suami')->getClientOriginalName();
+            $data = $newData->id;
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal. ' . $e->getMessage();
@@ -182,7 +181,8 @@ class NasabahController extends Controller
             $nasabah = Nasabah::find($id);
             $nik = $nasabah->nik;
 
-            $folder = 'upload/nasabah/'.$nik;
+            // $folder = 'upload/nasabah/'.$nik;
+            $folder = 'upload/nasabah/'.$nik.'/syarat-pinjaman-umroh';
             // Get canonicalized absolute pathname
             $path = realpath($folder);
             // If it exist, check if it's a directory
@@ -197,7 +197,7 @@ class NasabahController extends Controller
             $newData->id_nasabah = $id;
 
             // upload suket travel atau kbih
-            if($request->get('suket_travel') != null || $request->get('suket_travel') != ''){
+            if($request->get('suket_travel') != null || $request->get('suket_travel_filename') != ''){
                 $extension = explode('.', $request->get('suket_travel_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_suket_travel.'.$ext;
@@ -206,7 +206,7 @@ class NasabahController extends Controller
                 $newData->suket_travel = $filename;
             }
             // upload selfie usaha terkini
-            if($request->get('selfie_usaha') != null || $request->get('selfie_usaha') != ''){
+            if($request->get('selfie_usaha') != null || $request->get('selfie_usaha_filename') != ''){
                 $extension = explode('.', $request->get('selfie_usaha_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_selfie_usaha.'.$ext;
@@ -215,7 +215,7 @@ class NasabahController extends Controller
                 $newData->selfie_usaha = $filename;
             }
             // upload siup (suran izin usaha perusahaan)
-            if($request->get('siup') != null || $request->get('siup') != ''){
+            if($request->get('siup') != null || $request->get('siup_filename') != ''){
                 $extension = explode('.', $request->get('siup_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_siup.'.$ext;
@@ -224,7 +224,7 @@ class NasabahController extends Controller
                 $newData->siup = $filename;
             }
             // upload nib (nomor induk berusaha)
-            if($request->get('nib') != null || $request->get('nib') != ''){
+            if($request->get('nib') != null || $request->get('nib_filename') != ''){
                 $extension = explode('.', $request->get('nib_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_nib.'.$ext;
@@ -233,7 +233,7 @@ class NasabahController extends Controller
                 $newData->nib = $filename;
             }
             // upload scan jaminan
-            if($request->get('scan_jaminan') != null || $request->get('scan_jaminan') != ''){
+            if($request->get('scan_jaminan') != null || $request->get('scan_jaminan_filename') != ''){
                 $extension = explode('.', $request->get('scan_jaminan_filename'));
                 $ext = end($extension);
                 $filename = $folder.'/'.date('YmdHis').$id.'_scan_jaminan.'.$ext;

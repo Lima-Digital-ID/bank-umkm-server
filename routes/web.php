@@ -22,6 +22,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pelunasan', 'PelunasanController');
     Route::get('data-tambahan-nasabah/update-status/{id}', 'DataTambahanNasabahController@updateStatus');
     Route::resource('data-tambahan-nasabah', 'DataTambahanNasabahController');
+    
+    Route::get('syarat-pinjaman-umroh/update-status/{id}', 'SyaratPinjamanUmrohController@updateStatus');
+    Route::resource('syarat-pinjaman-umroh', 'SyaratPinjamanUmrohController');
+
+    Route::get('laporan/', 'LaporanController@index');
 });
 
 require __DIR__.'/auth.php';

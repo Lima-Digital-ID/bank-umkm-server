@@ -32,81 +32,71 @@
                     <tr>
                       <td>Nama</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->nasabah->nama}}</td>
+                      <td>{{$syaratPinjamanUmroh->nasabah->nama}}</td>
                     </tr>
                     <tr>
                       <td>Jenis Kelamin</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->nasabah->jenis_kelamin}}</td>
+                      <td>{{$syaratPinjamanUmroh->nasabah->jenis_kelamin}}</td>
                     </tr>
                     <tr>
                       <td>Tanggal Lahir</td>
                       <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($dataTambahan->nasabah->tanggal_lahir))}}</td>
+                      <td>{{date('d-m-Y', strtotime($syaratPinjamanUmroh->nasabah->tanggal_lahir))}}</td>
                     </tr>
                     <tr>
                       <td>NIK</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->nasabah->nik}}</td>
+                      <td>{{$syaratPinjamanUmroh->nasabah->nik}}</td>
                     </tr>
                     <tr>
                       <td>No Handphone</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->nasabah->no_hp}}</td>
+                      <td>{{$syaratPinjamanUmroh->nasabah->no_hp}}</td>
                     </tr>
                     {{-- <tr>
                       <td>Email</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->email}}</td>
+                      <td>{{$syaratPinjamanUmroh->email}}</td>
                     </tr> --}}
                     <tr>
-                      <td>Tempat Tinggal</td>
+                      <td>Surat Keterangan Travel</td>
                       <td>:</td>
-                      <td>{{$dataTambahan->tempat_tinggal}}</td>
+                      <td><a href="{{ url($syaratPinjamanUmroh->suket_travel) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                     </tr>
                     <tr>
-                      <td>NPWP</td>
+                      <td>Foto Selfie Usaha</td>
                       <td>:</td>
-                      <td><a href="{{ url($dataTambahan->scan_npwp) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td><a href="{{ url($syaratPinjamanUmroh->selfie_usaha) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                     </tr>
                     <tr>
-                      <td>KTP Suami</td>
+                      <td>SIUP</td>
                       <td>:</td>
-                      <td><a href="{{ url($dataTambahan->ktp_suami) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td><a href="{{ url($syaratPinjamanUmroh->siup) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                     </tr>
                     <tr>
-                      <td>KTP Istri</td>
+                      <td>NIB</td>
                       <td>:</td>
-                      <td><a href="{{ url($dataTambahan->ktp_istri) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td><a href="{{ url($syaratPinjamanUmroh->nib) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                     </tr>
                     <tr>
-                      <td>Surat Nikah</td>
+                      <td>Jaminan</td>
                       <td>:</td>
-                      <td><a href="{{ url($dataTambahan->surat_nikah) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td><a href="{{ url($syaratPinjamanUmroh->scan_jaminan) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                     </tr>
                     <tr>
-                      <td>BPKP</td>
+                      <td>Status Syarat Pinjaman</td>
                       <td>:</td>
-                      <td><a href="{{ url($dataTambahan->bpkb) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
-                    </tr>
-                    <tr>
-                      <td>Domisili Usaha</td>
-                      <td>:</td>
-                      <td><a href="{{ url($dataTambahan->domisili_usaha) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
-                    </tr>
-                    <tr>
-                      <td>Status Kelengkapan Data</td>
-                      <td>:</td>
-                      <td><span class="badge badge-{{$dataTambahan->nasabah->kelengkapan_data == '1' ? 'success' : ($dataTambahan->nasabah->kelengkapan_data == '2' ? 'warning' : 'danger')}}">
-                        {{$dataTambahan->nasabah->kelengkapan_data == '2' ? 'Pending' : ($dataTambahan->nasabah->kelengkapan_data=='1' ? 'ACC' : ($dataTambahan->nasabah->kelengkapan_data=='2' ? 'Pending' : 'Ditolak'))}}
+                      <td><span class="badge badge-{{$syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh == '1' ? 'success' : ($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh == '2' ? 'warning' : 'danger')}}">
+                        {{$syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh == '2' ? 'Pending' : ($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh=='1' ? 'ACC' : ($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh=='2' ? 'Pending' : 'Ditolak'))}}
                       </span></td>
                     </tr>
                   </table>
                 </div>
 
-                @if($dataTambahan->nasabah->kelengkapan_data==2)
-                  <a href="{{ url('data-tambahan-nasabah/update-status?status=1', $dataTambahan->id)}}" class="btn btn-success">ACC</a>
-                  <a href="{{ url('data-tambahan-nasabah/update-status?status=3', $dataTambahan->id)}}"class="btn btn-danger">Tolak</a>
+                @if($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh==2)
+                  <a href="{{ url('syarat-pinjaman-umroh/update-status?status=1', $syaratPinjamanUmroh->id)}}" class="btn btn-success">ACC</a>
+                  <a href="{{ url('syarat-pinjaman-umroh/update-status?status=3', $syaratPinjamanUmroh->id)}}"class="btn btn-danger">Tolak</a>
                 @endif
                 </div>
               </div>

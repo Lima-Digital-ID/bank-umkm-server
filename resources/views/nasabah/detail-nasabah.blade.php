@@ -92,8 +92,8 @@
                     <tr>
                       <td>Status</td>
                       <td>:</td>
-                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : $nasabah->is_verified=='2' ? 'primary' : 'danger'}}">
-                        {{$nasabah->is_verified=='0' ? 'Pending' : $nasabah->is_verified=='1' ? 'ACC' : $nasabah->is_verified=='2' ? 'Pending' : 'Ditolak'}}
+                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : ($nasabah->is_verified=='2' ? 'primary' : 'danger')}}">
+                        {{$nasabah->is_verified=='0' ? 'Pending' : ($nasabah->is_verified=='1' ? 'ACC' : ($nasabah->is_verified=='2' ? 'Pending' : 'Ditolak'))}}
                       </span></td>
                     </tr>
                     @if($nasabah->is_verified=='3')

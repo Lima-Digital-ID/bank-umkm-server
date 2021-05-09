@@ -14,7 +14,7 @@ class CreateSyaratPinjamanUmrohTable extends Migration
     public function up()
     {
         Schema::create('syarat_pinjaman_umroh', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('id_nasabah')->unsigned();
             $table->string('suket_travel')->nullable();
             $table->string('selfie_usaha')->nullable();

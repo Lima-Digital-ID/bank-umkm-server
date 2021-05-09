@@ -105,6 +105,9 @@
                 <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
                   <span>Pengajuan Data Tambahan Nasabah</span>
                 </a>
+                <a class="nav-link" href="{{url('syarat-pinjaman-umroh')}}">
+                  <span>Pengajuan Syarat Pinjaman Umroh</span>
+                </a>
               </div>
             </div>
           </li>
@@ -148,6 +151,13 @@
             <a class="nav-link" href="{{url('pelunasan')}}">
               <i class="fas fa-fw fa-hand-holding-usd"></i>
               <span>Pelunasan</span></a
+            >
+          </li>
+          
+          <li class="nav-item {{Request::segment(1) == 'laporan' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('laporan')}}">
+              <i class="fas fa-fw fa-chart-line"></i>
+              <span>Laporan Transaksi</span></a
             >
           </li>
 
