@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('syarat-pinjaman-umroh', 'SyaratPinjamanUmrohController');
 
     Route::get('laporan/', 'LaporanController@index');
+    Route::get('laporan/chart', 'ChartLaporanController@index');
 });
 
 require __DIR__.'/auth.php';

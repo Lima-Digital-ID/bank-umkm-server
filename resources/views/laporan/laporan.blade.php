@@ -42,6 +42,14 @@
         </form>
 
         @if (Request::get('dari') && Request::get('sampai'))
+        <hr>
+          <div class="row col-auto">
+            <div class="form-group mr-3">
+                <a href="{{ url('laporan/chart')."?dari=$_GET[dari]&sampai=$_GET[sampai]"}}" class="btn btn-primary btn-sm">
+                    <i class="fa fa-chart-line" aria-hidden="true"></i> Detail
+                </a>
+            </div>
+          </div>
           <div class="table-responsive">
             <table class="table table-custom">
               <thead>
