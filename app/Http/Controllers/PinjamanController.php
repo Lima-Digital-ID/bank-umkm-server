@@ -12,7 +12,7 @@ class PinjamanController extends Controller
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Manage Pinjaman / List Pinjaman';
+        $this->param['pageInfo'] = 'List Pinjaman';
         // $this->param['btnRight']['text'] = 'Tambah Data';
         // $this->param['btnRight']['link'] = route('pinjaman.create');
         $tipe = 'Pending';

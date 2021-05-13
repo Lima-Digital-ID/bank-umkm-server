@@ -20,7 +20,7 @@
           <div class="row">
             <div class="col-md-4">
               <label for="">Dari</label>
-              <input type="text" autocomplete="off" name="dari" class="form-control datepicker" value="{{Request::get('dari') != null ? Request::get('dari') : date('Y-m-d')}}">
+              <input type="text" autocomplete="off" name="dari" class="form-control datepicker" value="{{Request::get('dari') != null ? Request::get('dari') : date('Y-m-01')}}">
             </div>
             <div class="col-md-4">
               <label for="">Sampai</label>

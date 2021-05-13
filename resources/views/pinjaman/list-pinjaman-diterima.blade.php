@@ -67,8 +67,8 @@
                                 <td>
                                     <div class="form-inline">
                                         <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
-                                        <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-warning mr-2" title="Detail Pinjaman" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                        <a href="{{ route('pelunasan.show', $value) }}" class="btn btn-warning mr-2" title="History Pembayaran" data-toggle="tooltip"> <span class="fa fa-history"></span> </a>
+                                        <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-primary mr-2" title="Detail Pinjaman" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
+                                        <a href="{{ route('pelunasan.show', $value) }}" class="btn btn-info mr-2" title="History Pembayaran" data-toggle="tooltip"> <span class="fa fa-history"></span> </a>
                                         <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Nasabah" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
                                         <form action="{{ route('pinjaman.destroy', $value) }}" method="post">
                                             @csrf

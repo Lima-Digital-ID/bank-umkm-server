@@ -73,12 +73,12 @@
             >
           </li>
           
-          <li class="nav-item {{Request::segment(1) == 'tipe-nasabah' ? 'active' : ''}}">
+          {{-- <li class="nav-item {{Request::segment(1) == 'tipe-nasabah' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('tipe-nasabah')}}">
               <i class="fas fa-fw fa-layer-group"></i>
               <span>Tipe Nasabah</span></a
             >
-          </li>
+          </li> --}}
 
           <li class="nav-item {{Request::segment(1) == 'nasabah' ? 'active' : ''}}">
             <a
@@ -220,7 +220,7 @@
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="h4 mb-0 solid-color font-weight-bold infopage">
                   <?php 
-                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) : 'Dashboard';
+                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) : '';
                   ?>
                   {{ ucwords( str_replace("-"," ",$pageSegment) ) }}
             </div>
@@ -228,11 +228,11 @@
               <a href="#"> 
                 {{ucwords( str_replace("-"," ",$pageSegment) )}}
               </a>
-              /
               @if (!empty($pageInfo))
+                /
                 <a href="#"> {{$pageInfo}}</a>
               @else
-                <a href="#"> Dashboard</a>
+                <a href="#"></a>
               @endif
             </div>
           </div>

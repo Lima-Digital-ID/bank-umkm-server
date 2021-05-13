@@ -12,7 +12,7 @@ class NasabahController extends Controller
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Manage Nasabah / List Nasabah';
+        $this->param['pageInfo'] = ' List Nasabah';
         $this->param['btnRight']['text'] = 'Tambah Data';
         $this->param['btnRight']['link'] = route('nasabah.create');
 
@@ -37,7 +37,7 @@ class NasabahController extends Controller
 
     public function create()
     {
-        $this->param['pageInfo'] = 'Manage Nasabah / Tambah Data';
+        $this->param['pageInfo'] = ' Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('nasabah.index');
         $this->param['tipeNasabah'] = TipeNasabah::get();
@@ -128,7 +128,7 @@ class NasabahController extends Controller
     public function show($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage Nasabah / Detail';
+            $this->param['pageInfo'] = ' Detail';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
             $this->param['nasabah'] = Nasabah::with('tipe')->find($id);
@@ -151,7 +151,7 @@ class NasabahController extends Controller
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage Nasabah / Edit Data';
+            $this->param['pageInfo'] = ' Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
             $this->param['tipeNasabah'] = TipeNasabah::get();

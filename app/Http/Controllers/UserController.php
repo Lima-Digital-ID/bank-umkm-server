@@ -11,7 +11,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Manage User / List User';
+        $this->param['pageInfo'] = 'List User';
         $this->param['btnRight']['text'] = 'Tambah Data';
         $this->param['btnRight']['link'] = route('user.create');
 
@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $this->param['pageInfo'] = 'Manage User / Tambah Data';
+        $this->param['pageInfo'] = 'Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('user.index');
 
@@ -79,7 +79,7 @@ class UserController extends Controller
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage User / Edit Data';
+            $this->param['pageInfo'] = 'Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('user.index');
             $this->param['user'] = User::find($id);

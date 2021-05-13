@@ -11,7 +11,7 @@ class PelunasanController extends Controller
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Pelunasan / List Pelunasan';
+        $this->param['pageInfo'] = 'List Pelunasan';
         // $this->param['btnRight']['text'] = 'Tambah Data';
         // $this->param['btnRight']['link'] = route('pelunasan.create');
 
@@ -32,7 +32,7 @@ class PelunasanController extends Controller
 
     public function create()
     {
-        $this->param['pageInfo'] = 'Pelunasan / Tambah Data';
+        $this->param['pageInfo'] = 'Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('pelunasan.index');
 
@@ -71,7 +71,7 @@ class PelunasanController extends Controller
     public function show($idPinjaman)
     {
         try{
-            $this->param['pageInfo'] = 'Pelunasan / Detail';
+            $this->param['pageInfo'] = 'Detail';
             // $this->param['btnRight']['text'] = 'Lihat Data';
             // $this->param['btnRight']['link'] = route('pelunasan.index');
             $this->param['pinjaman'] = Pinjaman::with('nasabah')->find($idPinjaman);
@@ -90,7 +90,7 @@ class PelunasanController extends Controller
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Pelunasan / Edit Data';
+            $this->param['pageInfo'] = 'Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pelunasan.index');
             $this->param['pelunasan'] = Pelunasan::find($id);

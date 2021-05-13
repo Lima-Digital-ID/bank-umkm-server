@@ -5,12 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('dashboard', function(){
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('user', 'UserController');
     Route::resource('tipe-nasabah', 'TipeNasabahController');
     Route::post('nasabah/update-status/{id}', 'NasabahController@updateStatus');
