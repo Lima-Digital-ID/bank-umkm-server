@@ -51,7 +51,7 @@ class PinjamanController extends Controller
             $newPinjaman->id_nasabah = auth()->user()->id;
             $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
             $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
-            $newPinjaman->nominal = $request->get('nominal');
+            $newPinjaman->nominal = 0;
             $newPinjaman->tanggal_pengajuan = date('Y-m-d');
             $newPinjaman->alasan_penolakan = '-';
             $newPinjaman->status = 'Pending';

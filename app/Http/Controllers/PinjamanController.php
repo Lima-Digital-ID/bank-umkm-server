@@ -136,8 +136,8 @@ class PinjamanController extends Controller
             $this->param['pageInfo'] = 'Manage Pinjaman / Detail';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pinjaman.index');
-            $this->param['pinjaman'] = Pinjaman::with('nasabah')->find($id);
-
+            $this->param['pinjaman'] = Pinjaman::with('nasabah')->with('jenisPinjaman')->find($id);
+            // return $this->param['pinjaman'];
             return \view('pinjaman.detail-pinjaman', $this->param);
             
             
@@ -168,16 +168,26 @@ class PinjamanController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id, $status)
     {
         try{
             $pinjaman = Pinjaman::find($id);
-            $setStatus = $request->get('status');
+            $setStatus = $status;
             if ($setStatus == 'Terima') {
+                $this->validate($request,[
+                    'nominal' => 'required',
+                ],
+                [
+                    'required' => ':atributte harus diisi.'
+                ],
+                [
+                    'nominal' => 'Nominal'
+                ]);
                 $date = date('Y-m-d');
                 $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
                 $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
+                $pinjaman->nominal = $request->get('nominal');
                 
                 $nasabah = Nasabah::find($pinjaman->id_nasabah);
                 $nasabah->saldo += $pinjaman->nominal;
@@ -188,6 +198,7 @@ class PinjamanController extends Controller
                 $pinjaman->alasan_penolakan = $request->get('alasan');
             }
             $pinjaman->status = $setStatus;
+            $pinjaman->updated_at = time();
             $pinjaman->save();
 
 

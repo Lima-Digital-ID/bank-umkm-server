@@ -26,102 +26,130 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-custom">
-                    <tr>
-                      <td>Nama Nasabah</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->nama}}</td>
-                    </tr>
-                    <tr>
-                      <td>Jenis Kelamin</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->jenis_kelamin}}</td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Lahir</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->nasabah->tanggal_lahir))}}</td>
-                    </tr>
-                    <tr>
-                      <td>NIK</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->nik}}</td>
-                    </tr>
-                    <tr>
-                      <td>No Handphone</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->no_hp}}</td>
-                    </tr>
-                    <tr>
-                      <td>Email</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->email}}</td>
-                    </tr>
-                    <tr>
-                      <td>Alamat</td>
-                      <td>:</td>
-                      <td>{{$pinjaman->nasabah->alamat}}</td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Pengajuan</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_pengajuan))}}</td>
-                    </tr>
-                    @if ($pinjaman->status == 'Terima')
-                    <tr>
-                      <td>Tanggal Diterima</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_diterima))}}</td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Batas Pelunasan</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
-                    </tr>
-                    @endif
-                    @if ($pinjaman->status == 'Lunas')
-                    <tr>
-                      <td>Tanggal Diterima</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_diterima))}}</td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Batas Pelunasan</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
-                    </tr>
-                    <tr>
-                      <td>Tanggal Lunas</td>
-                      <td>:</td>
-                      <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_lunas))}}</td>
-                    </tr>
-                    @endif
-                    <tr>
-                      <td>Nominal</td>
-                      <td>:</td>
-                      <td>{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
-                    </tr>
-                    @if ($pinjaman->status == 'Terima')
-                    <tr>
-                      <td>Terbayar</td>
-                      <td>:</td>
-                      <td>{{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
-                    </tr>
-                    @endif
-                    <tr>
-                      <td>Status</td>
-                      <td>:</td>
-                      <td><span class="badge badge-{{$pinjaman->status == 'Pending' ? 'warning' : ($pinjaman->status == 'Terima' || $pinjaman->status == 'Lunas' ? 'success' : 'danger') }}">{{$pinjaman->status}}</span></td>
-                    </tr>
-                  </table>
+              <form action="{{ route('update-status-pinjaman', [$pinjaman->id, 'Terima'],) }}" method="get">
+                @csrf
+                @method("GET")
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-custom">
+                      <tr>
+                        <td>Nama Nasabah</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->nama}}</td>
+                      </tr>
+                      <tr>
+                        <td>Jenis Kelamin</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->jenis_kelamin}}</td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Lahir</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->nasabah->tanggal_lahir))}}</td>
+                      </tr>
+                      <tr>
+                        <td>NIK</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->nik}}</td>
+                      </tr>
+                      <tr>
+                        <td>No Handphone</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->no_hp}}</td>
+                      </tr>
+                      <tr>
+                        <td>Email</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->email}}</td>
+                      </tr>
+                      <tr>
+                        <td>Alamat</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->alamat}}</td>
+                      </tr>
+                      <tr>
+                        <td>Pekerjaan</td>
+                        <td>:</td>
+                        <td>{{$pinjaman->nasabah->pekerjaan}}</td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Pengajuan</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_pengajuan))}}</td>
+                      </tr>
+                      @if ($pinjaman->status == 'Terima')
+                      <tr>
+                        <td>Tanggal Diterima</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_diterima))}}</td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Batas Pelunasan</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
+                      </tr>
+                      @endif
+                      @if ($pinjaman->status == 'Lunas')
+                      <tr>
+                        <td>Tanggal Diterima</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_diterima))}}</td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Batas Pelunasan</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
+                      </tr>
+                      <tr>
+                        <td>Tanggal Lunas</td>
+                        <td>:</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_lunas))}}</td>
+                      </tr>
+                      @endif
+                      <tr>
+                        <td>Jenis Pinjaman</td>
+                        <td>:</td>
+                        <td>{{ $pinjaman->jenisPinjaman->jenis_pinjaman }} </td>
+                      </tr>
+                      <tr>
+                        <td>Pelunasan</td>
+                        <td>:</td>
+                        <td>{{ $pinjaman->jangka_waktu }} Bulan</td>
+                      </tr>
+                      @if ($pinjaman->status == 'Terima')
+                      <tr>
+                        <td>Terbayar</td>
+                        <td>:</td>
+                        <td>Rp. {{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
+                      </tr>
+                      @endif
+                      <tr>
+                        <td>Status</td>
+                        <td>:</td>
+                        <td><span class="badge badge-{{$pinjaman->status == 'Pending' ? 'warning' : ($pinjaman->status == 'Terima' || $pinjaman->status == 'Lunas' ? 'success' : 'danger') }}">{{$pinjaman->status}}</span></td>
+                      </tr>
+                      @if ($pinjaman->status != 'Tolak')
+                      <tr>
+                        <td>Nominal</td>
+                        <td>:</td>
+                        <td>
+                          @if ($pinjaman->status == 'Pending')
+                          <input type="number" name="nominal" id="nominal" class="form-control">
+                          @else
+                          Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
+                          @endif
+                        </td>
+                      </tr>
+                      @endif
+                    </table>
+                  </div>
+                  @if ($pinjaman->status == 'Pending')
+                    {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>
+                    <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
+                  @endif
                 </div>
-                @if ($pinjaman->status == 'Pending')
-                  <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a>
-                  <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
-                @endif
-              </div>
+              </form>
             </div>
           </div>
         </div>

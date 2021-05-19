@@ -19,6 +19,44 @@ class NasabahController extends Controller
         ]);
     }
 
+    public function getNasabahById()
+    {
+        $status = '';
+        $message = '';
+        $token = '';
+        $nasabah = '';
+        $id_nasabah = auth()->user()->id;
+        try {
+            $nasabah = Nasabah::find($id_nasabah);
+            if($nasabah == null) {
+                $status = 'failed';
+                $message = 'Akun tidak ditemukan';
+                // $nasabah = '';
+            }
+            else {
+                $status = 'success';
+                $message = 'Berhasil';
+            }
+
+
+        } catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'success';
+            $message = 'Gagal' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $nasabah,
+                'token' => $token
+            ], 200);
+        }
+    }
+
     public function getHutangPerNasabah(Request $request)
     {
         
