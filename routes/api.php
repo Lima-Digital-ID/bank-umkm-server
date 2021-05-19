@@ -42,6 +42,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('status-cicilan/{id_pinjaman}/{cicilan_ke}', 'API\ApiPembayaran@getStatusCicilan');
     // get saldo per nasabah
     Route::get('get-saldo-hutang-nasabah', 'API\NasabahController@getSaldoAndHutangPerNasabah');
+
+    // get notification per nasabah
+    Route::get('get-notification', 'API\NotificationController@getNotifPerNasabah');
+    Route::get('get-notification-not-read', 'API\NotificationController@getNotifPerNasabahNotRead');
+    Route::get('detail-notification/{id}', 'API\NotificationController@getDetailNotif');
+    Route::get('read-notification/{id}', 'API\NotificationController@isRead');
     
 });
 // // pengajuan pinjaman
