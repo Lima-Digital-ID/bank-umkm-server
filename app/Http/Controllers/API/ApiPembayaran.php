@@ -13,6 +13,7 @@ class ApiPembayaran extends Controller
 {
     public function store(Request $request)
     {
+        // proses pembayaran cicilan
         $validatedData = $request->validate([
             'id_pinjaman' => 'required',
             'nominal_pembayaran' => 'required',
@@ -45,13 +46,13 @@ class ApiPembayaran extends Controller
 
             $pinjaman = Pinjaman::find($request->get('id_pinjaman'));
             $pinjaman->terbayar += $request->get('nominal_pembayaran');
-            $pinjaman->save();
 
             if($pinjaman->terbayar == $pinjaman->nominal) {
                 $pinjaman->status = 'Lunas';
                 $pinjaman->tanggal_lunas = date("Y-m-d");
                 $pinjaman->save();
             }
+            $pinjaman->save();
 
             $status = 'success';
             $message = 'pembayaran berhasil.';
@@ -73,14 +74,14 @@ class ApiPembayaran extends Controller
 
     }
 
-    public function getStatusCicilan($id_pinjaman, $cicilan_ke)
+    public function getCicilan($id_pinjaman)
     {
         $status = '';
         $message = '';
-        $data = null;
+        $data = '';
 
         try {
-            $statusCicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->where('cicilan_ke', $cicilan_ke)->get();
+            $statusCicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->get();
             
             $data = count($statusCicilan);
 

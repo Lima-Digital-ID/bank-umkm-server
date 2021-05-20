@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('pembayaran', 'API\ApiPembayaran@store');
 
-    Route::get('status-cicilan/{id_pinjaman}/{cicilan_ke}', 'API\ApiPembayaran@getStatusCicilan');
+    Route::get('get-cicilan/{id_pinjaman}', 'API\ApiPembayaran@getCicilan');
     // get saldo per nasabah
     Route::get('get-saldo-hutang-nasabah', 'API\NasabahController@getSaldoAndHutangPerNasabah');
 
