@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\Nasabah;
+use App\Models\Notification;
 
 class PinjamanController extends Controller
 {
@@ -21,7 +22,7 @@ class PinjamanController extends Controller
         }
 
         try {
-            $this->param['pinjaman'] = Pinjaman::with('nasabah')->where('status', $tipe)->paginate(10);
+            $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->paginate(10);
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
         }
@@ -173,7 +174,12 @@ class PinjamanController extends Controller
         try{
             $pinjaman = Pinjaman::find($id);
             $setStatus = $status;
+            $notifTitle = '';
+            $notifMessage = '';
             if ($setStatus == 'Terima') {
+                $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
+                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan cek status pinjaman Anda.';
+
                 $this->validate($request,[
                     'nominal' => 'required',
                 ],
@@ -195,12 +201,20 @@ class PinjamanController extends Controller
                 $nasabah->save();
             }
             if($setStatus=='Tolak'){
+                $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';
+                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan');
+
                 $pinjaman->alasan_penolakan = $request->get('alasan');
             }
             $pinjaman->status = $setStatus;
             $pinjaman->updated_at = time();
             $pinjaman->save();
 
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = $id;
+            $newNotification->title = $notifTitle;
+            $newNotification->message = $notifMessage;
 
             return back()->withStatus('Data berhasil diperbarui.');
         }

@@ -127,9 +127,9 @@ class ApiAuthController extends Controller
             $updateNasabah->tanggal_lahir = $request->get('tgl_lahir');
             $updateNasabah->tempat_lahir = $request->get('tempat_lahir');
             $updateNasabah->nik = $request->get('nik');
-            $updateNasabah->no_hp = $request->get('no_hp');
             $updateNasabah->alamat = $request->get('alamat');
-            $updateNasabah->pekerjaan = $request->get('jenis_pekerjaan');
+            $updateNasabah->status_nikah = $request->get('status_nikah');
+            $updateNasabah->jenis_kelamin = $request->get('jenis_kelamin');
             $updateNasabah->is_verified = 2;
 
             $updateNasabah->save();

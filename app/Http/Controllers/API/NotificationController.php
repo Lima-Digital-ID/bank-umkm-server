@@ -36,7 +36,7 @@ class NotificationController extends Controller
         }
     }
 
-    public function getNotifPerNasabahNotRead()
+    public function getNotifPerNasabahNotSeen()
     {
         $status = '';
         $message = '';
@@ -46,7 +46,7 @@ class NotificationController extends Controller
 
             $status = 'success';
             $message = 'Berhasil';
-            $data = count($notif);
+            $data = $notif;
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal. ' . $e->getMessage();

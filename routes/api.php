@@ -47,9 +47,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // get notification per nasabah
     Route::get('get-notification', 'API\NotificationController@getNotifPerNasabah');
-    Route::get('get-notification-not-read', 'API\NotificationController@getNotifPerNasabahNotRead');
+    Route::get('get-notification-not-seen', 'API\NotificationController@getNotifPerNasabahNotSeen');
     Route::get('detail-notification/{id}', 'API\NotificationController@getDetailNotif');
     Route::get('read-notification/{id}', 'API\NotificationController@isRead');
+    // end notification
     
 });
 // // pengajuan pinjaman
