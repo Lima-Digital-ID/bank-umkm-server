@@ -92,6 +92,43 @@ class NotificationController extends Controller
         }
     }
 
+    public function updateSended(Request $request)
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $jsonreq = json_encode($request->json()->all());
+            $json = json_decode($jsonreq, true);
+            $arr = [];
+            foreach($json['data'] as $i => $v)
+            {
+                $notif = Notification::where('id_nasabah', auth()->user()->id)->where('id', $v['id'])->first();
+                $notif->sended = 1;
+                $notif->updated_at = time();
+                $notif->save();
+            }
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $notif;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function isRead($id)
     {
         $status = '';
