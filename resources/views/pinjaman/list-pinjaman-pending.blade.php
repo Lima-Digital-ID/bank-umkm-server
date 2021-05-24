@@ -23,8 +23,9 @@
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div> --}}
           <div class="col-auto ml-auto">
-            {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('pinjaman.index') }}" method="get">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
               <div class="input-group">
+              <input type="hidden" name="t" value="Pending">
                 <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="submit">
@@ -32,7 +33,7 @@
                   </button>
                 </div>
               </div>
-            </form> --}}
+            </form>
           </div>
         </div>
         @if (Request::get('t'))
@@ -64,16 +65,16 @@
                                 <td><span class="badge badge-{{$value->status == 'Pending' ? 'warning' : ($value->status == 'Terima' ? 'success' : 'warning')}}">{{$value->status}}</span></td>
                                 <td>
                                     <div class="form-inline">
-                                        <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
+                                        <!-- <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> -->
                                         <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-primary mr-2" title="Detail Pinjaman" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                        <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Nasabah" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
+                                        <!-- <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Nasabah" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
                                         <form action="{{ route('pinjaman.destroy', $value) }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                                 <span class="fa fa-minus-circle"></span>
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </td>
                             </tr>

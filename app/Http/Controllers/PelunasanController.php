@@ -76,8 +76,7 @@ class PelunasanController extends Controller
             // $this->param['btnRight']['link'] = route('pelunasan.index');
             $this->param['pinjaman'] = Pinjaman::with('nasabah')->find($idPinjaman);
             $this->param['pelunasan'] = Pelunasan::where('id_pinjaman', $idPinjaman)->orderBy('tanggal_pembayaran')->get();
-
-            return \view('pelunasan.detail-pelunasan', $this->param);
+         return \view('pelunasan.detail-pelunasan', $this->param);
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());

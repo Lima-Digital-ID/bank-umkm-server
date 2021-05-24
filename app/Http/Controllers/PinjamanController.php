@@ -22,7 +22,16 @@ class PinjamanController extends Controller
         }
 
         try {
-            $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->paginate(10);
+            $keyword = $request->get('keyword');
+            if ($keyword) {
+                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->whereHas('nasabah', function($query){
+                    return $query->where('nama','LIKE', "%$_GET[keyword]%");
+                })->paginate(10);
+            }
+            else{
+                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->paginate(10);
+            }
+
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
         }
@@ -180,22 +189,22 @@ class PinjamanController extends Controller
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
                 $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan cek status pinjaman Anda.';
 
-                $this->validate($request,[
-                    'nominal' => 'required',
-                ],
-                [
-                    'required' => ':atributte harus diisi.'
-                ],
-                [
-                    'nominal' => 'Nominal'
-                ]);
+                // $this->validate($request,[
+                //     'nominal' => 'required',
+                // ],
+                // [
+                //     'required' => ':atributte harus diisi.'
+                // ],
+                // [
+                //     'nominal' => 'Nominal'
+                // ]);
                 $date = date('Y-m-d');
                 $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
                 $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
-                $pinjaman->nominal = $request->get('nominal');
-                
                 $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $pinjaman->nominal = $nasabah->limit_pinjaman;
+                
                 $nasabah->saldo += $pinjaman->nominal;
                 $nasabah->hutang += $pinjaman->nominal;
                 $nasabah->save();

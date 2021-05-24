@@ -73,14 +73,27 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <td>#</td>
-                        <td>Tanggal Pembayaran</td>
                         <td>Cicilan Ke</td>
+                        <td>Tanggal Jatuh Tempo</td>
+                        <td>Tanggal Pembayaran</td>
                         <td>Nominal</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
+                <?php
+                  for($i=1;$i<=$pinjaman->jangka_waktu;$i++){
+                    $cek = \DB::table('pelunasan')->select('nominal_pembayaran','tanggal_pembayaran')->where('id_pinjaman',$pinjaman->id)->where('cicilan_ke',$i)->get();
+                ?>
+                  <tr>
+                    <td>{{$i}}</td>
+                    <td>{{date('d-m-Y',strtotime("+$i month", strtotime($pinjaman->tanggal_diterima)))}}</td>
+                    <td>{{count($cek)==0 ? '-' : date('Y-m-d', strtotime($cek[0]->tanggal_pembayaran)) }}</td>
+                    <td>{{count($cek)==0 ? '-' : number_format($cek[0]->nominal_pembayaran, 2, ',', '.')." <span class='fa fa-check-circle'></span>" }}</td>
+                  </tr>
+                <?php
+                  }
+                ?>
+<!--                     @php
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
@@ -95,7 +108,7 @@
                             $no++
                         @endphp
                     @endforeach
-                </tbody>
+ -->                </tbody>
             </table>
         </div>
 @endsection

@@ -134,13 +134,20 @@
                         <td>:</td>
                         <td>
                           @if ($pinjaman->status == 'Pending')
-                          <input type="number" name="nominal" id="nominal" class="form-control">
+                          Rp. {{number_format($pinjaman->limit_pinjaman, 2, ',', '.')}}
                           @else
-                          Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
+                          Rp. {{number_format($pinjaman->nasabah->nominal, 2, ',', '.')}}
                           @endif
                         </td>
                       </tr>
                       @endif
+                      <tr>
+                        <td>Skor</td>
+                        <td>:</td>
+                        <td>
+                          {{$pinjaman->nasabah->skor}}
+                        </td>
+                      </tr>
                     </table>
                   </div>
                   @if ($pinjaman->status == 'Pending')
@@ -165,10 +172,8 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <form action="{{ url('pinjaman/update-status', $pinjaman->id) }}" method="POST">
+              <form action="{{ url('pinjaman/update-status', $pinjaman->id).'/Tolak' }}" method="get">
                 @csrf
-                <input type="hidden" name="tipe" value="tolak">
-                <input type="hidden" name="status" value="Tolak">
                 <label for="">Alasan</label>
                 <textarea name="alasan" class="form-control"  id="" rows="5"></textarea>
                 <div class="mt-4">
