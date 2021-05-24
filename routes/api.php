@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // scoring
     Route::get('kategori-kriteria', 'API\ScoringController@getKategoriKriteria');
     Route::post('prosess-skoring', 'API\ScoringController@processScoring');
+    Route::get('get-option-by-kriteria/{id}', 'API\ScoringController@getOptionByKriteria');
     // end scoring
 
     // data tambahan nasabah (syarat pinjaman diatas 5jt)
