@@ -119,12 +119,5 @@
             </div>
           </div>
         </div>
-        
-        <script>
-          $('.form-check-input').click(function (e) { 
-            $(this).attr('disabled','disabled');();
-            
-          });
-        </script>
 
 @endsection

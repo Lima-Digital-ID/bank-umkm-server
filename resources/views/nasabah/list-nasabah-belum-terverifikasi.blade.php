@@ -65,13 +65,13 @@
                                 <div class="form-inline">
                                     {{-- <a href="{{ route('nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> --}}
                                     <a href="{{ route('nasabah.show', $value) }}" class="btn btn-success mr-2" title="Proses Verifikasi" data-toggle="tooltip"> <span class="fa fa-user-clock"></span> </a>
-                                    <a href="{{ url('nasabah/hasil-skoring', $value) }}" class="btn btn-secondary mr-2" title="Hasil Skoring" data-toggle="tooltip"> <span class="fa fa-clipboard-list"></span> </a>
+                                    {{-- <a href="{{ url('nasabah/hasil-skoring', $value) }}" class="btn btn-secondary mr-2" title="Hasil Skoring" data-toggle="tooltip"> <span class="fa fa-clipboard-list"></span> </a>
                                     @if ($value->dataTambahan)
                                         <a href="{{ route('data-tambahan-nasabah.show', $value->dataTambahan->id) }}" class="btn btn-primary mr-2" title="Data Tambahan" data-toggle="tooltip"> <span class="fa fa-folder-plus"></span> </a>
                                     @endif
                                     @if ($value->syaratPinjamanUmroh)
                                         <a href="{{ route('syarat-pinjaman-umroh.show', $value->syaratPinjamanUmroh->id) }}" class="btn btn-info mr-2" title="Syarat Pinjaman Umroh" data-toggle="tooltip"> <span class="fa fa-kaaba"></span> </a>
-                                    @endif
+                                    @endif --}}
 
                                     {{-- <form action="{{ route('nasabah.destroy', $value) }}" method="post">
                                         @csrf

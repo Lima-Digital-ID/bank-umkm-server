@@ -31,5 +31,10 @@ $(document).ready(function() {
     $('.showDetailData').click(function (e) { 
         let imageSrc = $(this).data('image');
         $('.modal-body #showDetail').attr('src', imageSrc);
-      });
+    });
+
+
+    $('.form-check .skoringOption').click(function (e) { 
+        return false;
+    });
 });

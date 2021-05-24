@@ -72,9 +72,6 @@
                           <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}" alt="" width="200px">
                         </a>
                       </td>
-                      {{-- <td>
-                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}" alt="" width="200px" class="showDetailData" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}">
-                      </td> --}}
                     </tr>
                     <tr>
                       <td>Foto Dengan KTP</td>
@@ -147,6 +144,82 @@
             </div>
           </div>
         </div>
+
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-custom">
+                    <thead>
+                      <tr>
+                        <td>Total Skor</td>
+                        <td>:</td>
+                        <td>{{$nasabah->skor}}</td>
+                      </tr>
+                      <tr>
+                        <td>Limit Pinjaman</td>
+                        <td>:</td>
+                        <td>{{number_format($nasabah->limit_pinjaman, 2, ',', '.')}}</td>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-custom">
+                    {{-- @php
+                        
+                        echo "<pre>";
+                        print_r ($hasilSkoring);
+                        echo "</pre>";
+                        
+                    @endphp --}}
+                    @foreach ($hasilSkoring as $item)
+                      <tr>
+                        <th>
+                          <h5>{{$loop->iteration . '. ' . $item->nama_kategori}}</h5>
+                        </th>
+                      </tr>
+                      @foreach ($item->kriteria as $kriteria)
+                          @php
+                              $selectedOption = '';
+                              $skor = '';
+                          @endphp
+                          <tr>
+                            <h5><th>{{$loop->iteration . '. ' . $kriteria->nama_kriteria}}</th></h5>
+                          </tr>
+                          @foreach ($kriteria->option as $option)
+                            @php
+                              $isSelected = DB::table('scoring')->where('id_nasabah', $nasabah->id)->where('id_option', $option->id)->count() > 0 ? true : false;
+                            @endphp
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <input class="form-check-input skoringOption" type="radio" {{$isSelected ? 'checked' : ''}} >
+                                  <label class="form-check-label">
+                                    {{$option->option}}
+                                  </label>
+                                </div>
+                              </td>
+                            </tr>
+                          @endforeach
+                      @endforeach
+                    @endforeach
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="modal modal-acc">
         <div class="modal-dialog">
           <div class="modal-content">
