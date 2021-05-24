@@ -14,7 +14,9 @@ class ScoringController extends Controller
 {
     public function getKategoriKriteria(Request $request)
     {
-        
+        $status = '';
+        $message = '';
+        $data = null;
 
         try {
             $kategori = KategoriKriteria::with('kriteria', 'kriteria.option')->get();
