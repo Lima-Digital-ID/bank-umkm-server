@@ -9,6 +9,8 @@ Route::get('/', function () {
 });
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('dashboard/cekNotif', 'DashboardController@cekNotif');
+    Route::get('dashboard/cekDetailNotif', 'DashboardController@cekDetailNotif');
     Route::resource('user', 'UserController');
     Route::resource('tipe-nasabah', 'TipeNasabahController');
     Route::post('nasabah/update-status/{id}', 'NasabahController@updateStatus');

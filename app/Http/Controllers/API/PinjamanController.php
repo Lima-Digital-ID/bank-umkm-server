@@ -61,6 +61,18 @@ class PinjamanController extends Controller
             $status = 'success';
             $message = 'Pengajuan pinjaman berhasil.';
 
+            $nasabah = Nasabah::select('nama')->find(auth()->user()->id);
+
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = auth()->user()->id;
+            $newNotification->title = "Pengajuan Pinjaman";
+            $newNotification->message = "Nasabah ".$nasabah->nama." mengajukan pinjaman baru";
+            $newNotification->jenis = "Pinjaman";
+            $newNotification->device = "web";
+
+            $newNotification->save();
+
         } catch(\Exception $e){
             $status = 'failed';
             $message = 'Pengajuan pinjaman gagal ' . $e->getMessage();

@@ -63,11 +63,23 @@ class DataTambahanNasabahController extends Controller
 
             if($request->status=="1"){
                 $nasabah->kelengkapan_data = 1;
+                $msg = "Kelengkapan data berhasil di ACC";
             }
             else if($request->status=="3"){
                 $nasabah->kelengkapan_data = 3;
+                $msg = "Kelengkapan data ditolak";
             }
             $nasabah->save();
+
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = $dataTambahan->id_nasabah;
+            $newNotification->title = "Verifikasi Kelengkapan Data";
+            $newNotification->message = $msg;
+            $newNotification->jenis = "Verifikasi";
+            $newNotification->device = "mobile";
+
+            $newNotification->save();
 
             return back()->withStatus('Status Berhasil Diperbarui');
         }
