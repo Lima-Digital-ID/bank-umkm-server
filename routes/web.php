@@ -26,7 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('syarat-pinjaman-umroh', 'SyaratPinjamanUmrohController');
 
     Route::get('laporan/', 'LaporanController@index');
-    Route::get('laporan/chart', 'ChartLaporanControlle@index');
+    Route::get('laporan/chart', 'ChartLaporanController@index');
 
     Route::prefix('master-scoring')->group(function () {
         Route::resource('kategori-kriteria', 'KategoriKriteriaController');

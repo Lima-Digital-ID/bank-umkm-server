@@ -84,4 +84,32 @@ class ScoringController extends Controller
             ], 200);
         }
     }
+
+    public function getOptionByKriteria($id)
+    {
+        $status = 'success';
+        $message = 'Berhasil';
+        $data = '';
+        try {
+            $option = Option::where('id_kriteria', $id)->get();
+            
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $option;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
 }

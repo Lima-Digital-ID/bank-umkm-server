@@ -145,7 +145,9 @@ class NasabahController extends Controller
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
             $this->param['nasabah'] = Nasabah::with('tipe')->find($id);
-
+            $this->param['hasilSkoring'] = KategoriKriteria::with('kriteria.option.scoring.nasabah')->whereHas('kriteria.option.scoring.nasabah', function ($query) use ($id) {
+                return $query->where('id', $id);
+            })->get();
             return \view('nasabah.detail-nasabah', $this->param);
             
             // echo "<pre>";
