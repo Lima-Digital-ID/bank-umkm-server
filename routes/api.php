@@ -18,6 +18,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('nasabah', 'API\NasabahController@index');
     // get data nasabah by id
     Route::get('get-nasabah', 'API\NasabahController@getNasabahById');
+
+    // scoring
+    Route::get('kategori-kriteria', 'API\ScoringController@getKategoriKriteria');
+    Route::post('prosess-skoring', 'API\ScoringController@processScoring');
+    // end scoring
+
     // data tambahan nasabah (syarat pinjaman diatas 5jt)
     Route::post('data-tambahan-nasabah', 'API\NasabahController@inputDataTambahan');
     // syarat pinjaman umroh

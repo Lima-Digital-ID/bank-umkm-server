@@ -33,4 +33,9 @@ class Nasabah extends Model
     {
         return $this->hasOne('App\Models\SyaratPinjamanUmroh','id_nasabah');
     }
+
+    public function scoring()
+    {
+        return $this->hasMany('\App\Models\Scoring', 'id_nasabah');
+    }
 }

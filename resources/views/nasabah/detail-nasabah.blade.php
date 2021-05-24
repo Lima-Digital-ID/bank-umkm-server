@@ -67,35 +67,64 @@
                     <tr>
                       <td>KTP</td>
                       <td>:</td>
-                      <td><a href="{{ url('upload/nasabah'. '/' . $nasabah->nik . '/' .$nasabah->scan_ktp) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td>
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}">
+                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}" alt="" width="200px">
+                        </a>
+                      </td>
+                      {{-- <td>
+                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}" alt="" width="200px" class="showDetailData" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}">
+                      </td> --}}
                     </tr>
                     <tr>
                       <td>Foto Dengan KTP</td>
                       <td>:</td>
-                      <td><a href="{{ url('upload/nasabah'. '/' . $nasabah->nik . '/' .$nasabah->foto_dengan_ktp) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td>
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}">
+                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}" alt="" width="200px">
+                        </a>
+                      </td>
+                      {{-- <td>
+                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}" alt="" width="200px">
+                      </td> --}}
                     </tr>
                     <tr>
                       <td>NPWP</td>
                       <td>:</td>
-                      <td><a href="{{ url('upload/nasabah'. '/' . $nasabah->nik . '/' .$nasabah->npwp) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td>
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}">
+                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}" alt="" width="200px">
+                        </a>
+                      </td>
+                      {{-- <td>
+                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}" alt="" width="200px">
+                      </td> --}}
                     </tr>
                     <tr>
                       <td>Surat Nikah</td>
                       <td>:</td>
-                      <td><a href="{{ url('upload/nasabah'. '/' . $nasabah->nik . '/' .$nasabah->surat_nikah) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td>
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}">
+                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}" alt="" width="200px">
+                        </a>
+                      </td>
+                      {{-- <td>
+                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}" alt="" width="200px">
+                      </td> --}}
                     </tr>
                     <tr>
                       <td>Surat Domisili Usaha</td>
                       <td>:</td>
-                      <td><a href="{{ url('upload/nasabah'. '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      <td>
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}">
+                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}" alt="" width="200px">
+                        </a>
+                      </td>
+                      {{-- <td>
+                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}" alt="" width="200px">
+                      </td> --}}
                     </tr>
-                    <tr>
-                      <td>Status</td>
-                      <td>:</td>
-                      <td><span class="badge badge-{{$nasabah->is_verified == '1' ? 'success' : ($nasabah->is_verified=='2' ? 'primary' : 'danger')}}">
-                        {{$nasabah->is_verified=='0' ? 'Pending' : ($nasabah->is_verified=='1' ? 'ACC' : ($nasabah->is_verified=='2' ? 'Pending' : 'Ditolak'))}}
-                      </span></td>
-                    </tr>
+                    
                     @if($nasabah->is_verified=='3')
                     <tr>
                       <td>Alasan Ditolak</td>
@@ -104,11 +133,6 @@
                     </tr>
                     @endif
 
-                    <tr>
-                      <td>Limit Pinjaman</td>
-                      <td>:</td>
-                      <td>Rp. {{number_format($nasabah->limit_pinjaman,0,',','.')}}</td>
-                    </tr>
                   </table>
                 </div>
 
@@ -129,7 +153,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-              <h4 class="modal-title">Limit Pinjaman</h4>
+              <h4 class="modal-title">Verifikasi Data</h4>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -138,12 +162,12 @@
               <form action="{{ url('nasabah/update-status', $nasabah->id) }}" method="POST">
                 @csrf
                 <input type="hidden" name="tipe" value="acc">
-                <label for="">Limit Pinjaman</label>
-                <input type="number" name="limit" class="form-control">
+                <label for="">Nama</label>
+                <input type="text" value="{{$nasabah->nama}}" class="form-control" readonly>
                 <div class="mt-4">
                   <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
                   &nbsp;
-                  <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+                  <button type="submit" class="btn btn-primary"> <span class="fa fa-check-circle"></span> Verifikasi</button>
               </div>
 
               </form>
@@ -179,5 +203,30 @@
             </div>
           </div>
         </div>
-      </div>        
+      </div>
+      
+      <div class="modal modal-show-detail">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              {{-- <h6 class="modal-title">Detail Data</h6> --}}
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body text-center">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <img alt="" id="showDetail" width="100%">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 @endsection

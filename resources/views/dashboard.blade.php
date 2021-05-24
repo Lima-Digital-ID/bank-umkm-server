@@ -14,18 +14,18 @@
                 <div class="row">
                     <div class="col-md-8 pr-0">
                         <h2 class="color-primary font-weight-bold">{{$nasabahBaru}}</h2>
-                        Nasabah Perlu Diverifikasi
+                        User Perlu Diverifikasi
                     </div>
                     <div class="col-md-4 pl-0 text-center">
                         <span class="fas fa-fw fa-user-clock fa-4x"></span>
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('nasabah')}}">Lihat Detail</a>
+                <a href="{{url('nasabah?verified=0')}}">Lihat Detail</a>
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-4">
+    {{-- <div class="col-md-3 mb-4">
         <div class="card card-dashboard py-2">
             <div class="card-body">    
                 <div class="row">
@@ -41,7 +41,7 @@
                 <a href="{{url('nasabah')}}">Lihat Detail</a>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="col-md-3 mb-4">
         <div class="card card-dashboard py-2 {{$pengajuanPinjaman > 0 ? 'has-notif' : ''}}">
             <div class="card-body">    

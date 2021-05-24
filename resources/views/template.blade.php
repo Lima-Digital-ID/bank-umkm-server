@@ -93,6 +93,38 @@
               <span>User</span></a
             >
           </li>
+
+          <li class="nav-item {{Request::segment(1) == 'master-scoring' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#master-scoring"
+              aria-expanded="true"
+              aria-controls="master-scoring"
+            >
+            <i class="fas fa-fw fa-list-ol "></i>
+              <span>Master Scoring <i class="badge badge-success badge-notif"></i></span>
+            </a>
+            <div
+              id="master-scoring"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('master-scoring/kategori-kriteria')}}">
+                  <span>Kategori Kriteria</span>
+                </a>
+                <a class="nav-link" href="{{url('master-scoring/kriteria')}}">
+                  <span>Kriteria</span>
+                </a>
+                <a class="nav-link" href="{{url('master-scoring/option')}}">
+                  <span>Option</span>
+                </a>
+              </div>
+            </div>
+          </li>
           
           {{-- <li class="nav-item {{Request::segment(1) == 'tipe-nasabah' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('tipe-nasabah')}}">
@@ -120,8 +152,11 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('nasabah')}}">
-                  <span>Nasabah</span>
+                <a class="nav-link" href="{{url('nasabah?verified=0')}}">
+                  <span>Nasabah Belum Terverifikasi</span>
+                </a>
+                <a class="nav-link" href="{{url('nasabah?verified=1')}}">
+                  <span>Nasabah Terverifikasi</span>
                 </a>
                 <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
                   <span>Pengajuan Data Tambahan Nasabah</span>

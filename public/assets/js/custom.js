@@ -3,10 +3,7 @@ $(document).ready(function() {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-    CKEDITOR.replace('editor');    
-    CKEDITOR.replace('raft');    
-    CKEDITOR.replace('run');    
-    CKEDITOR.replace('ride');    
+    CKEDITOR.replace('editor');
     $(".select2").select2();
     $(".datepicker").datepicker({
         format: "yyyy-mm-dd"
@@ -30,4 +27,9 @@ $(document).ready(function() {
         }
         return rupiah;
     }
+
+    $('.showDetailData').click(function (e) { 
+        let imageSrc = $(this).data('image');
+        $('.modal-body #showDetail').attr('src', imageSrc);
+      });
 });
