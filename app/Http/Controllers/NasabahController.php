@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KategoriKriteria;
 use Illuminate\Http\Request;
 use \App\Models\Nasabah;
 use \App\Models\TipeNasabah;
+use Illuminate\Support\Facades\DB;
 
 class NasabahController extends Controller
 {
@@ -12,17 +14,24 @@ class NasabahController extends Controller
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = ' List Nasabah';
-        $this->param['btnRight']['text'] = 'Tambah Data';
-        $this->param['btnRight']['link'] = route('nasabah.create');
-
+        
         try {
+            $verified = $request->get('verified');
+            // if ($request->get('verified')) {
+            if ($request->get('verified') != '0' && $request->get('verified') != '1') {
+                $verified = 1;
+            }
+            // }
+    
+            $this->param['pageInfo'] = $verified == 1 ?  ' List Nasabah Terverifikasi' : ' List Nasabah Belum Terverifikasi';
+            $this->param['btnRight']['text'] = 'Tambah Data';
+            $this->param['btnRight']['link'] = route('nasabah.create');
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
+                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('is_verified', $verified)->paginate(10);
             }
             else{
-                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified')->paginate(10);
+                $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified')->where('is_verified', $verified)->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -30,9 +39,13 @@ class NasabahController extends Controller
         
         // echo "<pre>";
         // print_r ($nasabah);
-        // echo "</pre>";
-        
-        return \view('nasabah.list-nasabah', ['nasabah' => $nasabah], $this->param);
+        // echo $verified;
+        if ($verified == 1) {
+            return \view('nasabah.list-nasabah-terverifikasi', ['nasabah' => $nasabah], $this->param);
+        }
+        else{
+            return \view('nasabah.list-nasabah-belum-terverifikasi', ['nasabah' => $nasabah], $this->param);
+        }
     }
 
     public function create()
@@ -145,6 +158,42 @@ class NasabahController extends Controller
         }
         catch(\Illuminate\Database\QueryException $e){
             return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
+    
+    public function hasilSkoring($id)
+    {
+        try{
+            $this->param['pageInfo'] = ' Hasil Skoring Nasabah';
+            $this->param['btnRight']['text'] = 'Lihat Data';
+            $this->param['btnRight']['link'] = route('nasabah.index');
+            $this->param['nasabah'] = Nasabah::find($id);
+            // $this->param['hasilSkoring'] = DB::table('nasabah')
+            //                                     ->join('scoring', 'scoring.id_nasabah','=', 'nasabah.id')
+            //                                     ->join('option', 'option.id','=', 'scoring.id_option')
+            //                                     ->join('kriteria', 'kriteria.id','=', 'option.id_kriteria')
+            //                                     ->join('kategori_kriteria', 'kategori_kriteria.id','=', 'kriteria.id_kategori')
+            //                                     ->select('nasabah.nama', 'nasabah.limit_pinjaman', 'option.option', 'option.skor', 'kriteria.nama_kriteria', 'kategori_kriteria.nama_kategori')
+            //                                     ->where('nasabah.id', $id)
+            //                                     ->where('scoring.id_nasabah', $id)
+            //                                     ->get();
+            $this->param['hasilSkoring'] = KategoriKriteria::with('kriteria.option.scoring.nasabah')->whereHas('kriteria.option.scoring.nasabah', function ($query) use ($id) {
+                return $query->where('id', $id);
+            })->get();
+
+            return \view('nasabah.hasil-skoring', $this->param);
+            
+            // echo "<pre>";
+            // print_r ($this->param['nasabah']);
+            // echo "</pre>";
+            
+        }
+        catch(\Exception $e){
+            // return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+            echo $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            // return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
 

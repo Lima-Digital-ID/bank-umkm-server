@@ -23,7 +23,7 @@
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div>
           <div class="col-auto ml-auto">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('nasabah.index') }}" method="get">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('option.index') }}" method="get">
               <div class="input-group">
                 <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
                 <div class="input-group-append">
@@ -40,11 +40,9 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Nama</td>
-                        <td>Jenis Kelamin</td>
-                        <td>NIK</td>
-                        <td>Email</td>
-                        <td>Status</td>
+                        <td>Nama Option</td>
+                        <td>Skor</td>
+                        <td>Kriteria</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -53,26 +51,16 @@
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
-                    @foreach ($nasabah as $value)
+                    @foreach ($option as $value)
                         <tr>
                             <td>{{$no}}</td>
-                            <td>{{$value->nama}}</td>
-                            <td>{{$value->jenis_kelamin}}</td>
-                            <td>{{$value->nik}}</td>
-                            <td>{{$value->email}}</td>
-                            <td><span class="badge badge-{{$value->is_verified == '1' ? 'success' : ($value->is_verified=='2' ? 'primary' : 'danger')}}">{{$value->is_verified == '1' ? 'Terverifikasi' : 'Pending'}}</span></td>
+                            <td>{{$value->option}}</td>
+                            <td>{{$value->skor}}</td>
+                            <td>{{$value->kriteria->nama_kriteria}}</td>
                             <td>
                                 <div class="form-inline">
-                                    <a href="{{ route('nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
-                                    <a href="{{ route('nasabah.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                    @if ($value->dataTambahan)
-                                        <a href="{{ route('data-tambahan-nasabah.show', $value->dataTambahan->id) }}" class="btn btn-primary mr-2" title="Data Tambahan" data-toggle="tooltip"> <span class="fa fa-folder-plus"></span> </a>
-                                    @endif
-                                    @if ($value->syaratPinjamanUmroh)
-                                        <a href="{{ route('syarat-pinjaman-umroh.show', $value->syaratPinjamanUmroh->id) }}" class="btn btn-info mr-2" title="Syarat Pinjaman Umroh" data-toggle="tooltip"> <span class="fa fa-kaaba"></span> </a>
-                                    @endif
-
-                                    <form action="{{ route('nasabah.destroy', $value) }}" method="post">
+                                    <a href="{{ route('option.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('option.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
@@ -88,6 +76,6 @@
                     @endforeach
                 </tbody>
             </table>
-            {{$nasabah->appends(Request::all())->links('vendor.pagination.custom')}}
+            {{$option->appends(Request::all())->links('vendor.pagination.custom')}}
         </div>
 @endsection
