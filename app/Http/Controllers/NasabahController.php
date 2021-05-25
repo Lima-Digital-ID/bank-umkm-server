@@ -6,6 +6,7 @@ use App\Models\KategoriKriteria;
 use Illuminate\Http\Request;
 use \App\Models\Nasabah;
 use \App\Models\TipeNasabah;
+use \App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
 class NasabahController extends Controller
@@ -228,12 +229,29 @@ class NasabahController extends Controller
                 // $nasabah->limit_pinjaman = $request->get('limit');
                 $nasabah->alasan_penolakan = "";
                 $nasabah->is_verified = 1;
+                // if ($request->tipe=="acc") {
+                    $notifTitle = 'Verifikasi Data Berhasil.';
+                    $notifMessage = 'Selamat data anda telah diverifikasi, anda dapat melalukan pinjaman.';
+                // }
             }
             else if($request->tipe=="tolak"){
                 $nasabah->alasan_penolakan = $request->get('alasan');
                 $nasabah->is_verified = 3;
+
+                $notifTitle = 'Verifikasi data gagal.';
+                $notifMessage = 'Maaf data anda gagal di verifikasi. \n'.$request->get('alasan');
             }
             $nasabah->save();
+
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = $pinjaman->id_nasabah;
+            $newNotification->title = $notifTitle;
+            $newNotification->message = $notifMessage;
+            $newNotification->jenis = "Pinjaman";
+            $newNotification->device = "mobile";
+
+            $newNotification->save();
 
             return back()->withStatus('Data berhasil diperbarui.');
         }
