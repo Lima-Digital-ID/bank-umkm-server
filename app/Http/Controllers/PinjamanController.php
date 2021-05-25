@@ -325,6 +325,11 @@ class PinjamanController extends Controller
 
                 $pinjaman->alasan_penolakan_pencairan = $request->get('alasan_penolakan_pencairan');
                 $pinjaman->status = $setStatus;
+
+                $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $nasabah->limit_pinjaman += $pinjaman->nominal;
+                $nasabah->hutang -= $pinjaman->nominal;
+                $nasabah->save();
             }
             $pinjaman->status_pencairan = $setStatus;
             $pinjaman->updated_at = time();
