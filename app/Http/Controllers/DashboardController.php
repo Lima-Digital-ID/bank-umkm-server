@@ -17,10 +17,10 @@ class DashboardController extends Controller
             $this->param['nasabahBaru'] = Nasabah::where('is_verified', 0)->count();
             $this->param['nasabahVerified'] = Nasabah::where('is_verified', 1)->count();
             $this->param['pengajuanPinjaman'] = Pinjaman::where('status', 'Pending')->count();
-            $this->param['pinjamanBerjalan'] = Pinjaman::where('status', 'Terima')->count();
+            $this->param['pinjamanBerjalan'] = Pinjaman::where('status', 'Terima')->where('status_pencairan', 'Terima')->count();
             // chart pinjaman harian bulan ini
             $month = date('m');
-            $getRekapBulanIni = Pinjaman::select(DB::raw('SUM(nominal) as nominal'), 'tanggal_diterima')->groupBy('tanggal_diterima')->where(DB::raw('MONTH(tanggal_diterima)'), $month)->whereIn('status', ['Terima', 'Lunas'])->get();
+            $getRekapBulanIni = Pinjaman::select(DB::raw('SUM(nominal) as nominal'), 'tanggal_diterima')->groupBy('tanggal_diterima')->where(DB::raw('MONTH(tanggal_diterima)'), $month)->whereIn('status', ['Terima', 'Lunas'])->where('status_pencairan', 'Terima')->get();
 
             $tanggal = [];
             $pinjamanHarian = [];
