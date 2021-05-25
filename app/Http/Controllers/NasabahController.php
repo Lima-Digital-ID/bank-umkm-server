@@ -245,7 +245,7 @@ class NasabahController extends Controller
 
             $newNotification = new Notification;
 
-            $newNotification->id_nasabah = $pinjaman->id_nasabah;
+            $newNotification->id_nasabah = $id;
             $newNotification->title = $notifTitle;
             $newNotification->message = $notifMessage;
             $newNotification->jenis = "Pinjaman";
