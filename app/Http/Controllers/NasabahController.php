@@ -225,7 +225,7 @@ class NasabahController extends Controller
         try{
             $nasabah = Nasabah::find($id);
             if($request->tipe=="acc"){
-                $nasabah->limit_pinjaman = $request->get('limit');
+                // $nasabah->limit_pinjaman = $request->get('limit');
                 $nasabah->alasan_penolakan = "";
                 $nasabah->is_verified = 1;
             }
