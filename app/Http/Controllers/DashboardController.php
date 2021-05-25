@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function index()
     {
         try {
-            $this->param['nasabahBaru'] = Nasabah::where('is_verified', 0)->count();
+            $this->param['nasabahBaru'] = Nasabah::where('is_verified', 2)->count();
             $this->param['nasabahVerified'] = Nasabah::where('is_verified', 1)->count();
             $this->param['pengajuanPinjaman'] = Pinjaman::where('status', 'Pending')->count();
             $this->param['pinjamanBerjalan'] = Pinjaman::where('status', 'Terima')->where('status_pencairan', 'Terima')->count();

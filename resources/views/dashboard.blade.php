@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('nasabah?verified=0')}}">Lihat Detail</a>
+                <a href="{{url('nasabah?verified=2')}}">Lihat Detail</a>
             </div>
         </div>
     </div>

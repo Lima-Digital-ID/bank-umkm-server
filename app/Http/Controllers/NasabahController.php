@@ -18,7 +18,7 @@ class NasabahController extends Controller
         try {
             $verified = $request->get('verified');
             // if ($request->get('verified')) {
-            if ($request->get('verified') != '0' && $request->get('verified') != '1') {
+            if ($request->get('verified') != '0' && $request->get('verified') != '1' && $request->get('verified') != '2') {
                 $verified = 1;
             }
             // }

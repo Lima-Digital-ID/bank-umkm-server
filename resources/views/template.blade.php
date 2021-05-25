@@ -152,7 +152,7 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('nasabah?verified=0')}}">
+                <a class="nav-link" href="{{url('nasabah?verified=2')}}">
                   <span>Nasabah Belum Terverifikasi</span>
                 </a>
                 <a class="nav-link" href="{{url('nasabah?verified=1')}}">
