@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
 use App\Models\MasterBank;
+use App\Models\Nasabah;
 
 class PinjamanController extends Controller
 {
@@ -37,7 +38,6 @@ class PinjamanController extends Controller
         $validatedData = $request->validate([
             'id_jenis_pinjaman' => 'required',
             'jangka_waktu' => 'required',
-            'nominal' => 'required',
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -47,19 +47,45 @@ class PinjamanController extends Controller
         $message = '';
 
         try {
-            $newPinjaman = new Pinjaman;
-            $newPinjaman->id_nasabah = auth()->user()->id;
-            $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
-            $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
-            $newPinjaman->nominal = 0;
-            $newPinjaman->tanggal_pengajuan = date('Y-m-d');
-            $newPinjaman->alasan_penolakan = '-';
-            $newPinjaman->status = 'Pending';
 
-            $newPinjaman->save();
+            if (auth()->user()->skor < 60) {
+                $status = 'failed';
+                $message = 'Maaf anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
+            }
+            else{
 
-            $status = 'success';
-            $message = 'Pengajuan pinjaman berhasil.';
+                $newPinjaman = new Pinjaman;
+                $newPinjaman->id_nasabah = auth()->user()->id;
+                $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
+                $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
+                $newPinjaman->nominal = auth()->user()->limit_pinjaman;
+                $newPinjaman->tanggal_pengajuan = date('Y-m-d');
+                $newPinjaman->alasan_penolakan = '-';
+                if (auth()->user()->skor >= 80) {
+                    $newPinjaman->status = 'Terima';
+                    $date = date('Y-m-d');
+                    $newPinjaman->tanggal_diterima = $date;
+                    // $newPinjaman->id_user = auth()->user()->id;
+                    $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
+                }
+                elseif (auth()->user()->skor < 80) {
+                    $newPinjaman->status = 'Pending';
+                }
+    
+                $newPinjaman->save();
+
+                if (auth()->user()->skor >= 80) {
+                    $nasabah = Nasabah::find(auth()->user()->id);
+                    $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
+                    $nasabah->hutang = $hutang;
+                    $nasabah->limit_pinjaman = 0;
+                    $nasabah->save();
+                }
+    
+                $status = 'success';
+                $message = 'Pengajuan pinjaman berhasil.';
+            }
 
         } catch(\Exception $e){
             $status = 'failed';

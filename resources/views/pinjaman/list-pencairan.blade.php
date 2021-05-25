@@ -36,7 +36,6 @@
             </form>
           </div>
         </div>
-        @if (Request::get('t'))
             <div class="table-responsive">
                 <table class="table table-custom">
                     <thead>
@@ -48,6 +47,7 @@
                           <td>Batas Pelunasan</td>
                           <td>Nominal</td>
                           <td>Status</td>
+                          <td>Status Pencairan</td>
                           <td>Aksi</td>
                       </tr>
                     </thead>
@@ -65,11 +65,12 @@
                                 <td>{{date('d-m-Y', strtotime($value->jatuh_tempo))}}</td>
                                 <td>Rp {{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-{{$value->status == 'Terima' ? 'primary' : 'success'}}">{{$value->status}}</span></td>
+                                <td><span class="badge badge-{{$value->status_pencairan == 'Terima' ? 'primary' : 'warning'}}">{{$value->status_pencairan}}</span></td>
                                 <td>
                                     <div class="form-inline">
                                         <!-- <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> -->
-                                        <a href="{{ route('pinjaman.show', $value) }}" class="btn btn-primary mr-2" title="Detail Pinjaman" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                        <a href="{{ route('pelunasan.show', $value) }}" class="btn btn-info mr-2" title="History Pembayaran" data-toggle="tooltip"> <span class="fa fa-history"></span> </a>
+                                        <a href="{{ url('pinjaman/proses-pencairan', $value) }}" class="btn btn-primary mr-2" title="Proses Pencairan" data-toggle="tooltip"> <span class="fa fa-hourglass-half"></span> </a>
+                                        {{-- <a href="{{ route('pelunasan.show', $value) }}" class="btn btn-info mr-2" title="History Pembayaran" data-toggle="tooltip"> <span class="fa fa-history"></span> </a> --}}
                                         <!-- <a href="{{ route('nasabah.show', $value->id_nasabah) }}" class="btn btn-warning mr-2" title="Detail Nasabah" data-toggle="tooltip"> <span class="fa fa-user"></span> </a>
                                         <form action="{{ route('pinjaman.destroy', $value) }}" method="post">
                                             @csrf
@@ -89,5 +90,4 @@
                 </table>
                 {{$pinjaman->appends(Request::all())->links('vendor.pagination.custom')}}
             </div>
-        @endif
 @endsection

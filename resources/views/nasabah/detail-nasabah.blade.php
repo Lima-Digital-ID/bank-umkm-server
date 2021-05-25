@@ -137,8 +137,8 @@
                 @if($nasabah->is_verified==0)
                   <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
                   <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
-                @elseif($nasabah->is_verified==3)
-                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
+                {{-- @elseif($nasabah->is_verified==3)
+                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a> --}}
                 @endif
               </div>
             </div>

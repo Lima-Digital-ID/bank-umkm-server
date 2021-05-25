@@ -22,15 +22,22 @@ class PinjamanController extends Controller
         }
 
         try {
+            
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->whereHas('nasabah', function($query){
+                $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->whereHas('nasabah', function($query){
                     return $query->where('nama','LIKE', "%$_GET[keyword]%");
-                })->paginate(10);
+                });
             }
             else{
-                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->paginate(10);
+                $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe);
             }
+
+            if ($tipe == 'Terima') {
+                $pinjaman->where('status_pencairan', 'Terima');
+            }
+
+            $this->param['pinjaman'] = $pinjaman->paginate(10);
 
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
@@ -51,6 +58,28 @@ class PinjamanController extends Controller
         else{
             return redirect()->back()->withError('Tipe tidak valid.');
         }
+    }
+
+    public function pencairanPinjaman(Request $request)
+    {
+        $this->param['pageInfo'] = 'List Pencairan Pinjaman';
+        
+        try {
+            $keyword = $request->get('keyword');
+            if ($keyword) {
+                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending')->whereHas('nasabah', function($query){
+                    return $query->where('nama','LIKE', "%$_GET[keyword]%");
+                })->paginate(10);
+            }
+            else{
+                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending')->paginate(10);
+            }
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
+        }
+
+        return \view('pinjaman.list-pencairan', $this->param);
     }
 
     public function create()
@@ -143,7 +172,7 @@ class PinjamanController extends Controller
     public function show($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage Pinjaman / Detail';
+            $this->param['pageInfo'] = 'Detail';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pinjaman.index');
             $this->param['pinjaman'] = Pinjaman::with('nasabah')->with('jenisPinjaman')->find($id);
@@ -159,11 +188,31 @@ class PinjamanController extends Controller
             return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
+    
+    public function prosesPencairan($id)
+    {
+        try{
+            $this->param['pageInfo'] = 'Proses Pencairan';
+            $this->param['btnRight']['text'] = 'Lihat Data';
+            $this->param['btnRight']['link'] = route('pinjaman.index');
+            $this->param['pinjaman'] = Pinjaman::with('nasabah')->with('jenisPinjaman')->find($id);
+            // return $this->param['pinjaman'];
+            return \view('pinjaman.proses-pencairan', $this->param);
+            
+            
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
 
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage Pinjaman / Edit Data';
+            $this->param['pageInfo'] = 'Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pinjaman.index');
             $this->param['nasabah'] = Pinjaman::find($id);
@@ -203,10 +252,10 @@ class PinjamanController extends Controller
                 $pinjaman->id_user = auth()->user()->id;
                 $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
                 $nasabah = Nasabah::find($pinjaman->id_nasabah);
-                $pinjaman->nominal = $nasabah->limit_pinjaman;
-                
-                $nasabah->saldo += $pinjaman->nominal;
-                $nasabah->hutang += $pinjaman->nominal;
+                $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
+                $nasabah->hutang = $hutang;
+                $nasabah->limit_pinjaman = 0;
                 $nasabah->save();
             }
             if($setStatus=='Tolak'){
@@ -224,6 +273,65 @@ class PinjamanController extends Controller
             $newNotification->id_nasabah = $id;
             $newNotification->title = $notifTitle;
             $newNotification->message = $notifMessage;
+            $newNotification->save();
+
+            return back()->withStatus('Data berhasil diperbarui.');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
+
+    public function updateStatusPencairan(Request $request, $id, $status)
+    {
+        try{
+            $pinjaman = Pinjaman::find($id);
+            $setStatus = $status;
+            $notifTitle = '';
+            $notifMessage = '';
+            if ($setStatus == 'Terima') {
+                $notifTitle = 'Selamat pinjaman anda berhasil dicairkan.';
+                $notifMessage = 'Selamat untuk anda. Pinjaman Anda berhasil dicairkan.';
+
+                // $this->validate($request,[
+                //     'nominal' => 'required',
+                // ],
+                // [
+                //     'required' => ':atributte harus diisi.'
+                // ],
+                // [
+                //     'nominal' => 'Nominal'
+                // ]);
+                // $date = date('Y-m-d');
+                // $pinjaman->tanggal_diterima = $date;
+                $pinjaman->id_user = auth()->user()->id;
+                // $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
+                // $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                // $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
+                // $nasabah->hutang = $hutang;
+                // $nasabah->limit_pinjaman = 0;
+                // $nasabah->save();
+            }
+            if($setStatus=='Tolak'){
+                $notifTitle = 'Maaf, proses pencairan gagal.';
+                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan_penolakan_pencairan');
+
+                $pinjaman->alasan_penolakan_pencairan = $request->get('alasan_penolakan_pencairan');
+            }
+            $pinjaman->status_pencairan = $setStatus;
+            $pinjaman->updated_at = time();
+            $pinjaman->save();
+
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = $id;
+            $newNotification->title = $notifTitle;
+            $newNotification->message = $notifMessage;
+            $newNotification->save();
 
             return back()->withStatus('Data berhasil diperbarui.');
         }

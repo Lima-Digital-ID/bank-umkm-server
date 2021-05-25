@@ -41,9 +41,11 @@ class NasabahController extends Controller
         // print_r ($nasabah);
         // echo $verified;
         if ($verified == 1) {
+            //     $nasabah->where('is_verified', 1);
             return \view('nasabah.list-nasabah-terverifikasi', ['nasabah' => $nasabah], $this->param);
         }
         else{
+            //     $nasabah->whereNot('is_verified', [1]);
             return \view('nasabah.list-nasabah-belum-terverifikasi', ['nasabah' => $nasabah], $this->param);
         }
     }

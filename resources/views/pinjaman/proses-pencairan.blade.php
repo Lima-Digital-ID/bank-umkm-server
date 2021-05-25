@@ -26,7 +26,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card">
-              <form action="{{ route('update-status-pinjaman', [$pinjaman->id, 'Terima'],) }}" method="get">
+              <form action="{{ url('pinjaman/update-pencairan', [$pinjaman->id, 'Terima'],) }}" method="get">
                 @csrf
                 @method("GET")
                 <div class="card-body">
@@ -116,18 +116,7 @@
                         <td>:</td>
                         <td>{{ $pinjaman->jangka_waktu }} Bulan</td>
                       </tr>
-                      @if ($pinjaman->status == 'Terima')
-                      <tr>
-                        <td>Terbayar</td>
-                        <td>:</td>
-                        <td>Rp. {{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
-                      </tr>
-                      @endif
-                      <tr>
-                        <td>Status</td>
-                        <td>:</td>
-                        <td><span class="badge badge-{{$pinjaman->status == 'Pending' ? 'warning' : ($pinjaman->status == 'Terima' || $pinjaman->status == 'Lunas' ? 'success' : 'danger') }}">{{$pinjaman->status}}</span></td>
-                      </tr>
+
                       @if ($pinjaman->status != 'Tolak')
                       <tr>
                         <td>Nominal</td>
@@ -150,7 +139,7 @@
                       </tr>
                     </table>
                   </div>
-                  @if ($pinjaman->status == 'Pending')
+                  @if ($pinjaman->status_pencairan == 'Pending')
                     {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
                     <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>
                     <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
@@ -172,10 +161,10 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <form action="{{ url('pinjaman/update-status', $pinjaman->id).'/Tolak' }}" method="get">
+              <form action="{{ url('pinjaman/update-pencairan', $pinjaman->id).'/Tolak' }}" method="get">
                 @csrf
                 <label for="">Alasan</label>
-                <textarea name="alasan" class="form-control"  id="" rows="5"></textarea>
+                <textarea name="alasan_penolakan_pencairans" class="form-control"  id="" rows="5"></textarea>
                 <div class="mt-4">
                   <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
                   &nbsp;

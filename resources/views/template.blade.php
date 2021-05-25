@@ -190,6 +190,9 @@
                 <a class="nav-link" href="{{url('pinjaman?t=Pending')}}">
                   <span>Pengajuan Pinjaman</span>
                 </a>
+                <a class="nav-link" href="{{url('pinjaman/pencairan')}}">
+                  <span>Pencairan Pinjaman</span>
+                </a>
                 <a class="nav-link" href="{{url('pinjaman?t=Terima')}}">
                   <span>Pinjaman Berjalan</span>
                 </a>

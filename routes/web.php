@@ -17,6 +17,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pengajuan-data-nasabah', 'PengajuanDataNasabah');
     Route::get('pinjaman/update-status/{id}/{status}', 'PinjamanController@updateStatus')->name('update-status-pinjaman');
     Route::get('pinjaman/cekNotif', 'PinjamanController@cekNotif');
+    Route::get('pinjaman/pencairan', 'PinjamanController@pencairanPinjaman');
+    Route::get('pinjaman/proses-pencairan/{id}', 'PinjamanController@prosesPencairan');
+    Route::get('pinjaman/update-pencairan/{id}/{status}', 'PinjamanController@updateStatusPencairan');
     Route::resource('pinjaman', 'PinjamanController');
     Route::resource('pelunasan', 'PelunasanController');
     Route::get('data-tambahan-nasabah/update-status/{id}', 'DataTambahanNasabahController@updateStatus');
