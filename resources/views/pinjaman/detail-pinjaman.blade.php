@@ -98,7 +98,7 @@
                       <tr>
                         <td>Tanggal Batas Pelunasan</td>
                         <td>:</td>
-                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->jatuh_tempo))}}</td>
                       </tr>
                       <tr>
                         <td>Tanggal Lunas</td>

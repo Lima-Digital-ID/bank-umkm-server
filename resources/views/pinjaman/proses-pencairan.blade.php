@@ -86,26 +86,10 @@
                       <tr>
                         <td>Tanggal Batas Pelunasan</td>
                         <td>:</td>
-                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
+                        <td>{{date('d-m-Y', strtotime($pinjaman->jatuh_tempo))}}</td>
                       </tr>
                       @endif
-                      @if ($pinjaman->status == 'Lunas')
-                      <tr>
-                        <td>Tanggal Diterima</td>
-                        <td>:</td>
-                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_diterima))}}</td>
-                      </tr>
-                      <tr>
-                        <td>Tanggal Batas Pelunasan</td>
-                        <td>:</td>
-                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_batas_pelunasan))}}</td>
-                      </tr>
-                      <tr>
-                        <td>Tanggal Lunas</td>
-                        <td>:</td>
-                        <td>{{date('d-m-Y', strtotime($pinjaman->tanggal_lunas))}}</td>
-                      </tr>
-                      @endif
+                     
                       <tr>
                         <td>Jenis Pinjaman</td>
                         <td>:</td>

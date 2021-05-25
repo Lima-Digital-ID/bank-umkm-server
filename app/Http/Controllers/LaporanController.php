@@ -24,7 +24,7 @@ class LaporanController extends Controller
             $this->param['allNasabah'] = Nasabah::select('id', 'nama', 'nik')->get();
 
             if ($dari && $sampai) {
-                $getLaporan = Pinjaman::with('nasabah', 'pelunasan')->whereBetween('tanggal_diterima', [$dari, $sampai])->whereIn('status', ['Terima', 'Lunas']);
+                $getLaporan = Pinjaman::with('nasabah', 'pelunasan')->whereBetween('tanggal_diterima', [$dari, $sampai])->whereIn('status', ['Terima', 'Lunas'])->where('status_pencairan', 'Terima');
 
                 if ($nasabah) {
                     $getLaporan->where('id_nasabah', $nasabah);

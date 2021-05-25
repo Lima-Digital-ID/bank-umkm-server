@@ -58,9 +58,9 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
-                                <td>{{$value->jangka_waktu}}</td>
-                                <td>{{$value->nominal}}</td>
-                                <td><span class="badge badge-{{$value->status == 'Pending' ? 'warning' : ($value->status == 'Terima' ? 'success' : 'warning')}}">{{$value->status}}</span></td>
+                                <td>{{$value->jangka_waktu}} bulan</td>
+                                <td>{{number_format($value->nominal, 2, ',', '.')}}</td>
+                                <td><span class="badge badge-danger">{{$value->status}}</span></td>
                                 <td>
                                     <div class="form-inline">
                                         <!-- <a href="{{ route('pinjaman.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> -->

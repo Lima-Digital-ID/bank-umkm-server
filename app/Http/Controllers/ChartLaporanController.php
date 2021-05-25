@@ -17,9 +17,9 @@ class ChartLaporanController extends Controller
 
             $year = date('Y');
 
-            $getRekapHarian = Pinjaman::select(DB::raw('SUM(nominal) as nominal'), 'tanggal_diterima')->groupBy('tanggal_diterima')->whereBetween('tanggal_diterima', [$dari, $sampai])->get();
+            $getRekapHarian = Pinjaman::select(DB::raw('SUM(nominal) as nominal'), 'tanggal_diterima')->groupBy('tanggal_diterima')->whereBetween('tanggal_diterima', [$dari, $sampai])->where('status_pencairan', 'Terima')->get();
 
-            $rekapBulanan = Pinjaman::select(DB::raw('YEAR(tanggal_diterima) as tahun'), DB::raw('MONTH(tanggal_diterima) as bulan'), DB::raw('SUM(nominal) as nominal'))->groupBy(DB::raw('YEAR(tanggal_diterima)'), DB::raw('MONTH(tanggal_diterima)'))->where(DB::raw('YEAR(tanggal_diterima)'), $year)->get();
+            $rekapBulanan = Pinjaman::select(DB::raw('YEAR(tanggal_diterima) as tahun'), DB::raw('MONTH(tanggal_diterima) as bulan'), DB::raw('SUM(nominal) as nominal'))->groupBy(DB::raw('YEAR(tanggal_diterima)'), DB::raw('MONTH(tanggal_diterima)'))->where(DB::raw('YEAR(tanggal_diterima)'), $year)->where('status_pencairan', 'Terima')->get();
             
             $tanggal = [];
             $pinjamanHarian = [];
