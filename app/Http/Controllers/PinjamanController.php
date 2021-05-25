@@ -224,6 +224,10 @@ class PinjamanController extends Controller
             $newNotification->id_nasabah = $id;
             $newNotification->title = $notifTitle;
             $newNotification->message = $notifMessage;
+            $newNotification->jenis = "Pinjaman";
+            $newNotification->device = "mobile";
+
+            $newNotification->save();
 
             return back()->withStatus('Data berhasil diperbarui.');
         }

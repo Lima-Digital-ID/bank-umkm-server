@@ -77,6 +77,7 @@
                         <td>Tanggal Jatuh Tempo</td>
                         <td>Tanggal Pembayaran</td>
                         <td>Nominal</td>
+                        <td>Denda</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,7 +89,19 @@
                     <td>{{$i}}</td>
                     <td>{{date('d-m-Y',strtotime("+$i month", strtotime($pinjaman->tanggal_diterima)))}}</td>
                     <td>{{count($cek)==0 ? '-' : date('Y-m-d', strtotime($cek[0]->tanggal_pembayaran)) }}</td>
-                    <td>{{count($cek)==0 ? '-' : number_format($cek[0]->nominal_pembayaran, 2, ',', '.')." <span class='fa fa-check-circle'></span>" }}</td>
+                    <td><?=count($cek)==0 ? '-' : number_format($cek[0]->nominal_pembayaran, 2, ',', '.')." <span class='fa ml-5 fa-lg fa-check-circle color-green'></span>" ?></td>
+                    <td>
+                      <?php 
+                        $now = time();
+                        $jatuhTempo = strtotime($pinjaman->jatuh_tempo);
+                        if(count($cek)==0 && $now>$jatuhTempo){
+                          $dateDiff = $now - $jatuhTempo;
+                          $telat = round($dateDiff / (60 * 60 * 24))-1;
+                          $denda = $telat * 1000;
+                          echo "<span style='color:red' class='font-weight-bold'>".number_format($denda, 2, ',', '.')."</span>";
+                        }
+                      ?>
+                    </td>
                   </tr>
                 <?php
                   }
