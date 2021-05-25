@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
 use App\Models\MasterBank;
+use App\Models\Notification;
 use App\Models\Nasabah;
 
 class PinjamanController extends Controller
@@ -49,6 +50,9 @@ class PinjamanController extends Controller
         try {
 
             if (auth()->user()->skor < 60) {
+                $notifTitle = 'Pengajuan Pinjaman Gagal.';
+                $notifMessage = 'Maaf pengajuan pinjaman anda gagal, anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
+
                 $status = 'failed';
                 $message = 'Maaf anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
             }
@@ -67,9 +71,15 @@ class PinjamanController extends Controller
                     $newPinjaman->tanggal_diterima = $date;
                     // $newPinjaman->id_user = auth()->user()->id;
                     $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
+
+                    $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, silahkan datang ke kantor cabang terdekat untuk pencairan pinjaman.';
                 }
                 elseif (auth()->user()->skor < 80) {
                     $newPinjaman->status = 'Pending';
+
+                    $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
                 }
     
                 $newPinjaman->save();
@@ -92,10 +102,10 @@ class PinjamanController extends Controller
             $newNotification = new Notification;
 
             $newNotification->id_nasabah = auth()->user()->id;
-            $newNotification->title = "Pengajuan Pinjaman";
-            $newNotification->message = "Nasabah ".$nasabah->nama." mengajukan pinjaman baru";
+            $newNotification->title = $notifTitle;
+            $newNotification->message = $notifMessage;
             $newNotification->jenis = "Pinjaman";
-            $newNotification->device = "web";
+            $newNotification->device = "mobile";
 
             $newNotification->save();
 
@@ -120,7 +130,7 @@ class PinjamanController extends Controller
         try {
             $idNasabah = auth()->user()->id;
             // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
-            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->get();
+            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->where('status', 'Terima')->where('status_pencairan', 'Terima')->get();
             
             $status = 'success';
             $message = 'Berhasil';

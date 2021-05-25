@@ -236,7 +236,7 @@ class PinjamanController extends Controller
             $notifMessage = '';
             if ($setStatus == 'Terima') {
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
-                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan cek status pinjaman Anda.';
+                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan datang ke kantor cabang terdekat untuk pencairan pinjaman.';
 
                 // $this->validate($request,[
                 //     'nominal' => 'required',
@@ -251,12 +251,8 @@ class PinjamanController extends Controller
                 $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
                 $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
-                $nasabah = Nasabah::find($pinjaman->id_nasabah);
-                $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
-                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
-                $nasabah->hutang = $hutang;
-                $nasabah->limit_pinjaman = 0;
-                $nasabah->save();
+                
+                
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';
@@ -318,6 +314,12 @@ class PinjamanController extends Controller
                 // $nasabah->hutang = $hutang;
                 // $nasabah->limit_pinjaman = 0;
                 // $nasabah->save();
+                $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
+                $nasabah->hutang = $hutang;
+                $nasabah->limit_pinjaman = 0;
+                $nasabah->save();
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, proses pencairan gagal.';
