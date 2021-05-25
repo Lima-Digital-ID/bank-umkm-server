@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get-notification-not-seen', 'API\NotificationController@getNotifPerNasabahNotSeen');
     Route::get('detail-notification/{id}', 'API\NotificationController@getDetailNotif');
     Route::get('read-notification/{id}', 'API\NotificationController@isRead');
-    Route::post('update-sended', 'API\NotificationController@updateSended');
+    Route::post('update-notification-sended', 'API\NotificationController@updateSended');
     // end notification
     
 });

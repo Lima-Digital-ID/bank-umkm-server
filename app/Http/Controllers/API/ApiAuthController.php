@@ -15,15 +15,24 @@ class ApiAuthController extends Controller
     public function login(Request $request)
     {
         $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required'
+            'email' => 'required|email:rfc,dns',
+            'password' => 'required|min:4'
+        ],
+        [
+            'required' => ':attribute tidak boleh kosong.',
+            'email' => 'Harap masukkan :attribute dengan benar',
+            'password.min' => ':attribute minimal 4 karakter.'
+        ],
+        [
+            'email' => 'Alamat Email',
+            'password' => 'Password'
         ]);
         
         $status = '';
         $message = '';
         $token = '';
         try {
-            $nasabah = Nasabah::where('username', $request->get('username'))->first();
+            $nasabah = Nasabah::where('email', $request->get('email'))->first();
             if($nasabah == null) {
                 $status = 'failed';
                 $message = 'Gagal login. Akun tidak ditemukan';
@@ -65,17 +74,25 @@ class ApiAuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'nama' => 'required',
+            'nama' => 'required|min:6',
             // 'tanggal_lahir' => 'required|date',
             // 'jenis_kelamin' => 'required',
             'no_hp' => 'required',
-            'username' => 'required',
-            'password' => 'required'
+            'email' => 'required|unique:nasabah|email:rfc,dns',
+            'password' => 'required|min:4'
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
             'email' => 'Masukan email yang valid.',
-            'unique' => ':attribute telah terdaftar.'
+            'unique' => ':attribute telah terdaftar.',
+            'nama.min' => ':attribute minimal 6 karakter.',
+            'password.min' => ':attribute minimal 4 karakter.'
+        ],
+        [
+            'nama' => 'Nama Lengkap',
+            'no_hp' => 'Nomor Handphone',
+            'email' => 'Alamat Email',
+            'password' => 'Password'
         ]);
 
         $status = '';
@@ -87,9 +104,9 @@ class ApiAuthController extends Controller
             // $newNasabah->tanggal_lahir = $request->get('tanggal_lahir');
             // $newNasabah->jenis_kelamin = $request->get('jenis_kelamin');
             $newNasabah->no_hp = $request->get('no_hp');
-            $newNasabah->username = $request->get('username');
+            $newNasabah->email = $request->get('email');
             $newNasabah->password = \Hash::make($request->get('password'));
-            $newNasabah->limit_pinjaman = 5000000;
+            $newNasabah->limit_pinjaman = 0;
             $newNasabah->is_verified = 0;
             $newNasabah->alasan_penolakan = '';
 

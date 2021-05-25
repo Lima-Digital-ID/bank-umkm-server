@@ -7,6 +7,7 @@ use App\Models\DataTambahanNasabah;
 use Illuminate\Http\Request;
 use \App\Models\Nasabah;
 use App\Models\SyaratPinjamanUmroh;
+use App\Models\Notification;
 
 class NasabahController extends Controller
 {
@@ -192,6 +193,18 @@ class NasabahController extends Controller
             $status = 'success';
             $message = 'Berhasil';
             $data = $newData->id;
+            
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = $id;
+            $newNotification->title = "Upload Data Tambahan";
+            $newNotification->message = "Nasabah ".$nasabah->nama." baru saja mengunggah data tambahan";
+            $newNotification->jenis = "Verifikasi";
+            $newNotification->device = "web";
+
+            $newNotification->save();
+            
+
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal. ' . $e->getMessage();

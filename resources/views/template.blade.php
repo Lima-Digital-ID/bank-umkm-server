@@ -104,7 +104,7 @@
               aria-controls="master-scoring"
             >
             <i class="fas fa-fw fa-list-ol "></i>
-              <span>Master Scoring <i class="badge badge-success badge-notif"></i></span>
+              <span>Master Scoring </span>
             </a>
             <div
               id="master-scoring"
@@ -143,7 +143,7 @@
               aria-controls="nasabah"
             >
             <i class="fas fa-fw fa-users "></i>
-              <span>Nasabah <i class="badge badge-success badge-notif"></i></span>
+              <span>Nasabah</span>
             </a>
             <div
               id="nasabah"
@@ -178,7 +178,7 @@
               aria-controls="pinjaman"
             >
             <i class="fas fa-fw fa-money-bill-wave "></i>
-              <span>Pinjaman <i class="badge badge-success badge-notif"></i></span>
+              <span>Pinjaman</span>
             </a>
             <div
               id="pinjaman"
@@ -246,49 +246,18 @@
           <ul class="navbar-nav ml-auto">
           <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
+                <i class="fas fa-bell fa-notif-top fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                <span class="badge badge-danger badge-counter badge-notif">
+                
+                </span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in " aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                     Notification
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fas fa-file-alt text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 12, 2019</div>
-                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-success">
-                            <i class="fas fa-donate text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 7, 2019</div>
-                        $290.29 has been deposited into your account!
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-warning">
-                            <i class="fas fa-exclamation-triangle text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 2, 2019</div>
-                        Spending Alert: We've noticed unusually high spending for your account.
-                    </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                <div class="dropdown-notif"></div>
             </div>
         </li>
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -432,20 +401,30 @@
     <script src="{{asset('vendor/sweetalert-master/dist/sweetalert-dev.js')}}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>
-/*       $(document).ready(function(){
-        setInterval(function(){
+      $(document).ready(function(){
+        setInterval(() => {
           $.ajax({
             type : "get",
-            url : "<?= url('pinjaman/cekNotif') ?>",
+            url : "<?= url('dashboard/cekNotif') ?>",
             success : function(data){
               if(data!=0){
                 $(".badge-notif").html(data)
               }
             }
           })
+        }, 3000);
+        $(".fa-notif-top").click(function(){
+          $.ajax({
+            type : "get",
+            url : "<?= url('dashboard/cekDetailNotif') ?>",
+            success : function(data){
+                $(".dropdown-notif").html(data)
+            }
+          })
         })
-        }, 1000);
- */
+      })
+
+
       const tel = document.getElementById('kode_rekening');
 
       tel.addEventListener('input', function() {

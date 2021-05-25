@@ -270,9 +270,12 @@ class PinjamanController extends Controller
 
             $newNotification = new Notification;
 
-            $newNotification->id_nasabah = $id;
+            $newNotification->id_nasabah = $pinjaman->id_nasabah;
             $newNotification->title = $notifTitle;
             $newNotification->message = $notifMessage;
+            $newNotification->jenis = "Pinjaman";
+            $newNotification->device = "mobile";
+
             $newNotification->save();
 
             return back()->withStatus('Data berhasil diperbarui.');
@@ -321,6 +324,7 @@ class PinjamanController extends Controller
                 $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan_penolakan_pencairan');
 
                 $pinjaman->alasan_penolakan_pencairan = $request->get('alasan_penolakan_pencairan');
+                $pinjaman->status = $setStatus;
             }
             $pinjaman->status_pencairan = $setStatus;
             $pinjaman->updated_at = time();
@@ -328,9 +332,12 @@ class PinjamanController extends Controller
 
             $newNotification = new Notification;
 
-            $newNotification->id_nasabah = $id;
+            $newNotification->id_nasabah = $pinjaman->id_nasabah;
             $newNotification->title = $notifTitle;
             $newNotification->message = $notifMessage;
+            $newNotification->jenis = "Pinjaman";
+            $newNotification->device = "mobile";
+
             $newNotification->save();
 
             return back()->withStatus('Data berhasil diperbarui.');

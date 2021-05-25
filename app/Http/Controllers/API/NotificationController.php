@@ -96,7 +96,6 @@ class NotificationController extends Controller
     {
         $status = '';
         $message = '';
-        $data = '';
         try {
             $jsonreq = json_encode($request->json()->all());
             $json = json_decode($jsonreq, true);
@@ -111,7 +110,6 @@ class NotificationController extends Controller
 
             $status = 'success';
             $message = 'Berhasil';
-            $data = $notif;
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal. ' . $e->getMessage();
@@ -123,8 +121,7 @@ class NotificationController extends Controller
         finally{
             return response()->json([
                 'status' => $status,
-                'message' => $message,
-                'data' => $data
+                'message' => $message
             ], 200);
         }
     }

@@ -14,7 +14,9 @@ class ScoringController extends Controller
 {
     public function getKategoriKriteria(Request $request)
     {
-        
+        $status = '';
+        $message = '';
+        $data = null;
 
         try {
             $kategori = KategoriKriteria::with('kriteria', 'kriteria.option')->get();
@@ -49,14 +51,30 @@ class ScoringController extends Controller
         try {
             $data = json_encode($request->json()->all());
             $data = json_decode($data, true);
-            $totalSkor = array_sum(array_column($data['data'],'skor'));
+            // return $data['data'];
+            $totalSkor = 0;
+            
+            for($i=0; $i<count($data['score']); $i++){
+                $totalSkor += $data['score'][$i];
+                $newScore = new Scoring;
+                $newScore->id_option = $data['data'][$i];
+                $newScore->id_nasabah = auth()->user()->id;
+                
+                $newScore->save();
 
-            foreach ($data['data'] as $key => $value) {
-                DB::table('scoring')->insert([
-                    'id_option' => $value['id_option'],
-                    'id_nasabah' => auth()->user()->id
-                ]);
+                // DB::table('scoring')->insert([
+                //     'id_option' => $data['data'][$i],
+                //     'id_nasabah' => auth()->user()->id,
+                // ]);
             }
+            // $totalSkor = array_sum(array_column($data['score'],'skor'));
+            
+            // foreach ($data['data'] as $key => $value) {
+            //     DB::table('scoring')->insert([
+            //         'id_option' => $value['id_option'],
+            //         'id_nasabah' => auth()->user()->id
+            //     ]);
+            // }
 
             DB::table('nasabah')
                 ->where('id', auth()->user()->id)
@@ -80,7 +98,6 @@ class ScoringController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $data
             ], 200);
         }
     }

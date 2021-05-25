@@ -54,6 +54,17 @@ class ApiPembayaran extends Controller
             }
             $pinjaman->save();
 
+            $newNotification = new Notification;
+
+            $newNotification->id_nasabah = auth()->user()->id;
+            $newNotification->title = "Pembayaran";
+            $newNotification->message = "Nasabah ".$nasabah->nama." melakukan pembayaran";
+            $newNotification->jenis = "Pembayaran";
+            $newNotification->device = "web";
+
+            $newNotification->save();
+
+
             $status = 'success';
             $message = 'pembayaran berhasil.';
         } catch(\Exception $e){
