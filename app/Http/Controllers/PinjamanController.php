@@ -236,7 +236,7 @@ class PinjamanController extends Controller
             $notifMessage = '';
             if ($setStatus == 'Terima') {
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
-                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan cek status pinjaman Anda.';
+                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan datang ke kantor cabang terdekat untuk pencairan pinjaman.';
 
                 // $this->validate($request,[
                 //     'nominal' => 'required',
