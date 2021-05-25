@@ -134,7 +134,7 @@
                 </div>
 
                 
-                @if($nasabah->is_verified==0)
+                @if($nasabah->is_verified==2)
                   <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
                   <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
                 {{-- @elseif($nasabah->is_verified==3)
