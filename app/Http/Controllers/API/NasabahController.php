@@ -92,6 +92,35 @@ class NasabahController extends Controller
         }
     }
 
+    public function getLimit()
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            
+            $saldo = Nasabah::select('limit_pinjaman')->find(auth()->user()->id);
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $saldo;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function inputDataTambahan(Request $request)
     {
         $status = '';

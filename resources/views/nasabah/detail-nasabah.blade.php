@@ -68,8 +68,8 @@
                       <td>KTP</td>
                       <td>:</td>
                       <td>
-                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}">
-                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->scan_ktp }}" alt="" width="200px">
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{url($nasabah->scan_ktp)}}">
+                          <img src="{{url($nasabah->scan_ktp)}}" alt="" width="200px">
                         </a>
                       </td>
                     </tr>
@@ -77,8 +77,8 @@
                       <td>Foto Dengan KTP</td>
                       <td>:</td>
                       <td>
-                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}">
-                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}" alt="" width="200px">
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{url($nasabah->selfie_ktp)}}">
+                          <img src="{{url($nasabah->selfie_ktp)}}" alt="" width="200px">
                         </a>
                       </td>
                       {{-- <td>
@@ -89,20 +89,23 @@
                       <td>NPWP</td>
                       <td>:</td>
                       <td>
-                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}">
-                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}" alt="" width="200px">
+                        @if ($nasabah->npwp)
+                        <img src="{{ url($nasabah->npwp) }}" alt="" width="200px">
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url($nasabah->npwp) }}">
                         </a>
+                            
+                        @endif
                       </td>
                       {{-- <td>
-                        <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->npwp }}" alt="" width="200px">
+                        <img src="{{ url($nasabah->selfie_ktp) }}" alt="" width="200px">
                       </td> --}}
                     </tr>
                     <tr>
                       <td>Surat Nikah</td>
                       <td>:</td>
                       <td>
-                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}">
-                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}" alt="" width="200px">
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ $nasabah->surat_nikah}}">
+                          <img src="{{ $nasabah->surat_nikah}}" alt="" width="200px">
                         </a>
                       </td>
                       {{-- <td>
@@ -113,8 +116,8 @@
                       <td>Surat Domisili Usaha</td>
                       <td>:</td>
                       <td>
-                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}">
-                          <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}" alt="" width="200px">
+                        <a data-toggle="modal" class="showDetailData" data-target=".modal-show-detail" data-image="{{ $nasabah->surat_domisili_usaha }}">
+                          <img src="{{ $nasabah->surat_domisili_usaha }}" alt="" width="200px">
                         </a>
                       </td>
                       {{-- <td>

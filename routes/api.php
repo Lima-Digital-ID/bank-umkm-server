@@ -51,9 +51,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get-cicilan/{id_pinjaman}', 'API\ApiPembayaran@getCicilan');
     // get saldo per nasabah
     Route::get('get-saldo-hutang-nasabah', 'API\NasabahController@getSaldoAndHutangPerNasabah');
+    Route::get('get-limit-nasabah', 'API\NasabahController@getLimit');
 
     // get notification per nasabah
     Route::get('get-notification', 'API\NotificationController@getNotifPerNasabah');
+    Route::get('get-new-notification', 'API\NotificationController@getNewNotifPerNasabah');
     Route::get('get-notification-not-seen', 'API\NotificationController@getNotifPerNasabahNotSeen');
     Route::get('detail-notification/{id}', 'API\NotificationController@getDetailNotif');
     Route::get('read-notification/{id}', 'API\NotificationController@isRead');

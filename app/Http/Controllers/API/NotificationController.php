@@ -14,7 +14,9 @@ class NotificationController extends Controller
         $message = '';
         $data = '';
         try {
-            $notif = Notification::where('id_nasabah', auth()->user()->id)->get();
+            $notif = Notification::where('id_nasabah', auth()->user()->id)
+                                    ->where('sended', 1)
+                                    ->get();
 
             $status = 'success';
             $message = 'Berhasil';
@@ -43,6 +45,34 @@ class NotificationController extends Controller
         $data = '';
         try {
             $notif = Notification::where('id_nasabah', auth()->user()->id)->where('is_read', 0)->get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $notif;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
+    public function getNewNotifPerNasabah()
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $notif = Notification::where('id_nasabah', auth()->user()->id)->where('sended', 0)->get();
 
             $status = 'success';
             $message = 'Berhasil';
