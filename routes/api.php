@@ -61,6 +61,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('read-notification/{id}', 'API\NotificationController@isRead');
     Route::post('update-notification-sended', 'API\NotificationController@updateSended');
     // end notification
+
+    // alamat
+    Route::get('get-provinsi', 'API\AlamatController@getProvinsi');
+    Route::get('get-kabupaten/{id_provinsi}', 'API\AlamatController@getKabupaten');
+    Route::get('get-kecamatan/{id_kecamatan}', 'API\AlamatController@getKecamatan');
+    // end alamat
     
 });
 // // pengajuan pinjaman

@@ -145,8 +145,7 @@ class ApiAuthController extends Controller
             $updateNasabah->tempat_lahir = $request->get('tempat_lahir');
             $updateNasabah->nik = $request->get('nik');
             $updateNasabah->alamat = $request->get('alamat');
-            $updateNasabah->status_nikah = $request->get('status_nikah');
-            $updateNasabah->jenis_kelamin = $request->get('jenis_kelamin');
+            $updateNasabah->kecamatan_id = $request->get('kecamatan_id');
             $updateNasabah->is_verified = 2;
 
             $updateNasabah->save();
@@ -192,6 +191,7 @@ class ApiAuthController extends Controller
 
                 $newPenjamin = new Penjamin;
                 $newPenjamin->id_nasabah = $updateNasabah->id;
+                $newPenjamin->hubungan = $request->get('hubungan');
                 $newPenjamin->nama = $request->get('nama_penjamin');
                 $newPenjamin->nik = $request->get('nik_penjamin');
                 $newPenjamin->no_hp = $request->get('no_hp_penjamin');
