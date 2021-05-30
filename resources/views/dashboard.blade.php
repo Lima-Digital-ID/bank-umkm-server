@@ -77,6 +77,24 @@
         </div>
     </div>
 
+    <div class="col-md-3 mb-4">
+        <div class="card card-dashboard py-2">
+            <div class="card-body">    
+                <div class="row">
+                    <div class="col-md-8 pr-0">
+                        <h2 class="color-primary font-weight-bold">{{$cicilanTelat}}</h2>
+                        Pembayaran Terlambat
+                    </div>
+                    <div class="col-md-4 pl-0 text-center">
+                        <span class="fas fa-fw fa-money-check-alt fa-4x"></span>
+                    </div>
+                </div>
+                <hr>
+                <a href="{{url('pelunasan/late-payment')}}">Lihat Detail</a>
+            </div>
+        </div>
+    </div>
+
     {{-- <div class="row"> --}}
         <div class="col-md-12">
             <div class="card">

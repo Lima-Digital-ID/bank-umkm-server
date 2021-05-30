@@ -15,10 +15,12 @@ class DashboardController extends Controller
     public function index()
     {
         try {
+            $date = date('Y-m-d');
             $this->param['nasabahBaru'] = Nasabah::where('is_verified', 2)->count();
             $this->param['nasabahVerified'] = Nasabah::where('is_verified', 1)->count();
             $this->param['pengajuanPinjaman'] = Pinjaman::where('status', 'Pending')->count();
             $this->param['pinjamanBerjalan'] = Pinjaman::where('status', 'Terima')->where('status_pencairan', 'Terima')->count();
+            $this->param['cicilanTelat'] = Pelunasan::where('jatuh_tempo_cicilan', '<', $date)->where('status', 'Belum')->count();
             // chart pinjaman bulanan
             $bulan = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
             $tahun = date('Y');

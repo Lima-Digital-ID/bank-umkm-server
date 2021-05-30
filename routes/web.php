@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('pinjaman/proses-pencairan/{id}', 'PinjamanController@prosesPencairan');
     Route::get('pinjaman/update-pencairan/{id}/{status}', 'PinjamanController@updateStatusPencairan');
     Route::resource('pinjaman', 'PinjamanController');
+    Route::get('pelunasan/late-payment', 'PelunasanController@latePayment');
     Route::resource('pelunasan', 'PelunasanController');
     Route::get('data-tambahan-nasabah/update-status/{id}', 'DataTambahanNasabahController@updateStatus');
     Route::resource('data-tambahan-nasabah', 'DataTambahanNasabahController');

@@ -12,6 +12,6 @@ class Pelunasan extends Model
 
     public function pinjaman()
     {
-        return $this->belongsTo('\App\Models\Pinjaman');
+        return $this->belongsTo('\App\Models\Pinjaman', 'id_pinjaman');
     }
 }

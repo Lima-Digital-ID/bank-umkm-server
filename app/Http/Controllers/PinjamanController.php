@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
+use \App\Models\Pelunasan;
 use \App\Models\Nasabah;
 use App\Models\Notification;
+use Illuminate\Support\Facades\DB;
 
 class PinjamanController extends Controller
 {
@@ -320,6 +322,16 @@ class PinjamanController extends Controller
                 $nasabah->hutang = $hutang;
                 $nasabah->limit_pinjaman = 0;
                 $nasabah->save();
+                
+                for ($i=1; $i <= $pinjaman->jangka_waktu ; $i++) { 
+                    $cicilan = new Pelunasan;
+                    $cicilan->id_pinjaman = $pinjaman->id;
+                    $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime($pinjaman->tanggal_diterima)));
+                    $cicilan->cicilan_ke = $i;
+                    $cicilan->nominal_pembayaran = round($pinjaman->nominal / $pinjaman->jangka_waktu);
+                    $cicilan->save();
+                }
+
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, proses pencairan gagal.';
@@ -421,7 +433,8 @@ class PinjamanController extends Controller
     }
     public function cekNotif()
     {
-        $count = Pinjaman::select(\DB::raw("count('id') as ttl"))->where('view','0')->get();
+        $count = Pinjaman::select(DB::raw("count('id') as ttl"))->where('view','0')->get();
         echo $count[0]->ttl;
+        
     }
 }

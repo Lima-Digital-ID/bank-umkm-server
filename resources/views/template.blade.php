@@ -207,10 +207,32 @@
           </li>
 
           <li class="nav-item {{Request::segment(1) == 'pelunasan' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('pelunasan')}}">
-              <i class="fas fa-fw fa-hand-holding-usd"></i>
-              <span>Pelunasan</span></a
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#pelunasan"
+              aria-expanded="true"
+              aria-controls="pelunasan"
             >
+            <i class="fas fa-fw fa-hand-holding-usd"></i>
+              <span>Pelunasan</span>
+            </a>
+            <div
+              id="pelunasan"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('pelunasan')}}">
+                  <span>Pelunasan</span>
+                </a>
+                <a class="nav-link" href="{{url('pelunasan/late-payment')}}">
+                  <span>Pembayaran Terlambat</span>
+                </a>
+              </div>
+            </div>
           </li>
           
           <li class="nav-item {{Request::segment(1) == 'laporan' ? 'active' : ''}}">

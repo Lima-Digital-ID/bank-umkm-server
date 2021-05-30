@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Pelunasan;
 use \App\Models\Pinjaman;
+use Illuminate\Support\Facades\DB;
+
 class PelunasanController extends Controller
 {
     private $param;
@@ -74,8 +76,8 @@ class PelunasanController extends Controller
             $this->param['pageInfo'] = 'Detail';
             // $this->param['btnRight']['text'] = 'Lihat Data';
             // $this->param['btnRight']['link'] = route('pelunasan.index');
-            $this->param['pinjaman'] = Pinjaman::with('nasabah')->find($idPinjaman);
-            $this->param['pelunasan'] = Pelunasan::where('id_pinjaman', $idPinjaman)->orderBy('tanggal_pembayaran')->get();
+            $this->param['pinjaman'] = Pinjaman::with('nasabah', 'pelunasan')->find($idPinjaman);
+            // $this->param['pelunasan'] = Pelunasan::where('id_pinjaman', $idPinjaman)->orderBy('tanggal_pembayaran')->get();
          return \view('pelunasan.detail-pelunasan', $this->param);
         }
         catch(\Exception $e){
@@ -154,6 +156,39 @@ class PelunasanController extends Controller
         catch(\Illuminate\Database\QueryException $e){
             return redirect()->route('pelunasan.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
+        
+    }
+
+    public function latePayment(Request $request)
+    {
+        
+        $this->param['pageInfo'] = 'List Pembayaran Terlambat';
+        // $this->param['btnRight']['text'] = 'Tambah Data';
+        // $this->param['btnRight']['link'] = route('pelunasan.create');
+
+        try {
+            $date = date('Y-m-d');
+            $keyword = $request->get('keyword');
+            $latePayment= Pelunasan::with('pinjaman.nasabah')
+                                                        ->where('jatuh_tempo_cicilan', '<', $date)
+                                                        ->where('pelunasan.status', 'Belum');
+            if ($keyword) {
+                $latePayment->whereHas('pinjaman.nasabah', function ($query) use ($keyword) {
+                    return $query->where('nama', 'LIKE', "$keyword");
+                });
+            }
+
+            $this->param['latePayment'] = $latePayment->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan'. $e->getMessage());
+        }
+                
+        return \view('pelunasan.list-late-payment', $this->param);
+        
+
+        // echo "<pre>";
+        // print_r ($this->param['latePayment']);
+        // echo "</pre>";
         
     }
 }

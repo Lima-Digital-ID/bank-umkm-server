@@ -28,15 +28,11 @@ class ApiPembayaran extends Controller
         $hutang = '';
         
         try {
-            $newPembayaran = new Pelunasan; 
-            $newPembayaran->id_pinjaman = $request->get('id_pinjaman');
-            $newPembayaran->nominal_pembayaran = $request->get('nominal_pembayaran');
-            $newPembayaran->metode_pembayaran = $request->get('metode_pembayaran');
-            $newPembayaran->tanggal_pembayaran = date("Y-m-d");
-            $getCicilan = Pelunasan::select('cicilan_ke')->where('id_pinjaman',$request->get('id_pinjaman'))->orderBy('cicilan_ke','desc')->get();
-            $newPembayaran->cicilan_ke = count($getCicilan) > 0 ? $getCicilan[0]->cicilan_ke + 1 : 1;
-
-            $newPembayaran->save();
+            $pelunasan = Pelunasan::find($request->get('id'));
+            $pelunasan->tanggal_pembayaran = date('Y-m-d');
+            $pelunasan->metode_pembayaran = $request->get('metode_pembayaran');
+            $pelunasan->status = 'Sudah';
+            $pelunasan->save();
 
             $nasabah = Nasabah::find(auth()->user()->id);
             $hutang = $nasabah->hutang - $request->get('nominal_pembayaran');
@@ -102,9 +98,9 @@ class ApiPembayaran extends Controller
         $data = '';
 
         try {
-            $statusCicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->get();
+            $cicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->count();
             
-            $data = count($statusCicilan);
+            $data = $cicilan;
 
             $status = 'success';
             $message = 'berhasil.';

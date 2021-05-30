@@ -74,54 +74,53 @@
                 <thead>
                     <tr>
                         <td>Cicilan Ke</td>
-                        <td>Tanggal Jatuh Tempo</td>
+                        <td>Tanggal Jatuh Tempo Cicilan</td>
                         <td>Tanggal Pembayaran</td>
                         <td>Nominal</td>
+                        <td>Status Pembayaran</td>
+                        <td>Keterlambatan</td>
                         <td>Denda</td>
                     </tr>
                 </thead>
                 <tbody>
-                <?php
-                  for($i=1;$i<=$pinjaman->jangka_waktu;$i++){
-                    $cek = \DB::table('pelunasan')->select('nominal_pembayaran','tanggal_pembayaran')->where('id_pinjaman',$pinjaman->id)->where('cicilan_ke',$i)->get();
-                ?>
+                  @php
+                      $date = date('Y-m-d');
+                  @endphp
+                @foreach ($pinjaman->pelunasan as $item)
+                @php         
+                      //jika belum bayar dan terlambat dari jatuh tempo           
+                      if ($item->jatuh_tempo_cicilan < $date && $item->status == 'Belum') {
+                        # code...
+                        $keterlambatan = date_diff(date_create($date),date_create($item->jatuh_tempo_cicilan), true);
+                        $denda = (int)$keterlambatan->format("%a") * 1000;
+                        // echo "<pre>";
+                        // print_r ($keterlambatan->format("%a"));
+                        // echo "</pre>";
+                      }
+                      // jika sudah terbayar dan terlambat
+                      elseif($item->jatuh_tempo_cicilan < $item->tanggal_pembayaran && $item->status == 'Sudah'){
+                        $keterlambatan = date_diff(date_create($item->tanggal_pembayaran),date_create($item->jatuh_tempo_cicilan), true);
+                        $denda = (int)$keterlambatan->format("%a") * 1000;
+                      }
+                      else{
+                        $keterlambatan = 0;
+                        $denda = 0;
+                      }
+                      
+                      
+                  @endphp
                   <tr>
-                    <td>{{$i}}</td>
-                    <td>{{date('d-m-Y',strtotime("+$i month", strtotime($pinjaman->tanggal_diterima)))}}</td>
-                    <td>{{count($cek)==0 ? '-' : date('Y-m-d', strtotime($cek[0]->tanggal_pembayaran)) }}</td>
-                    <td><?=count($cek)==0 ? '-' : number_format($cek[0]->nominal_pembayaran, 2, ',', '.')." <span class='fa ml-5 fa-lg fa-check-circle color-green'></span>" ?></td>
-                    <td>
-                      <?php 
-                        $now = time();
-                        $jatuhTempo = strtotime($pinjaman->jatuh_tempo);
-                        if(count($cek)==0 && $now>$jatuhTempo){
-                          $dateDiff = $now - $jatuhTempo;
-                          $telat = round($dateDiff / (60 * 60 * 24))-1;
-                          $denda = $telat * 1000;
-                          echo "<span style='color:red' class='font-weight-bold'>".number_format($denda, 2, ',', '.')."</span>";
-                        }
-                      ?>
-                    </td>
+                    <td>{{$item->cicilan_ke}}</td>
+                    <td>{{date('d-m-Y', strtotime($item->jatuh_tempo_cicilan))}}</td>
+                    <td>{{$item->tanggal_pembayaran ? date('d-m-Y', strtotime($item->tanggal_pembayaran)) : '-'}}</td>
+                    {{-- <td>{{number_format($item->nominal_pembayaran, 2, ',', '.')."<span class='fa ml-5 fa-lg fa-check-circle color-green'></span>" }}</td> --}}
+                    <td>{{'Rp' . number_format($item->nominal_pembayaran, 2, ',', '.')}}</td>
+                    <td>{{$item->status == 'Belum' ? $item->status . ' Terbayar' : $item->status . ' Terbayar'}}</td>
+                    <td>{{$item->jatuh_tempo_cicilan < $date && $item->status == 'Belum' ? $keterlambatan->format("%R%a hari") : $keterlambatan . ' hari'}}</td>
+                    <td>{{'Rp' .number_format($denda, 2, ',', '.')}}</td>
                   </tr>
-                <?php
-                  }
-                ?>
-<!--                     @php
-                        $page = Request::get('page');
-                        $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
-                    @endphp
-                    @foreach ($pelunasan as $value)
-                        <tr>
-                            <td>{{$no}}</td>
-                            <td>{{date('d-m-Y', strtotime($value->tanggal_pembayaran))}}</td>
-                            <td>{{$value->cicilan_ke}}</td>
-                            <td>{{number_format($value->nominal_pembayaran, 2, ',', '.')}}</td>
-                        </tr>
-                        @php
-                            $no++
-                        @endphp
-                    @endforeach
- -->                </tbody>
+                @endforeach
+                </tbody>
             </table>
         </div>
 @endsection

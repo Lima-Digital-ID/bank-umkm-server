@@ -25,9 +25,11 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Tanggal Pembayaran</td>
-                        <td>Nasabah</td>
-                        <td>Nominal</td>
+                        <td>Nama Nasabah</td>
+                        <td>Cicilan Ke</td>
+                        <td>Nominal Cicilan</td>
+                        <td>Jatuh Tempo Cicilan</td>
+                        <td>Keterlambatan</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -35,24 +37,31 @@
                     @php
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
+                        $date = date('Y-m-d');
+                        
                     @endphp
-                    @foreach ($pelunasan as $value)
+                    @foreach ($latePayment as $value)
+                    @php
+                        $keterlambatan = date_diff(date_create($date),date_create($value->jatuh_tempo_cicilan), true);
+                    @endphp
                         <tr>
                             <td>{{$no}}</td>
-                            <td>{{$value->tanggal_pembayaran}}</td>
-                            <td>{{$value->nama}}</td>
+                            <td>{{$value->pinjaman->nasabah->nama}}</td>
+                            <td>{{$value->cicilan_ke}}</td>
                             <td>{{number_format($value->nominal_pembayaran, 2, ',', '.')}}</td>
+                            <td>{{date('d-m-Y', strtotime($value->jatuh_tempo_cicilan))}}</td>
+                            <td>{{$keterlambatan->format("%R%a hari")}}</td>
                             <td>
                                 <div class="form-inline">
-                                    <a href="{{ route('pelunasan.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
+                                    {{-- <a href="{{ route('pelunasan.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> --}}
                                     <a href="{{ route('pelunasan.show', $value->id_pinjaman) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                    <form action="{{ route('pelunasan.destroy', $value) }}" method="post">
+                                    {{-- <form action="{{ route('pelunasan.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                             <span class="fa fa-minus-circle"></span>
                                         </button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>
@@ -62,6 +71,6 @@
                     @endforeach
                 </tbody>
             </table>
-            {{$pelunasan->appends(Request::all())->links('vendor.pagination.custom')}}
+            {{$latePayment->appends(Request::all())->links('vendor.pagination.custom')}}
         </div>
 @endsection
