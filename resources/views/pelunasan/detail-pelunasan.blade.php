@@ -98,7 +98,7 @@
                         // echo "</pre>";
                       }
                       // jika sudah terbayar dan terlambat
-                      elseif($item->jatuh_tempo_cicilan < $item->tanggal_pembayaran && $item->status == 'Sudah'){
+                      elseif($item->jatuh_tempo_cicilan < $item->tanggal_pembayaran && $item->status == 'Lunas'){
                         $keterlambatan = date_diff(date_create($item->tanggal_pembayaran),date_create($item->jatuh_tempo_cicilan), true);
                         $denda = (int)$keterlambatan->format("%a") * 1000;
                       }

@@ -31,7 +31,7 @@ class ApiPembayaran extends Controller
             $pelunasan = Pelunasan::find($request->get('id'));
             $pelunasan->tanggal_pembayaran = date('Y-m-d');
             $pelunasan->metode_pembayaran = $request->get('metode_pembayaran');
-            $pelunasan->status = 'Sudah';
+            $pelunasan->status = 'Lunas';
             $pelunasan->save();
 
             $nasabah = Nasabah::find(auth()->user()->id);
