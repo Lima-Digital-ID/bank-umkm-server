@@ -98,7 +98,7 @@ class ApiPembayaran extends Controller
         $data = '';
 
         try {
-            $cicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->count();
+            $cicilan = Pelunasan::where('id_pinjaman', $id_pinjaman)->get();
             
             $data = $cicilan;
 
