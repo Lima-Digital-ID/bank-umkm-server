@@ -92,7 +92,8 @@
                       if ($item->jatuh_tempo_cicilan < $date && $item->status == 'Belum') {
                         # code...
                         $keterlambatan = date_diff(date_create($date),date_create($item->jatuh_tempo_cicilan), true);
-                        $denda = (int)$keterlambatan->format("%a") * 1000;
+                        $keterlambatan = $keterlambatan->format("%a");
+                        $denda = $keterlambatan * 1000;
                         // echo "<pre>";
                         // print_r ($keterlambatan->format("%a"));
                         // echo "</pre>";
@@ -100,7 +101,8 @@
                       // jika sudah terbayar dan terlambat
                       elseif($item->jatuh_tempo_cicilan < $item->tanggal_pembayaran && $item->status == 'Lunas'){
                         $keterlambatan = date_diff(date_create($item->tanggal_pembayaran),date_create($item->jatuh_tempo_cicilan), true);
-                        $denda = (int)$keterlambatan->format("%a") * 1000;
+                        $keterlambatan = $keterlambatan->format("%a");
+                        $denda = $keterlambatan * 1000;
                       }
                       else{
                         $keterlambatan = 0;
@@ -115,7 +117,7 @@
                     <td>{{$item->tanggal_pembayaran ? date('d-m-Y', strtotime($item->tanggal_pembayaran)) : '-'}}</td>
                     {{-- <td>{{number_format($item->nominal_pembayaran, 2, ',', '.')."<span class='fa ml-5 fa-lg fa-check-circle color-green'></span>" }}</td> --}}
                     <td>{{'Rp' . number_format($item->nominal_pembayaran, 2, ',', '.')}}</td>
-                    <td>{{$item->status == 'Belum' ? $item->status . ' Terbayar' : $item->status . ' Terbayar'}}</td>
+                    <td>{{$item->status == 'Belum' ? $item->status . ' Terbayar' : $item->status}}</td>
                     <td>{{$item->jatuh_tempo_cicilan < $date && $item->status == 'Belum' ? $keterlambatan->format("%R%a hari") : $keterlambatan . ' hari'}}</td>
                     <td>{{'Rp' .number_format($denda, 2, ',', '.')}}</td>
                   </tr>
