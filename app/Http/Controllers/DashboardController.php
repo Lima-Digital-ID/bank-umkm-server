@@ -31,7 +31,7 @@ class DashboardController extends Controller
             foreach ($bulan as $key => $val) {
                 $pinjaman = Pinjaman::select(DB::raw('SUM(nominal) as nominal'))->where(DB::raw('MONTH(tanggal_diterima)'), $val)->where(DB::raw('YEAR(tanggal_diterima)'), $tahun)->whereIn('status', ['Terima', 'Lunas'])->where('status_pencairan', 'Terima')->get();
                 
-                $pembayaran = Pelunasan::select(DB::raw('SUM(nominal_pembayaran) as nominal_pembayaran'))->where(DB::raw('MONTH(tanggal_pembayaran)'), $val)->where(DB::raw('YEAR(tanggal_pembayaran)'), $tahun)->get();
+                $pembayaran = Pelunasan::select(DB::raw('SUM(nominal_pembayaran) as nominal_pembayaran'))->where(DB::raw('MONTH(tanggal_pembayaran)'), $val)->where(DB::raw('YEAR(tanggal_pembayaran)'), $tahun)->where('status', 'Lunas')->get();
 
                 if ($pembayaran) {
                     array_push($pembayaranBulanan, $pembayaran[0]->nominal_pembayaran);

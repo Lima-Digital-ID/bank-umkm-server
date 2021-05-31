@@ -27,6 +27,7 @@
                         <td>#</td>
                         <td>Tanggal Pembayaran</td>
                         <td>Nasabah</td>
+                        <td>Cicilan Ke</td>
                         <td>Nominal</td>
                         <td>Aksi</td>
                     </tr>
@@ -41,18 +42,19 @@
                             <td>{{$no}}</td>
                             <td>{{$value->tanggal_pembayaran}}</td>
                             <td>{{$value->nama}}</td>
+                            <td>{{$value->cicilan_ke}}</td>
                             <td>{{number_format($value->nominal_pembayaran, 2, ',', '.')}}</td>
                             <td>
                                 <div class="form-inline">
-                                    <a href="{{ route('pelunasan.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
+                                    {{-- <a href="{{ route('pelunasan.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> --}}
                                     <a href="{{ route('pelunasan.show', $value->id_pinjaman) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
-                                    <form action="{{ route('pelunasan.destroy', $value) }}" method="post">
+                                    {{-- <form action="{{ route('pelunasan.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="button" class="btn btn-danger" title="Hapus" data-toggle="tooltip" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                             <span class="fa fa-minus-circle"></span>
                                         </button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>
