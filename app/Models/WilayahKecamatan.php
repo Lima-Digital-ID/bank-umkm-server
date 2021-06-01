@@ -9,4 +9,14 @@ class WilayahKecamatan extends Model
 {
     use HasFactory;
     protected $table = 'wilayah_kecamatan';
+
+    public function nasabah()
+    {
+        return $this->hasMany('\App\Models\Nasabah');
+    }
+
+    public function kabupaten()
+    {
+        return $this->hasMany('\App\Models\WilayahKabupaten', 'kabupaten_id');
+    }
 }

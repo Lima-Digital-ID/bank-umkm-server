@@ -62,21 +62,22 @@ class NasabahController extends Controller
     {
         $status = '';
         $message = '';
-        $token = '';
         $verifData = '';
         $id_nasabah = auth()->user()->id;
         try {
-            $verifData = Nasabah::with('informasiBank')->where('id', $id_nasabah)->first();
+            $verifData = Nasabah::with('informasiBank', 'penjamin', 'kecamatan')
+            // ->join('wilayah_kecamatan', 'wilayah_kecamatan.id', '=', 'nasabah.kecamatan_id')
+            // ->join('wilayah_kabupaten', 'wilayah_kabupaten.id', '=', 'wilayah_kecamatan.kabupaten_id')
+            ->where('nasabah.id', $id_nasabah)
+            ->first();
             if($verifData == null) {
                 $status = 'failed';
                 $message = 'Nasabah tidak ditemukan';
-                // $nasabah = '';
             }
             else {
                 $status = 'success';
                 $message = 'Berhasil';
             }
-
 
         } catch(\Exception $e){
             $status = 'failed';

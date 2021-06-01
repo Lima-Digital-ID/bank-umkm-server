@@ -19,6 +19,11 @@ class Nasabah extends Model
         return $this->hasMany('App\Models\Pinjaman');
     }
 
+    public function penjamin()
+    {
+        return $this->hasMany('\App\Models\Penjamin', 'id_nasabah');
+    }
+
     public function tipe()
     {
         return $this->belongsTo('\App\Models\TipeNasabah');
@@ -43,4 +48,15 @@ class Nasabah extends Model
     {
         return $this->hasMany('\App\Models\InformasiBank', 'id_nasabah');
     }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo('\App\Models\WilayahKecamatan');
+    }
+
+    public function kabupaten()
+    {
+        return $this->belong('\App\Models\WilayahKabupaten', 'kecamatan_id', 'id');
+    }
+
 }

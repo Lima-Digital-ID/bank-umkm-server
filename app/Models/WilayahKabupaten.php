@@ -9,4 +9,9 @@ class WilayahKabupaten extends Model
 {
     use HasFactory;
     protected $table = 'wilayah_kabupaten';
+
+    public function kecamatan()
+    {
+        return $this->belongsTo('\App\Models\WilayahKecamatan');
+    }
 }
