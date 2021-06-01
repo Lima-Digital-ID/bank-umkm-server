@@ -29,4 +29,9 @@ class Pinjaman extends Model
     {
         return $this->belongsTo('\App\Models\JenisPinjaman', 'id_jenis_pinjaman');
     }
+
+    public function bank()
+    {
+        return $this->belongsTo('\App\Models\InformasiBank', 'id_nasabah');
+    }
 }

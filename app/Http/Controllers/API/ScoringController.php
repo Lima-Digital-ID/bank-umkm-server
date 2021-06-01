@@ -129,4 +129,32 @@ class ScoringController extends Controller
             ], 200);
         }
     }
+
+    public function getScoringPerNasahabah()
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $detailPinjaman = Scoring::with('option')->where('id_nasabah', auth()->user()->id)->get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $detailPinjaman;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }   
+    }
 }

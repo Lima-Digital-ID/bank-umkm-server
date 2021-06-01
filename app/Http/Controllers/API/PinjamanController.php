@@ -46,6 +46,7 @@ class PinjamanController extends Controller
 
         $status = '';
         $message = '';
+        $idPinjaman = '';
 
         try {
 
@@ -56,10 +57,26 @@ class PinjamanController extends Controller
                 $status = 'failed';
                 $message = 'Maaf anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
             }
-            else{
+            else{                
+                $kodePinjaman = '';
+                $noPinjaman = '00001';
+                $countPinjaman = Pinjaman::select('kode_pinjaman')->count();
+                $getDate = date('Ymd');
+
+                if($countPinjaman > 0){
+                    $lastPinjaman = Pinjaman::orderBy('kode_pinjaman', 'desc')->first()->kode_pinjaman;
+    
+                    $lastIncreament = substr($lastPinjaman, 10);
+    
+                    $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
+    
+                }
+
+                $kodePinjaman = 'PC'.$getDate.$noPinjaman;
 
                 $newPinjaman = new Pinjaman;
                 $newPinjaman->id_nasabah = auth()->user()->id;
+                $newPinjaman->kode_pinjaman = $kodePinjaman;
                 $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
                 $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
                 $newPinjaman->nominal = auth()->user()->limit_pinjaman;
@@ -83,6 +100,7 @@ class PinjamanController extends Controller
                 }
     
                 $newPinjaman->save();
+                $idPinjaman = $newPinjaman->id;
 
                 if (auth()->user()->skor >= 80) {
                     $nasabah = Nasabah::find(auth()->user()->id);
@@ -120,7 +138,8 @@ class PinjamanController extends Controller
         finally{
             return response()->json([
                 'status' => $status,
-                'message' => $message
+                'message' => $message,
+                'data' => $idPinjaman
             ]);
         }
     }
@@ -152,13 +171,48 @@ class PinjamanController extends Controller
         }
     }
 
+    public function getPinjamanPendingByNasabah()
+    {   
+        try {
+            $idNasabah = auth()->user()->id;
+            // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
+            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->where('status', 'Pending')->get();
+            
+            $status = 'success';
+            $message = 'Berhasil';
+            $data = $pinjamanByNasabah;
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function show($id)
     {   
         $status = '';
         $message = '';
         $data = '';
         try {
-            $detailPinjaman = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id', $id)->get();
+            $detailPinjaman = Pinjaman::
+            with('jenisPinjaman', 'pelunasan', 'nasabah')
+            // ->select(
+            //     'master_bank.nama_bank'
+            // )
+            ->join('informasi_bank', 'informasi_bank.id_nasabah', 'pinjaman.id_nasabah')
+            ->join('master_bank', 'informasi_bank.id_bank', 'master_bank.id')
+            ->where('pinjaman.id', $id)
+            ->get();
 
             $status = 'success';
             $message = 'Berhasil';

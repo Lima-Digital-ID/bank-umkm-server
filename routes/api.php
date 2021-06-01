@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('kategori-kriteria', 'API\ScoringController@getKategoriKriteria');
     Route::post('prosess-skoring', 'API\ScoringController@processScoring');
     Route::get('get-option-by-kriteria/{id}', 'API\ScoringController@getOptionByKriteria');
+    Route::get('get-scoring-per-nasabah', 'API\ScoringController@getScoringPerNasahabah');
     // end scoring
 
     // data tambahan nasabah (syarat pinjaman diatas 5jt)
@@ -33,6 +34,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('logout', 'API\ApiAuthController@logout');
     // melengkapi data profil
     Route::post('lengkapi-data', 'API\ApiAuthController@lengkapiData');
+    
+    Route::get('get-verif-data', 'API\NasabahController@getVerifData');
     // jenis pinjaman
     Route::get('jenis-pinjaman', 'API\JenisPinjamanController@index');
 
@@ -42,6 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('pinjaman/{id}', 'API\PinjamanController@show');
     // get pinjaman by nasabah
     Route::get('pinjaman-per-nasabah', 'API\PinjamanController@getPinjamanByNasabah');
+    Route::get('pinjaman-pending', 'API\PinjamanController@getPinjamanPendingByNasabah');
 
     // bank
     Route::get('bank', 'API\PinjamanController@getBank');

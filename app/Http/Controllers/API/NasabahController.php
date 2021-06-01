@@ -58,6 +58,43 @@ class NasabahController extends Controller
         }
     }
 
+    public function getVerifData()
+    {
+        $status = '';
+        $message = '';
+        $token = '';
+        $verifData = '';
+        $id_nasabah = auth()->user()->id;
+        try {
+            $verifData = Nasabah::with('informasiBank')->where('id', $id_nasabah)->first();
+            if($verifData == null) {
+                $status = 'failed';
+                $message = 'Nasabah tidak ditemukan';
+                // $nasabah = '';
+            }
+            else {
+                $status = 'success';
+                $message = 'Berhasil';
+            }
+
+
+        } catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'success';
+            $message = 'Gagal' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $verifData
+            ], 200);
+        }
+    }
+
     public function getHutangPerNasabah(Request $request)
     {
         

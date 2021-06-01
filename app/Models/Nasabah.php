@@ -38,4 +38,9 @@ class Nasabah extends Model
     {
         return $this->hasMany('\App\Models\Scoring', 'id_nasabah');
     }
+
+    public function informasiBank()
+    {
+        return $this->hasMany('\App\Models\InformasiBank', 'id_nasabah');
+    }
 }
