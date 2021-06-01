@@ -176,7 +176,11 @@ class PinjamanController extends Controller
         try {
             $idNasabah = auth()->user()->id;
             // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
-            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->where('status', 'Pending')->get();
+            // $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)
+            // ->where('status', 'Pending')
+            // ->orWhere('status', 'Terima')
+            // ->where('status_pencairan', 'Pending')->get();
+            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->orderBy('created_at', 'DESC')->get();
             
             $status = 'success';
             $message = 'Berhasil';
