@@ -140,6 +140,7 @@ class ApiAuthController extends Controller
         $sms = 'nonaktif';
         $id_nasabah = auth()->user()->id;
         $updateNasabah = Nasabah::find($id_nasabah);
+        $isVerified = $updateNasabah->is_verified;
         try{
             $updateNasabah->tanggal_lahir = $request->get('tgl_lahir');
             $updateNasabah->tempat_lahir = $request->get('tempat_lahir');
@@ -169,6 +170,7 @@ class ApiAuthController extends Controller
                     $img = base64_decode($request->get('scan_ktp'));
                     file_put_contents($filename, $img);
                     $uploadImg->scan_ktp = $filename;
+                    $uploadImg->updated_at = time();
                 }
                 if($request->get('foto_dengan_ktp') != null || $request->get('foto_dengan_ktp') != ''){
                     $extension = explode('.', $request->get('with_ktp_filename'));
@@ -177,27 +179,51 @@ class ApiAuthController extends Controller
                     $img = base64_decode($request->get('foto_dengan_ktp'));
                     file_put_contents($filename, $img);
                     $uploadImg->selfie_ktp = $filename;
+                    $uploadImg->updated_at = time();
                 }
-                $uploadImg->updated_at = time();
                 $uploadImg->save();
 
-                $newBank = new InformasiBank;
-                $newBank->id_nasabah = $updateNasabah->id;
-                $newBank->id_bank = $request->get('id_bank');
-                $newBank->no_rekening = $request->get('norek');
-                $newBank->nama_rekening = $request->get('nama_akun_bank');
-
-                $newBank->save();
-
-                $newPenjamin = new Penjamin;
-                $newPenjamin->id_nasabah = $updateNasabah->id;
-                $newPenjamin->hubungan = $request->get('hubungan');
-                $newPenjamin->nama = $request->get('nama_penjamin');
-                $newPenjamin->nik = $request->get('nik_penjamin');
-                $newPenjamin->no_hp = $request->get('no_hp_penjamin');
-                $newPenjamin->alamat = $request->get('alamat_penjamin');
-
-                $newPenjamin->save();
+                if($isVerified == 1) {
+                    $editBank = InformasiBank::where('id_nasabah', $id_nasabah)->first();
+                    $editBank->id_nasabah = $id_nasabah;
+                    $editBank->id_bank = $request->get('id_bank');
+                    $editBank->no_rekening = $request->get('norek');
+                    $editBank->nama_rekening = $request->get('nama_akun_bank');
+                    $editBank->updated_at = time();
+                    
+                    $editBank->save();
+                    
+                    $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->first();
+                    $editPenjamin->id_nasabah = $id_nasabah;
+                    $editPenjamin->hubungan = $request->get('hubungan');
+                    $editPenjamin->nama = $request->get('nama_penjamin');
+                    $editPenjamin->nik = $request->get('nik_penjamin');
+                    $editPenjamin->no_hp = $request->get('no_hp_penjamin');
+                    $editPenjamin->alamat = $request->get('alamat_penjamin');
+                    $editPenjamin->updated_at = time();
+    
+                    $editPenjamin->save();
+                }
+                else {
+                    $newBank = new InformasiBank;
+                    $newBank->id_nasabah = $updateNasabah->id;
+                    $newBank->id_bank = $request->get('id_bank');
+                    $newBank->no_rekening = $request->get('norek');
+                    $newBank->nama_rekening = $request->get('nama_akun_bank');
+    
+                    $newBank->save();    
+                    
+                    $newPenjamin = new Penjamin;
+                    $newPenjamin->id_nasabah = $updateNasabah->id;
+                    $newPenjamin->hubungan = $request->get('hubungan');
+                    $newPenjamin->nama = $request->get('nama_penjamin');
+                    $newPenjamin->nik = $request->get('nik_penjamin');
+                    $newPenjamin->no_hp = $request->get('no_hp_penjamin');
+                    $newPenjamin->alamat = $request->get('alamat_penjamin');
+    
+                    $newPenjamin->save();
+                }
+                
             }
 
             $message = "Success update data";
