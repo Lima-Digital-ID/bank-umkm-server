@@ -8,6 +8,7 @@ use \App\Models\KategoriKriteria;
 use \App\Models\Kriteria;
 use \App\Models\Option;
 use \App\Models\Scoring;
+use \App\Models\Nasabah;
 use Illuminate\Support\Facades\DB;
 
 class ScoringController extends Controller
@@ -49,24 +50,71 @@ class ScoringController extends Controller
         // return $data['data'][0]['skor'];
         // return $totalSkor ;
         try {
+            $nasabah = Nasabah::find(auth()->user()->id);
+            
             $data = json_encode($request->json()->all());
             $data = json_decode($data, true);
             // return $data['data'];
             $totalSkor = 0;
             
-            for($i=0; $i<count($data['score']); $i++){
-                $totalSkor += $data['score'][$i];
-                $newScore = new Scoring;
-                $newScore->id_option = $data['data'][$i];
-                $newScore->id_nasabah = auth()->user()->id;
-                
-                $newScore->save();
-
-                // DB::table('scoring')->insert([
-                //     'id_option' => $data['data'][$i],
-                //     'id_nasabah' => auth()->user()->id,
-                // ]);
+            if($nasabah->skor > 0) {
+                // jika sudah pernah skoring
+                // $deleteSkor = Scoring::where('id_nasabah', auth()->user()->id);
+                // $deleteSkor->destroy();
+                $id_nasabah = auth()->user()->id;
+                $deleteSkor = DB::unprepared("DELETE FROM scoring WHERE id_nasabah = $id_nasabah");
+                if($deleteSkor) {
+                     for($i=0; $i<count($data['score']); $i++){
+                        $totalSkor += $data['score'][$i];
+                        $newScore = new Scoring;
+                        $newScore->id_option = $data['data'][$i];
+                        $newScore->id_nasabah = auth()->user()->id;
+                        
+                        $newScore->save();
+                        // $editScore = Scoring::find(auth()->user()->id);
+                        // $editScore->id_option = $data['data'][$i];
+                        // $editScore->id_nasabah = auth()->user()->id;
+                        // $editScore->updated_at = time();
+                        
+                        // $editScore->save();
+        
+                        // DB::table('scoring')->insert([
+                        //     'id_option' => $data['data'][$i],
+                        //     'id_nasabah' => auth()->user()->id,
+                        // ]);
+                    }   
+                }
             }
+            else {
+                // jika belum pernah skoring
+                for($i=0; $i<count($data['score']); $i++){
+                    $totalSkor += $data['score'][$i];
+                    $newScore = new Scoring;
+                    $newScore->id_option = $data['data'][$i];
+                    $newScore->id_nasabah = auth()->user()->id;
+                    
+                    $newScore->save();
+    
+                    // DB::table('scoring')->insert([
+                    //     'id_option' => $data['data'][$i],
+                    //     'id_nasabah' => auth()->user()->id,
+                    // ]);
+                }    
+            }
+            // for($i=0; $i<count($data['score']); $i++){
+            //         $totalSkor += $data['score'][$i];
+            //         $newScore = new Scoring;
+            //         $newScore->id_option = $data['data'][$i];
+            //         $newScore->id_nasabah = auth()->user()->id;
+                    
+            //         $newScore->save();
+    
+            //         // DB::table('scoring')->insert([
+            //         //     'id_option' => $data['data'][$i],
+            //         //     'id_nasabah' => auth()->user()->id,
+            //         // ]);
+            //     }   
+            
             // $totalSkor = array_sum(array_column($data['score'],'skor'));
             
             // foreach ($data['data'] as $key => $value) {

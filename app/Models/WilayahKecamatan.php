@@ -17,6 +17,6 @@ class WilayahKecamatan extends Model
 
     public function kabupaten()
     {
-        return $this->hasMany('\App\Models\WilayahKabupaten', 'kabupaten_id');
+        return $this->hasMany('\App\Models\WilayahKabupaten');
     }
 }

@@ -142,6 +142,7 @@ class ApiAuthController extends Controller
         $updateNasabah = Nasabah::find($id_nasabah);
         $isVerified = $updateNasabah->is_verified;
         try{
+            $updateNasabah->nama = $request->get('nama');
             $updateNasabah->tanggal_lahir = $request->get('tgl_lahir');
             $updateNasabah->tempat_lahir = $request->get('tempat_lahir');
             $updateNasabah->nik = $request->get('nik');
@@ -183,7 +184,7 @@ class ApiAuthController extends Controller
                 }
                 $uploadImg->save();
 
-                if($isVerified == 1) {
+                if($isVerified == 1 || $isVerified == 2) {
                     $editBank = InformasiBank::where('id_nasabah', $id_nasabah)->first();
                     $editBank->id_nasabah = $id_nasabah;
                     $editBank->id_bank = $request->get('id_bank');

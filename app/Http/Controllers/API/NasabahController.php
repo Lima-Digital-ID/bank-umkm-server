@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use \App\Models\Nasabah;
 use App\Models\SyaratPinjamanUmroh;
 use App\Models\Notification;
+use App\Models\WilayahKecamatan;
 
 class NasabahController extends Controller
 {
@@ -63,13 +64,17 @@ class NasabahController extends Controller
         $status = '';
         $message = '';
         $verifData = '';
+        $alamatData = '';
         $id_nasabah = auth()->user()->id;
         try {
-            $verifData = Nasabah::with('informasiBank', 'penjamin', 'kecamatan')
-            // ->join('wilayah_kecamatan', 'wilayah_kecamatan.id', '=', 'nasabah.kecamatan_id')
-            // ->join('wilayah_kabupaten', 'wilayah_kabupaten.id', '=', 'wilayah_kecamatan.kabupaten_id')
+            $verifData = Nasabah::with('informasiBank', 'penjamin')
             ->where('nasabah.id', $id_nasabah)
             ->first();
+            
+            $alamatData = WilayahKecamatan::where('wilayah_kecamatan.id', $verifData->kecamatan->id)
+            ->join('wilayah_kabupaten as kabupaten', 'kabupaten.id', 'wilayah_kecamatan.kabupaten_id')
+            ->first();
+            
             if($verifData == null) {
                 $status = 'failed';
                 $message = 'Nasabah tidak ditemukan';
@@ -91,7 +96,8 @@ class NasabahController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $verifData
+                'data' => $verifData,
+                'alamat_data' => $alamatData
             ], 200);
         }
     }
