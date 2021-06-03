@@ -24,17 +24,17 @@
     <form action="{{ route('user.store') }}" method="POST">
       @csrf
       <label>Nama</label>
-      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" autofocus name="name" placeholder="ex : Anthony Davis">
-      @if ($errors->has('name'))
+      <input type="text" class="form-control {{ $errors->has('nama') ? ' is-invalid' : '' }}" value="{{ old('nama') }}" autofocus name="nama" placeholder="Nama User">
+      @if ($errors->has('nama'))
           <span class="invalid-feedback" role="alert">
-              <strong>{{ $errors->first('name') }}</strong>
+              <strong>{{ $errors->first('nama') }}</strong>
           </span>
       @endif
 
       <br>
 
       <label>Username</label>
-      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') }}" autofocus name="username" placeholder="ex : anthony">
+      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') }}" autofocus name="username" placeholder="Username">
       @if ($errors->has('username'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('username') }}</strong>
@@ -44,13 +44,32 @@
       <br>
 
       <label>Email</label>
-      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="ex : anthonydavis@mail.com">
+      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="Email">
       @if ($errors->has('email'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('email') }}</strong>
           </span>
       @endif
-
+        <br>
+      <label for="">Level</label>
+      <br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Administrator" value="Administrator" {{ old('level') == 'Administrator' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Administrator">Administrator</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Verificator" value="Verificator" {{ old('level') == 'Verificator' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Verificator">Verificator</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Pencairan" value="Pencairan" {{ old('level') == 'Pencairan' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Pencairan">Pencairan</label>
+      </div>
+      @if ($errors->has('level'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('level') }}</strong>
+          </span>
+      @endif
       <br>
 
       <div class="mt-4">

@@ -79,6 +79,7 @@
             <div class="sidebar-brand-text"> Bank UMKM </div>
           </a>
 
+          
           <!-- Nav Item - Dashboard -->
           <li class="nav-item {{Request::segment(1) == 'dashboard' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('dashboard')}}">
@@ -87,44 +88,48 @@
             >
           </li>
           
-          <li class="nav-item {{Request::segment(1) == 'user' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('user')}}">
-              <i class="fas fa-fw fa-user"></i>
-              <span>User</span></a
-            >
-          </li>
+          @if (auth()->user()->level == 'Administrator')
 
-          <li class="nav-item {{Request::segment(1) == 'master-scoring' ? 'active' : ''}}">
-            <a
-              class="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#master-scoring"
-              aria-expanded="true"
-              aria-controls="master-scoring"
-            >
-            <i class="fas fa-fw fa-list-ol "></i>
-              <span>Master Scoring </span>
-            </a>
-            <div
-              id="master-scoring"
-              class="collapse"
-              aria-labelledby="headingTwo"
-              data-parent="#accordionSidebar"
-            >
-              <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('master-scoring/kategori-kriteria')}}">
-                  <span>Kategori Kriteria</span>
-                </a>
-                <a class="nav-link" href="{{url('master-scoring/kriteria')}}">
-                  <span>Kriteria</span>
-                </a>
-                <a class="nav-link" href="{{url('master-scoring/option')}}">
-                  <span>Option</span>
-                </a>
+            <li class="nav-item {{Request::segment(1) == 'user' ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('user')}}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>User</span></a
+              >
+            </li>
+            
+            <li class="nav-item {{Request::segment(1) == 'master-scoring' ? 'active' : ''}}">
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#master-scoring"
+                aria-expanded="true"
+                aria-controls="master-scoring"
+              >
+              <i class="fas fa-fw fa-list-ol "></i>
+                <span>Master Scoring </span>
+              </a>
+              <div
+                id="master-scoring"
+                class="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div class="py-2 collapse-inner rounded">
+                  <a class="nav-link" href="{{url('master-scoring/kategori-kriteria')}}">
+                    <span>Kategori Kriteria</span>
+                  </a>
+                  <a class="nav-link" href="{{url('master-scoring/kriteria')}}">
+                    <span>Kriteria</span>
+                  </a>
+                  <a class="nav-link" href="{{url('master-scoring/option')}}">
+                    <span>Option</span>
+                  </a>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+
+          @endif
           
           {{-- <li class="nav-item {{Request::segment(1) == 'tipe-nasabah' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('tipe-nasabah')}}">
@@ -133,41 +138,43 @@
             >
           </li> --}}
 
-          <li class="nav-item {{Request::segment(1) == 'nasabah' ? 'active' : ''}}">
-            <a
-              class="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#nasabah"
-              aria-expanded="true"
-              aria-controls="nasabah"
-            >
-            <i class="fas fa-fw fa-users "></i>
-              <span>Nasabah</span>
-            </a>
-            <div
-              id="nasabah"
-              class="collapse"
-              aria-labelledby="headingTwo"
-              data-parent="#accordionSidebar"
-            >
-              <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('nasabah?verified=2')}}">
-                  <span>Nasabah Belum Terverifikasi</span>
-                </a>
-                <a class="nav-link" href="{{url('nasabah?verified=1')}}">
-                  <span>Nasabah Terverifikasi</span>
-                </a>
-                <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
-                  <span>Pengajuan Data Tambahan Nasabah</span>
-                </a>
-                <a class="nav-link" href="{{url('syarat-pinjaman-umroh')}}">
-                  <span>Pengajuan Syarat Pinjaman Umroh</span>
-                </a>
+          @if (auth()->user()->level == 'Administrator' || auth()->user()->level == 'Verificator')
+            <li class="nav-item {{Request::segment(1) == 'nasabah' ? 'active' : ''}}">
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#nasabah"
+                aria-expanded="true"
+                aria-controls="nasabah"
+              >
+              <i class="fas fa-fw fa-users "></i>
+                <span>Nasabah</span>
+              </a>
+              <div
+                id="nasabah"
+                class="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div class="py-2 collapse-inner rounded">
+                  <a class="nav-link" href="{{url('nasabah?verified=2')}}">
+                    <span>Nasabah Belum Terverifikasi</span>
+                  </a>
+                  <a class="nav-link" href="{{url('nasabah?verified=1')}}">
+                    <span>Nasabah Terverifikasi</span>
+                  </a>
+                  {{-- <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
+                    <span>Pengajuan Data Tambahan Nasabah</span>
+                  </a>
+                  <a class="nav-link" href="{{url('syarat-pinjaman-umroh')}}">
+                    <span>Pengajuan Syarat Pinjaman Umroh</span>
+                  </a> --}}
+                </div>
               </div>
-            </div>
-          </li>
-          
+            </li>
+          @endif
+
           <li class="nav-item {{Request::segment(1) == 'pinjaman' ? 'active' : ''}}">
             <a
               class="nav-link collapsed"
@@ -187,61 +194,65 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('pinjaman?t=Pending')}}">
-                  <span>Pengajuan Pinjaman</span>
-                </a>
-                <a class="nav-link" href="{{url('pinjaman/pencairan')}}">
-                  <span>Pencairan Pinjaman</span>
-                </a>
-                <a class="nav-link" href="{{url('pinjaman?t=Terima')}}">
-                  <span>Pinjaman Berjalan</span>
-                </a>
-                <a class="nav-link" href="{{url('pinjaman?t=Lunas')}}">
-                  <span>Pinjaman Telah Lunas</span>
-                </a>
-                <a class="nav-link" href="{{url('pinjaman?t=Tolak')}}">
-                  <span>Pinjaman Ditolak</span>
-                </a>
+                @if (auth()->user()->level == 'Administrator' || auth()->user()->level == 'Verificator')
+                  <a class="nav-link" href="{{url('pinjaman?t=Pending')}}">
+                    <span>Pengajuan Pinjaman</span>
+                  </a>
+                  <a class="nav-link" href="{{url('pinjaman?t=Terima')}}">
+                    <span>Pinjaman Berjalan</span>
+                  </a>
+                  <a class="nav-link" href="{{url('pinjaman?t=Lunas')}}">
+                    <span>Pinjaman Telah Lunas</span>
+                  </a>
+                  <a class="nav-link" href="{{url('pinjaman?t=Tolak')}}">
+                    <span>Pinjaman Ditolak</span>
+                  </a>
+                @endif
+                @if (auth()->user()->level == 'Administrator' || auth()->user()->level == 'Pencairan')
+                  <a class="nav-link" href="{{url('pinjaman/pencairan')}}">
+                    <span>Pencairan Pinjaman</span>
+                  </a>
+                @endif
               </div>
             </div>
           </li>
 
-          <li class="nav-item {{Request::segment(1) == 'pelunasan' ? 'active' : ''}}">
-            <a
-              class="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#pelunasan"
-              aria-expanded="true"
-              aria-controls="pelunasan"
-            >
-            <i class="fas fa-fw fa-hand-holding-usd"></i>
-              <span>Pelunasan</span>
-            </a>
-            <div
-              id="pelunasan"
-              class="collapse"
-              aria-labelledby="headingTwo"
-              data-parent="#accordionSidebar"
-            >
-              <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('pelunasan')}}">
-                  <span>Pelunasan</span>
-                </a>
-                <a class="nav-link" href="{{url('pelunasan/late-payment')}}">
-                  <span>Pembayaran Terlambat</span>
-                </a>
+          @if (auth()->user()->level == 'Administrator')
+            <li class="nav-item {{Request::segment(1) == 'pelunasan' ? 'active' : ''}}">
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#pelunasan"
+                aria-expanded="true"
+                aria-controls="pelunasan"
+              >
+              <i class="fas fa-fw fa-hand-holding-usd"></i>
+                <span>Pelunasan</span>
+              </a>
+              <div
+                id="pelunasan"
+                class="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div class="py-2 collapse-inner rounded">
+                  <a class="nav-link" href="{{url('pelunasan')}}">
+                    <span>Pelunasan</span>
+                  </a>
+                  <a class="nav-link" href="{{url('pelunasan/late-payment')}}">
+                    <span>Pembayaran Terlambat</span>
+                  </a>
+                </div>
               </div>
-            </div>
-          </li>
-          
-          <li class="nav-item {{Request::segment(1) == 'laporan' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('laporan')}}">
-              <i class="fas fa-fw fa-chart-line"></i>
-              <span>Laporan Transaksi</span></a
-            >
-          </li>
-
+            </li>    
+            <li class="nav-item {{Request::segment(1) == 'laporan' ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('laporan')}}">
+                <i class="fas fa-fw fa-chart-line"></i>
+                <span>Laporan Transaksi</span></a
+              >
+            </li>
+          @endif
           
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">
@@ -287,7 +298,7 @@
             {{-- <span class="my-auto">{{ Auth::user()->name }}</span> --}}
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-6000 small">{{auth()->user()->name}}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-6000 small">{{auth()->user()->nama}}</span>
                 <i class="fa fa-user"></i>
               </a>
               <!-- Dropdown - User Information -->

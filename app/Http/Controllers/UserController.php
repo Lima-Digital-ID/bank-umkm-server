@@ -18,7 +18,7 @@ class UserController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $user = User::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
+                $user = User::where('nama', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
                 $user = User::paginate(10);
@@ -42,9 +42,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users',
+            'level' => 'required',
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -52,16 +53,18 @@ class UserController extends Controller
             'unique' => ':attribute telah terdaftar'
         ],
         [
-            'name' => 'name',
+            'nama' => 'Nama',
             'username' => 'Username',
             'email' => 'Alamat email',
+            'level' => 'Level',
         ]);
         try{
             $newUser = new User;
     
-            $newUser->name = $request->get('name');
+            $newUser->nama = $request->get('nama');
             $newUser->username = $request->get('username');
             $newUser->email = $request->get('email');
+            $newUser->level = $request->get('level');
             $newUser->password = \Hash::make($request->get('username'));
 
             $newUser->save();
@@ -101,25 +104,26 @@ class UserController extends Controller
         $isUnique = $user->email == $request->email ? '' : '|unique:users,email';
         $isUniqueUsername = $user->username == $request->username ? '' : '|unique:users,username';
         $validatedData = $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
             'username' => 'required|'.$isUniqueUsername,
             'email' => 'required|email'.$isUnique,
         ],
         [
-            'name.required' => ':attribute tidak boleh kosong.',
+            'nama.required' => ':attribute tidak boleh kosong.',
             'username.required' => ':attribute tidak boleh kosong.',
             'email.required' => ':attribute tidak boleh kosong.'
         ],
         [
-           'name' => 'name',
+           'nama' => 'Nama',
            'username' => 'Username',
            'email' => 'Email' 
         ]);
         try{
 
-            $user->name = $request->get('name');
+            $user->nama = $request->get('nama');
             $user->email = $request->get('email');
             $user->username = $request->get('username');
+            $user->level = $request->get('level');
             // $user->akses = $request->get('akses');
             $user->save();
 

@@ -136,18 +136,19 @@
                   </table>
                 </div>
 
-                
-                @if($nasabah->is_verified==2)
-                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
-                  <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
-                {{-- @elseif($nasabah->is_verified==3)
-                  <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a> --}}
+                @if (auth()->user()->level == 'Verificator')
+                  @if($nasabah->is_verified==2)
+                    <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
+                    <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
+                  {{-- @elseif($nasabah->is_verified==3)
+                    <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a> --}}
+                  @endif
                 @endif
               </div>
             </div>
           </div>
         </div>
-
+        <hr class="mt-4">
         <div class="row mt-4">
           <div class="col-md-6">
             <div class="card">
