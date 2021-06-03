@@ -21,7 +21,9 @@
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('nasabah?verified=2')}}">Lihat Detail</a>
+                @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
+                    <a href="{{url('nasabah?verified=2')}}">Lihat Detail</a>
+                @endif
             </div>
         </div>
     </div>
@@ -55,10 +57,13 @@
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('pinjaman?t=Pending')}}">Lihat Detail</a>
+                @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
+                    <a href="{{url('pinjaman?t=Pending')}}">Lihat Detail</a>
+                @endif
             </div>
         </div>
     </div>
+    
     <div class="col-md-3 mb-4">
         <div class="card card-dashboard py-2">
             <div class="card-body">    
@@ -72,7 +77,9 @@
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('pinjaman?t=Terima')}}">Lihat Detail</a>
+                @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
+                    <a href="{{url('pinjaman?t=Terima')}}">Lihat Detail</a>
+                @endif
             </div>
         </div>
     </div>
@@ -90,7 +97,9 @@
                     </div>
                 </div>
                 <hr>
-                <a href="{{url('pelunasan/late-payment')}}">Lihat Detail</a>
+                @if (auth()->user()->level == 'Administrator')
+                    <a href="{{url('pelunasan/late-payment')}}">Lihat Detail</a>
+                @endif
             </div>
         </div>
     </div>

@@ -25,10 +25,10 @@
       @csrf
       @method('PUT')
       <label>Nama</label>
-      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name', $user->name) }}" autofocus name="name" placeholder="ex : Anthony Davis">
-      @if ($errors->has('name'))
+      <input type="text" class="form-control {{ $errors->has('nama') ? ' is-invalid' : '' }}" value="{{ old('nama', $user->nama) }}" autofocus name="nama" placeholder="ex : Anthony Davis">
+      @if ($errors->has('nama'))
           <span class="invalid-feedback" role="alert">
-              <strong>{{ $errors->first('name') }}</strong>
+              <strong>{{ $errors->first('nama') }}</strong>
           </span>
       @endif
 
@@ -52,6 +52,28 @@
           </span>
       @endif
 
+      <br>
+
+      <br>
+      <label for="">Level</label>
+      <br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Administrator" value="Administrator" {{ old('level', $user->level) == 'Administrator' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Administrator">Administrator</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Verificator" value="Verificator" {{ old('level', $user->level) == 'Verificator' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Verificator">Verificator</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Pencairan" value="Pencairan" {{ old('level', $user->level) == 'Pencairan' ? 'checked' : '' }}>
+        <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Pencairan">Pencairan</label>
+      </div>
+      @if ($errors->has('level'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('level') }}</strong>
+          </span>
+      @endif
       <br>
 
       <div class="mt-4">

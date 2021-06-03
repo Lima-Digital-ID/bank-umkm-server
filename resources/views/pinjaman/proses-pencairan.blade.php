@@ -123,10 +123,12 @@
                       </tr>
                     </table>
                   </div>
-                  @if ($pinjaman->status_pencairan == 'Pending')
-                    {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
-                    <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>
-                    <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
+                  @if (auth()->user()->level == 'Pencairan')
+                    @if ($pinjaman->status_pencairan == 'Pending')
+                      {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
+                      <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>
+                      <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
+                    @endif
                   @endif
                 </div>
               </form>

@@ -43,6 +43,7 @@
                         <td>Nama</td>
                         <td>Username</td>
                         <td>Email</td>
+                        <td>Level</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -54,9 +55,10 @@
                     @foreach ($user as $value)
                         <tr>
                             <td>{{$no}}</td>
-                            <td>{{$value->name}}</td>
+                            <td>{{$value->nama}}</td>
                             <td>{{$value->username}}</td>
                             <td>{{$value->email}}</td>
+                            <td>{{$value->level}}</td>
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('user.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>
