@@ -18,6 +18,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('nasabah', 'API\NasabahController@index');
     // get data nasabah by id
     Route::get('get-nasabah', 'API\NasabahController@getNasabahById');
+    Route::post('update-profile-nasabah', 'API\NasabahController@updateProfile');
+    Route::post('update-photo-nasabah', 'API\NasabahController@updatePhoto');
+    Route::post('delete-photo-nasabah', 'API\NasabahController@deletePhoto');
 
     // scoring
     Route::get('kategori-kriteria', 'API\ScoringController@getKategoriKriteria');

@@ -59,6 +59,179 @@ class NasabahController extends Controller
         }
     }
 
+    public function updateProfile(Request $request)
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $id = auth()->user()->id;
+            $nasabah = Nasabah::find($id);
+            
+            $nasabah->nama = $request->get('nama');
+            $nasabah->tanggal_lahir = $request->get('tgl_lahir');
+            $nasabah->tempat_lahir = $request->get('tempat_lahir');
+            $nasabah->alamat = $request->get('alamat');
+            $nasabah->updated_at = time();
+
+            $nasabah->save();
+            
+            if($nasabah->save()) {
+                $status = 'success';
+                $message = 'Berhasil';
+                $data = $nasabah->id;
+            }
+            else {
+                $status = 'failed';
+                $message = 'Gagal merubah data';
+                $data = $nasabah->id;
+            }
+
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
+    public function deletePhoto()
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $id = auth()->user()->id;
+            $nasabah = Nasabah::find($id);
+            $nik = $nasabah->nik;
+
+            $path = 'upload/nasabah/'.$nik.'/profile'.'/';
+
+            $file = $nasabah->foto_profil; // added reference to filename
+
+            $nasabah->foto_profil = NULL;
+            $nasabah->updated_at = time();
+            $nasabah->save();
+            
+            if($nasabah->save()) {
+                // If the file in existing directory already exist, delete it
+                if (file_exists($file)) {
+                    if(unlink($file)) {
+                        $status = 'success';
+                        $message = 'Berhasil';
+                        $data = $nasabah->id;
+                    }
+                    else {
+                        $status = 'failed';
+                        $message = 'Gagal menghapus foto profil';
+                        $data = $nasabah->id;
+                    }
+                }
+            }
+
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $status = '';
+        $message = '';
+        $data = '';
+        try {
+            $id = auth()->user()->id;
+            $nasabah = Nasabah::find($id);
+            $nik = $nasabah->nik;
+
+            $path_delete = 'upload/nasabah/'.$nik.'/profile'.'/';
+
+            $file_delete = $nasabah->foto_profil;
+
+            // $folder = 'upload/nasabah/'.$nik;
+            $folder = 'upload/nasabah/'.$nik.'/profile';
+            // Get canonicalized absolute pathname
+            $path = realpath($folder);
+            // If it exist, check if it's a directory
+            if(!($path !== true AND is_dir($path)))
+            {
+                // Path/folder does not exist then create a new folder
+                mkdir($folder);
+            }
+
+            // upload new profile
+            if($request->get('foto_profil') != null || $request->get('foto_profil_filename') != ''){
+                if ($file_delete != null) {
+                    if(unlink($file_delete)) {
+                        $extension = explode('.', $request->get('foto_profil_filename'));
+                        $ext = end($extension);
+                        $filename = $folder.'/'.date('YmdHis').$id.'_foto_profil.'.$ext;
+                        $img = base64_decode($request->get('foto_profil'));
+                        file_put_contents($filename, $img);
+                        $nasabah->foto_profil = $filename;
+                        $nasabah->updated_at = time();
+                    }
+                }
+                else {
+                    $extension = explode('.', $request->get('foto_profil_filename'));
+                    $ext = end($extension);
+                    $filename = $folder.'/'.date('YmdHis').$id.'_foto_profil.'.$ext;
+                    $img = base64_decode($request->get('foto_profil'));
+                    file_put_contents($filename, $img);
+                    $nasabah->foto_profil = $filename;
+                    $nasabah->updated_at = time();
+                }
+            }
+            
+            if($nasabah->save()) {
+                $status = 'success';
+                $message = 'Berhasil';
+                $data = $nasabah->foto_profil;
+            }
+            else {
+                $status = 'failed';
+                $message = 'Gagal memperbarui foto profil';
+                $data = $nasabah->foto_profil;
+            }
+
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function getVerifData()
     {
         $status = '';
@@ -71,9 +244,11 @@ class NasabahController extends Controller
             ->where('nasabah.id', $id_nasabah)
             ->first();
             
-            $alamatData = WilayahKecamatan::where('wilayah_kecamatan.id', $verifData->kecamatan->id)
-            ->join('wilayah_kabupaten as kabupaten', 'kabupaten.id', 'wilayah_kecamatan.kabupaten_id')
-            ->first();
+            if ($verifData->kecamatan_id != null) {
+                $alamatData = WilayahKecamatan::where('wilayah_kecamatan.id', $verifData->kecamatan->id)
+                ->join('wilayah_kabupaten as kabupaten', 'kabupaten.id', 'wilayah_kecamatan.kabupaten_id')
+                ->first();
+            }
             
             if($verifData == null) {
                 $status = 'failed';
