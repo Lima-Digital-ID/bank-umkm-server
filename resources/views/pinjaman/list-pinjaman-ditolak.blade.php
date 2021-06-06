@@ -44,7 +44,7 @@
                         <td>#</td>
                         <td>Nama Peminjam</td>
                         <td>Jangka Waktu</td>
-                        <td>Nominal</td>
+                        <td>Jumlah Pinjaman</td>
                         <td>Status</td>
                         <td>Aksi</td>
                     </tr>

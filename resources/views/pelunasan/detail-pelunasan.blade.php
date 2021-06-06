@@ -31,7 +31,7 @@
                     <table class="table table-custom">
                       <thead>
                         <tr>
-                          <td>Nama Nasabah</td>
+                          <td>Nama Peminjam</td>
                           <td>:</td>
                           <td>{{$pinjaman->nasabah->nama}}</td>
                         </tr>
@@ -53,7 +53,7 @@
                     <table class="table table-custom">
                       <thead>
                         <tr>
-                          <td>Nominal Pinjaman</td>
+                          <td>Jumlah Pinjaman</td>
                           <td>:</td>
                           <td>{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
                         </tr>
@@ -73,13 +73,13 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <td>Cicilan Ke</td>
-                        <td>Tanggal Jatuh Tempo Cicilan</td>
-                        <td>Tanggal Pembayaran</td>
-                        <td>Nominal</td>
-                        <td>Status Pembayaran</td>
+                        <td>Termin</td>
+                        <td>Jatuh Tempo</td>
+                        <td>Terbayar Pada</td>
+                        <td>Jumlah Tagihan</td>
+                        <td>Status</td>
                         <td>Keterlambatan</td>
-                        <td>Denda</td>
+                        <td>Denda Keterlambatan</td>
                     </tr>
                 </thead>
                 <tbody>

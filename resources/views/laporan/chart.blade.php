@@ -44,7 +44,7 @@
           var chartRekapBulananData = {
               labels: periode,
               datasets: [{
-                  label: 'Nominal',
+                  label: 'Total',
                   backgroundColor: "transparent",
                   data: nominal,
                   borderColor: '#3c4099',
@@ -59,7 +59,7 @@
           var chartHarian = {
               labels: tanggal,
               datasets: [{
-                  label: 'Nominal Pinjaman Harian',
+                  label: 'Total Pinjaman Harian',
                   backgroundColor: "transparent",
                   data: nominalPinjamanHarian,
                   borderColor: '#3c4099',

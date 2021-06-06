@@ -25,10 +25,10 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Nama Nasabah</td>
-                        <td>Cicilan Ke</td>
-                        <td>Nominal Cicilan</td>
-                        <td>Jatuh Tempo Cicilan</td>
+                        <td>Nama Peminjam</td>
+                        <td>Termin</td>
+                        <td>Jumlah Tagihan</td>
+                        <td>Jatuh Tempo</td>
                         <td>Keterlambatan</td>
                         <td>Aksi</td>
                     </tr>

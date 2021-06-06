@@ -25,10 +25,10 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Tanggal Pembayaran</td>
-                        <td>Nasabah</td>
-                        <td>Cicilan Ke</td>
-                        <td>Nominal</td>
+                        <td>Terbayar Pada</td>
+                        <td>Peminjam</td>
+                        <td>Termin</td>
+                        <td>Jumlah</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>

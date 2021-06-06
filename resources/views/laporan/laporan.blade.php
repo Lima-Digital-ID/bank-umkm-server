@@ -55,11 +55,11 @@
               <thead>
                 <tr>
                     <td>#</td>
-                    <td>Nama Nasabah</td>
-                    <td>Tanggal Mulai Pinjaman</td>
+                    <td>Nama Pm\</td>
+                    <td>Tanggal Pinjaman</td>
                     <td>Jangka Waktu</td>
                     <td>Jatuh Tempo</td>
-                    <td>Nominal</td>
+                    <td>Jumlah Pinjaman</td>
                     <td>Terbayar</td>
                     <td>Status</td>
                 </tr>
