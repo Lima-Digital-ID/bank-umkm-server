@@ -97,6 +97,13 @@
               >
             </li>
             
+            <li class="nav-item {{Request::segment(1) == 'asuransi-pinjaman' ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('asuransi-pinjaman')}}">
+                <i class="fas fa-fw fa-money-check-alt"></i>
+                <span>Asuransi Pinjaman</span></a
+              >
+            </li>
+            
             <li class="nav-item {{Request::segment(1) == 'master-scoring' ? 'active' : ''}}">
               <a
                 class="nav-link collapsed"
