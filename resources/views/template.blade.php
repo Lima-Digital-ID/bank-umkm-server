@@ -74,7 +74,7 @@
             href="{{ url('dashboard') }}"
           >
             <div class="sidebar-brand-icon">
-              <i class="fas fa-running fa-fw"></i>
+              <i class="fas fa-donate fa-fw"></i>
             </div>
             <div class="sidebar-brand-text"> Bank UMKM </div>
           </a>
