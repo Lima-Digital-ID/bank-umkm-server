@@ -5,10 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
+use \App\Models\Pelunasan;
 use \App\Models\JenisPinjaman;
 use App\Models\MasterBank;
 use App\Models\Notification;
 use App\Models\Nasabah;
+use \App\Models\KantorCabang;
 
 class PinjamanController extends Controller
 {
@@ -73,24 +75,41 @@ class PinjamanController extends Controller
                 }
 
                 $kodePinjaman = 'PC'.$getDate.$noPinjaman;
+                
+                $cicil = auth()->user()->limit_pinjaman / $request->get('jangka_waktu');
+                $bunga = 9 / 100 * $cicil;
+                $totalCicilan = $cicil + $bunga;
+                $totalPinjaman = $totalCicilan * $request->get('jangka_waktu');
 
                 $newPinjaman = new Pinjaman;
                 $newPinjaman->id_nasabah = auth()->user()->id;
                 $newPinjaman->kode_pinjaman = $kodePinjaman;
                 $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
                 $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
-                $newPinjaman->nominal = auth()->user()->limit_pinjaman;
+                $newPinjaman->nominal = $totalPinjaman;
                 $newPinjaman->tanggal_pengajuan = date('Y-m-d');
                 $newPinjaman->alasan_penolakan = '-';
+                
                 if (auth()->user()->skor >= 80) {
                     $newPinjaman->status = 'Terima';
                     $date = date('Y-m-d');
                     $newPinjaman->tanggal_diterima = $date;
+                    
                     // $newPinjaman->id_user = auth()->user()->id;
                     $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
 
+                    $cabang = KantorCabang::where('kecamatan_id', auth()->user()->kecamatan_id)->get();
+                    $kantorCabang = '';
+                    
+                    if(count($cabang) == 0) {
+                        $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda.';
+                    }
+                    else {
+                        $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera di bawah ini.'.$cabang[0]->alamat;
+                    }
+
                     $notifTitle = 'Pengajuan Pinjaman Berhasil.';
-                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, silahkan datang ke kantor cabang terdekat untuk pencairan pinjaman.';
+                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang;
                 }
                 elseif (auth()->user()->skor < 80) {
                     $newPinjaman->status = 'Pending';
@@ -101,18 +120,30 @@ class PinjamanController extends Controller
     
                 $newPinjaman->save();
                 $idPinjaman = $newPinjaman->id;
-
-                if (auth()->user()->skor >= 80) {
-                    $nasabah = Nasabah::find(auth()->user()->id);
-                    $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
-                    // $nasabah->hutang -= $request->get('nominal_pembayaran');
-                    $nasabah->hutang = $hutang;
-                    $nasabah->limit_pinjaman = 0;
-                    $nasabah->save();
-                }
-    
+                
+                // if(auth()->user()->skor >= 80) {
+                //     for ($i=1; $i <= $request->get('jangka_waktu') ; $i++) { 
+                //         $cicilan = new Pelunasan;
+                //         $cicilan->id_pinjaman = $idPinjaman;
+                //         $cicilan->jatuh_tempo_cicilan =  date('Y-m-d', strtotime("+$i months", strtotime(date('Y-m-d'))));
+                //         $cicilan->cicilan_ke = $i;
+                //         $cicilan->nominal_pembayaran = $totalCicilan;
+                //         $cicilan->bunga = $bunga;
+                //         $cicilan->save();
+                //     }
+                // }
                 $status = 'success';
                 $message = 'Pengajuan pinjaman berhasil.';
+
+                // if (auth()->user()->skor >= 80) {
+                //     $nasabah = Nasabah::find(auth()->user()->id);
+                //     $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                //     // $nasabah->hutang -= $request->get('nominal_pembayaran');
+                //     $nasabah->hutang = $hutang;
+                //     $nasabah->limit_pinjaman = 0;
+                //     $nasabah->save();
+                // }
+    
             }
 
             $nasabah = Nasabah::select('nama')->find(auth()->user()->id);
@@ -261,6 +292,46 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
+                'data' => $data
+            ], 200);
+        }
+    }
+    
+    public function getCabang()
+    {
+        $status = '';
+        $message = '';
+        $kabupaten = '';
+        $data = '';
+        try {
+            // $kabupaten = WilayahKecamatan::find(auth()->user()->kecamatan_id);
+            // $cabang = KantorCabang::where('kecamatan_id', $kecamatan_id)->get();
+            $kecamatan_id = 3508060;
+
+            $kantorCabang = KantorCabang::where('kecamatan_id', $kecamatan_id)->get();
+
+            $status = 'success';
+            $message = 'Berhasil';
+            // $data = $cabang;
+            if(count($kantorCabang) == 0) {
+                $data = 'Harap datang ke kantor terdekat di daerah Anda';
+            }
+            else {
+                $data = 'Harap datang ke kantor cabang yang sudah tertera di bawah ini.'.$kantorCabang[0]->alamat;
+            }
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'kecamatan_id' => $kabupaten,
                 'data' => $data
             ], 200);
         }

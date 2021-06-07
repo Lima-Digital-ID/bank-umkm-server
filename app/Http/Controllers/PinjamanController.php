@@ -8,6 +8,7 @@ use \App\Models\Pelunasan;
 use \App\Models\Nasabah;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
+use App\Models\KantorCabang;
 
 class PinjamanController extends Controller
 {
@@ -196,7 +197,8 @@ class PinjamanController extends Controller
         try{
             $this->param['pageInfo'] = 'Proses Pencairan';
             $this->param['btnRight']['text'] = 'Lihat Data';
-            $this->param['btnRight']['link'] = route('pinjaman.index');
+            $this->param['btnRight']['link'] = url('pinjaman/pencairan');
+            // $this->param['btnRight']['link'] = 'asd';
             $this->param['pinjaman'] = Pinjaman::with('nasabah')->with('jenisPinjaman')->find($id);
             // return $this->param['pinjaman'];
             return \view('pinjaman.proses-pencairan', $this->param);
@@ -237,8 +239,19 @@ class PinjamanController extends Controller
             $notifTitle = '';
             $notifMessage = '';
             if ($setStatus == 'Terima') {
+                $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $cabang = KantorCabang::where('kecamatan_id', $nasabah->kecamatan_id)->get();
+                $kantorCabang = '';
+                
+                if(count($cabang) == 0) {
+                    $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda.';
+                }
+                else {
+                    $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera.'.$cabang[0]->alamat;
+                }
+                
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
-                $notifMessage = 'Selamat untuk anda. Pengajuan pinjaman Anda telah diterima, silahkan datang ke kantor cabang terdekat untuk pencairan pinjaman.';
+                $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang;
 
                 // $this->validate($request,[
                 //     'nominal' => 'required',
@@ -317,18 +330,40 @@ class PinjamanController extends Controller
                 // $nasabah->limit_pinjaman = 0;
                 // $nasabah->save();
                 $nasabah = Nasabah::find($pinjaman->id_nasabah);
-                $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
+                
+                $tempLimit = $nasabah->limit_pinjaman;
+                
+                $hutang = $pinjaman->nominal;
                     // $nasabah->hutang -= $request->get('nominal_pembayaran');
                 $nasabah->hutang = $hutang;
                 $nasabah->limit_pinjaman = 0;
+                $nasabah->temp_limit = $tempLimit;
                 $nasabah->save();
                 
+                // if(auth()->user()->skor < 80) {
+                //     $nominalPembayaran = round($tempLimit / $pinjaman->jangka_waktu);
+                //     $bunga = 9 / 100 * $nominalPembayaran;
+                
+                //     for ($i=1; $i <= $pinjaman->jangka_waktu ; $i++) { 
+                //         $cicilan = new Pelunasan;
+                //         $cicilan->id_pinjaman = $pinjaman->id;
+                //         $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime(date('Y-m-d'))));
+                //         $cicilan->cicilan_ke = $i;
+                //         $cicilan->nominal_pembayaran = $nominalPembayaran;
+                //         $cicilan->bunga = $bunga;
+                //         $cicilan->save();
+                //     }
+                // }
+                $nominalPembayaran = round($tempLimit / $pinjaman->jangka_waktu);
+                $bunga = 9 / 100 * $nominalPembayaran;
+            
                 for ($i=1; $i <= $pinjaman->jangka_waktu ; $i++) { 
                     $cicilan = new Pelunasan;
                     $cicilan->id_pinjaman = $pinjaman->id;
-                    $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime($pinjaman->tanggal_diterima)));
+                    $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime(date('Y-m-d'))));
                     $cicilan->cicilan_ke = $i;
-                    $cicilan->nominal_pembayaran = round($pinjaman->nominal / $pinjaman->jangka_waktu);
+                    $cicilan->nominal_pembayaran = $nominalPembayaran;
+                    $cicilan->bunga = $bunga;
                     $cicilan->save();
                 }
 
@@ -340,10 +375,10 @@ class PinjamanController extends Controller
                 $pinjaman->alasan_penolakan_pencairan = $request->get('alasan_penolakan_pencairan');
                 $pinjaman->status = $setStatus;
 
-                $nasabah = Nasabah::find($pinjaman->id_nasabah);
-                $nasabah->limit_pinjaman += $pinjaman->nominal;
-                $nasabah->hutang -= $pinjaman->nominal;
-                $nasabah->save();
+                // $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                // $nasabah->limit_pinjaman += $pinjaman->nominal;
+                // $nasabah->hutang -= $pinjaman->nominal;
+                // $nasabah->save();
             }
             $pinjaman->status_pencairan = $setStatus;
             $pinjaman->updated_at = time();

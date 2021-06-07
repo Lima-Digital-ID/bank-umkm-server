@@ -75,6 +75,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get-kecamatan/{id_kecamatan}', 'API\AlamatController@getKecamatan');
     // end alamat
     
+    Route::get('kantor-cabang', 'API\PinjamanController@getCabang');
+    
 });
 // // pengajuan pinjaman
 // Route::post('pinjaman', 'API\PinjamanController@store');
