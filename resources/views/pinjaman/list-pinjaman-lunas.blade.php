@@ -45,8 +45,8 @@
                           <td>Nama Peminjam</td>
                           <td>Tanggal Pinjaman</td>
                           <td>Jangka Waktu</td>
-                          <td>Batas Pelunasan</td>
-                          <td>Nominal</td>
+                          <td>Jatuh Tempo</td>
+                          <td>Jumlah Pinjaman</td>
                           <td>Status</td>
                           <td>Aksi</td>
                       </tr>
