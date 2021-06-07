@@ -70,7 +70,6 @@
           };
       
           window.onload = function() {
-
               var ctx = document.getElementById("rekapBulanan").getContext("2d");
               window.myBar = new Chart(ctx, {
                   type: 'line',

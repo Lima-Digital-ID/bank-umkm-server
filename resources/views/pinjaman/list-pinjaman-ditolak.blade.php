@@ -42,7 +42,7 @@
                     <thead>
                       <tr>
                         <td>#</td>
-                        <td>Nama Peminjam</td>
+                        <td>Peminjam</td>
                         <td>Jangka Waktu</td>
                         <td>Jumlah Pinjaman</td>
                         <td>Status</td>

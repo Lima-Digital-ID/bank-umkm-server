@@ -33,7 +33,7 @@
                   <div class="table-responsive">
                     <table class="table table-custom">
                       <tr>
-                        <td>Nama Nasabah</td>
+                        <td>Peminjam</td>
                         <td>:</td>
                         <td>{{$pinjaman->nasabah->nama}}</td>
                       </tr>
@@ -90,11 +90,11 @@
                       </tr>
                       @endif
                      
-                      <tr>
+                      {{-- <tr>
                         <td>Jenis Pinjaman</td>
                         <td>:</td>
                         <td>{{ $pinjaman->jenisPinjaman->jenis_pinjaman }} </td>
-                      </tr>
+                      </tr> --}}
                       <tr>
                         <td>Pelunasan</td>
                         <td>:</td>

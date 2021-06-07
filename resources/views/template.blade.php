@@ -156,7 +156,7 @@
                 aria-controls="nasabah"
               >
               <i class="fas fa-fw fa-users "></i>
-                <span>Nasabah</span>
+                <span>Peminjam</span>
               </a>
               <div
                 id="nasabah"
@@ -166,13 +166,13 @@
               >
                 <div class="py-2 collapse-inner rounded">
                   <a class="nav-link" href="{{url('nasabah?verified=2')}}">
-                    <span>Nasabah Belum Terverifikasi</span>
+                    <span>Peminjam Belum Terverifikasi</span>
                   </a>
                   <a class="nav-link" href="{{url('nasabah?verified=1')}}">
-                    <span>Nasabah Terverifikasi</span>
+                    <span>Peminjam Terverifikasi</span>
                   </a>
                   {{-- <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
-                    <span>Pengajuan Data Tambahan Nasabah</span>
+                    <span>Pengajuan Data Tambahan Peminjam</span>
                   </a>
                   <a class="nav-link" href="{{url('syarat-pinjaman-umroh')}}">
                     <span>Pengajuan Syarat Pinjaman Umroh</span>
@@ -334,7 +334,7 @@
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="h4 mb-0 solid-color font-weight-bold infopage">
                   <?php 
-                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) : '';
+                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) == 'nasabah' ?'Peminjam' : Request::segment(1) : '';
                   ?>
                   {{ ucwords( str_replace("-"," ",$pageSegment) ) }}
             </div>

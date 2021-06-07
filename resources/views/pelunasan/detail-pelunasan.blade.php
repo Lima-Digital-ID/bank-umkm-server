@@ -31,7 +31,7 @@
                     <table class="table table-custom">
                       <thead>
                         <tr>
-                          <td>Nama Peminjam</td>
+                          <td>Peminjam</td>
                           <td>:</td>
                           <td>{{$pinjaman->nasabah->nama}}</td>
                         </tr>

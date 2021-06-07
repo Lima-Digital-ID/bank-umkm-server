@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-8 pr-0">
                         <h2 class="color-primary font-weight-bold">{{$nasabahBaru}}</h2>
-                        User Perlu Diverifikasi
+                        Peminjam Perlu Diverifikasi
                     </div>
                     <div class="col-md-4 pl-0 text-center">
                         <span class="fas fa-fw fa-user-clock fa-4x"></span>

@@ -41,12 +41,12 @@
                     <thead>
                       <tr>
                           <td>#</td>
-                          <td>Nama Peminjam</td>
+                          <td>Peminjam</td>
                           <td>Tanggal Pinjaman</td>
                           <td>Jangka Waktu</td>
                           <td>Batas Pelunasan</td>
                           <td>Nominal</td>
-                          <td>Status</td>
+                          <td>Status Pinjaman</td>
                           <td>Status Pencairan</td>
                           <td>Aksi</td>
                       </tr>

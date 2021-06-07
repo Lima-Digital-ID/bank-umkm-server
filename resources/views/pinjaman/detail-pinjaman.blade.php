@@ -33,7 +33,7 @@
                   <div class="table-responsive">
                     <table class="table table-custom">
                       <tr>
-                        <td>Nama Nasabah</td>
+                        <td>Peminjam</td>
                         <td>:</td>
                         <td>{{$pinjaman->nasabah->nama}}</td>
                       </tr>

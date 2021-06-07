@@ -25,7 +25,7 @@
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Nama Peminjam</td>
+                        <td>Peminjam</td>
                         <td>Termin</td>
                         <td>Jumlah Tagihan</td>
                         <td>Jatuh Tempo</td>

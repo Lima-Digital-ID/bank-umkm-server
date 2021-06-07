@@ -55,7 +55,7 @@
               <thead>
                 <tr>
                     <td>#</td>
-                    <td>Nama Pm\</td>
+                    <td>Peminjam</td>
                     <td>Tanggal Pinjaman</td>
                     <td>Jangka Waktu</td>
                     <td>Jatuh Tempo</td>

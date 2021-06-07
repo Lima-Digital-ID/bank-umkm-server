@@ -24,7 +24,7 @@ class NasabahController extends Controller
             }
             // }
     
-            $this->param['pageInfo'] = $verified == 1 ?  ' List Nasabah Terverifikasi' : ' List Nasabah Belum Terverifikasi';
+            $this->param['pageInfo'] = $verified == 1 ?  ' Peminjam Terverifikasi' : ' Peminjam Belum Terverifikasi';
             $this->param['btnRight']['text'] = 'Tambah Data';
             $this->param['btnRight']['link'] = route('nasabah.create');
             $keyword = $request->get('keyword');
@@ -169,7 +169,7 @@ class NasabahController extends Controller
     public function hasilSkoring($id)
     {
         try{
-            $this->param['pageInfo'] = ' Hasil Skoring Nasabah';
+            $this->param['pageInfo'] = ' Hasil Skoring Peminjam';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('nasabah.index');
             $this->param['nasabah'] = Nasabah::find($id);
