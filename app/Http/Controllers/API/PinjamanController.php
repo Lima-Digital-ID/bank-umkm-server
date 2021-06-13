@@ -317,7 +317,7 @@ class PinjamanController extends Controller
                 $data = 'Harap datang ke kantor terdekat di daerah Anda';
             }
             else {
-                $data = 'Harap datang ke kantor cabang yang sudah tertera di bawah ini.'.$kantorCabang[0]->alamat;
+                $data = 'Harap datang ke kantor cabang yang sudah tertera di bawah ini.'.$kantorCabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
             }
         }catch(\Exception $e){
             $status = 'failed';
