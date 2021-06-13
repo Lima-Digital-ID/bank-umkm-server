@@ -105,7 +105,7 @@ class PinjamanController extends Controller
                         $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda.';
                     }
                     else {
-                        $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera.'.$cabang[0]->alamat;
+                        $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera.'.$cabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
                     }
 
                     $notifTitle = 'Pengajuan Pinjaman Berhasil.';
