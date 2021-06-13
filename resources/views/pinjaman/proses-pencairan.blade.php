@@ -103,14 +103,28 @@
 
                       @if ($pinjaman->status != 'Tolak')
                       <tr>
-                        <td>Nominal</td>
+                        <td>Jumlah Pinjaman</td>
                         <td>:</td>
                         <td>
                           @if ($pinjaman->status == 'Pending')
-                          Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
+                          Rp{{number_format($pinjaman->nominal, 2, ',', '.')}}
                           @else
-                          Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
+                          Rp{{number_format($pinjaman->nominal, 2, ',', '.')}}
                           @endif
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Jumlah Asuransi Pinjaman</td>
+                        <td>:</td>
+                        <td>
+                          Rp{{number_format($asuransiPinjaman->jumlah_asuransi)}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Jumlah Pencairan</td>
+                        <td>:</td>
+                        <td>
+                          Rp{{number_format($pinjaman->nominal - $asuransiPinjaman->jumlah_asuransi)}}
                         </td>
                       </tr>
                       @endif
@@ -150,7 +164,7 @@
               <form action="{{ url('pinjaman/update-pencairan', $pinjaman->id).'/Tolak' }}" method="get">
                 @csrf
                 <label for="">Alasan</label>
-                <textarea name="alasan_penolakan_pencairans" class="form-control"  id="" rows="5"></textarea>
+                <textarea name="alasan_penolakan_pencairan" class="form-control"  id="" rows="5"></textarea>
                 <div class="mt-4">
                   <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
                   &nbsp;

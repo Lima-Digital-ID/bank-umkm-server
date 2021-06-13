@@ -16,7 +16,7 @@ class CreateKantorCabangTable extends Migration
         Schema::create('kantor_cabang', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 100);
-            $table->string('kecamatan_id', 7)->collation('latin1_swedish_ci');
+            $table->string('kecamatan_id', 7);
             $table->text('alamat');
             $table->string('phone', 13)->default('-');
             $table->timestamps();
