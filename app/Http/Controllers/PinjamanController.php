@@ -9,6 +9,7 @@ use \App\Models\Nasabah;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Models\KantorCabang;
+use App\Models\AsuransiPinjaman;
 
 class PinjamanController extends Controller
 {
@@ -200,6 +201,7 @@ class PinjamanController extends Controller
             $this->param['btnRight']['link'] = url('pinjaman/pencairan');
             // $this->param['btnRight']['link'] = 'asd';
             $this->param['pinjaman'] = Pinjaman::with('nasabah')->with('jenisPinjaman')->find($id);
+            $this->param['asuransiPinjaman'] = AsuransiPinjaman::first();
             // return $this->param['pinjaman'];
             return \view('pinjaman.proses-pencairan', $this->param);
             
@@ -307,6 +309,10 @@ class PinjamanController extends Controller
             $notifTitle = '';
             $notifMessage = '';
             if ($setStatus == 'Terima') {
+
+                // get nominal asuransi pinjaman
+                $asuransi = AsuransiPinjaman::first();
+
                 $notifTitle = 'Selamat pinjaman anda berhasil dicairkan.';
                 $notifMessage = 'Selamat untuk anda. Pinjaman Anda berhasil dicairkan.';
 
@@ -322,6 +328,7 @@ class PinjamanController extends Controller
                 // $date = date('Y-m-d');
                 // $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
+                $pinjaman->asuransi_pinjaman = $asuransi->jumlah_asuransi;
                 // $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
                 // $nasabah = Nasabah::find($pinjaman->id_nasabah);
                 // $hutang = $nasabah->hutang + $nasabah->limit_pinjaman;
