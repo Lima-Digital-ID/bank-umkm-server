@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSkorDiNasabah extends Migration
+class ChangeTanggalLahirOnNasabahTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSkorDiNasabah extends Migration
      */
     public function up()
     {
-        Schema::table('nasabah', function (Blueprint $table) {
-            $table->tinyInteger('skor')->default(0)->after('is_verified');
+        Schema::table('nasabah', function(Blueprint $table) {
+            $table->date('tanggal_lahir')->nullable()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddSkorDiNasabah extends Migration
      */
     public function down()
     {
-        Schema::table('nasabah', function (Blueprint $table) {
-            $table->dropColumn('skor');
+        Schema::table('nasabah', function(Blueprint $table) {
+            $table->date('tanggal_lahir');
         });
     }
 }

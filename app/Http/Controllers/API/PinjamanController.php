@@ -301,24 +301,15 @@ class PinjamanController extends Controller
     {
         $status = '';
         $message = '';
-        $kabupaten = '';
         $data = '';
         try {
-            // $kabupaten = WilayahKecamatan::find(auth()->user()->kecamatan_id);
-            // $cabang = KantorCabang::where('kecamatan_id', $kecamatan_id)->get();
-            $kecamatan_id = 3508060;
-
-            $kantorCabang = KantorCabang::where('kecamatan_id', $kecamatan_id)->get();
+            $data = KantorCabang::select('kantor_cabang.*', 'wilayah_kecamatan.nama AS kecamatan')
+                                ->join('wilayah_kecamatan', 'kantor_cabang.kecamatan_id', 'wilayah_kecamatan.id')
+                                ->get();
 
             $status = 'success';
             $message = 'Berhasil';
-            // $data = $cabang;
-            if(count($kantorCabang) == 0) {
-                $data = 'Harap datang ke kantor terdekat di daerah Anda';
-            }
-            else {
-                $data = 'Harap datang ke kantor cabang yang sudah tertera di bawah ini.'.$kantorCabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
-            }
+            
         }catch(\Exception $e){
             $status = 'failed';
             $message = 'Gagal ' . $e->getMessage();
@@ -331,7 +322,6 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'kecamatan_id' => $kabupaten,
                 'data' => $data
             ], 200);
         }

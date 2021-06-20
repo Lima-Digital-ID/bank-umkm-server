@@ -149,6 +149,10 @@ class ApiAuthController extends Controller
             $updateNasabah->alamat = $request->get('alamat');
             $updateNasabah->kecamatan_id = $request->get('kecamatan_id');
             $updateNasabah->is_verified = 2;
+            $updateNasabah->pekerjaan = $request->get('pekerjaan');
+            $updateNasabah->jabatan = $request->get('jabatan');
+            $updateNasabah->alamat_perusahaan = $request->get('alamat_perusahaan');
+            $updateNasabah->kontak_perusahaan = $request->get('kontak_perusahaan');
 
             $updateNasabah->save();
 
@@ -194,7 +198,8 @@ class ApiAuthController extends Controller
                     
                     $editBank->save();
                     
-                    $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->first();
+                    // Hubungan 1
+                    $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->orderBy('id', 'ASC')->get()[0];
                     $editPenjamin->id_nasabah = $id_nasabah;
                     $editPenjamin->hubungan = $request->get('hubungan');
                     $editPenjamin->nama = $request->get('nama_penjamin');
@@ -204,6 +209,33 @@ class ApiAuthController extends Controller
                     $editPenjamin->updated_at = time();
     
                     $editPenjamin->save();
+                    // END Hubungan 1
+
+                     // Hubungan 2
+                     $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->orderBy('id', 'ASC')->get()[1];
+                     $editPenjamin->id_nasabah = $id_nasabah;
+                     $editPenjamin->hubungan = $request->get('hubungan2');
+                     $editPenjamin->nama = $request->get('nama_penjamin2');
+                     $editPenjamin->nik = $request->get('nik_penjamin2');
+                     $editPenjamin->no_hp = $request->get('no_hp_penjamin2');
+                     $editPenjamin->alamat = $request->get('alamat_penjamin2');
+                     $editPenjamin->updated_at = time();
+     
+                     $editPenjamin->save();
+                     // END Hubungan 2
+
+                    // Hubungan 3
+                    $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->orderBy('id', 'ASC')->get()[2];
+                    $editPenjamin->id_nasabah = $id_nasabah;
+                    $editPenjamin->hubungan = $request->get('hubungan3');
+                    $editPenjamin->nama = $request->get('nama_penjamin3');
+                    $editPenjamin->nik = $request->get('nik_penjamin3');
+                    $editPenjamin->no_hp = $request->get('no_hp_penjamin3');
+                    $editPenjamin->alamat = $request->get('alamat_penjamin3');
+                    $editPenjamin->updated_at = time();
+    
+                    $editPenjamin->save();
+                    // END Hubungan 3
                 }
                 else {
                     $newBank = new InformasiBank;
@@ -214,6 +246,7 @@ class ApiAuthController extends Controller
     
                     $newBank->save();    
                     
+                    // Hubungan 1
                     $newPenjamin = new Penjamin;
                     $newPenjamin->id_nasabah = $updateNasabah->id;
                     $newPenjamin->hubungan = $request->get('hubungan');
@@ -223,6 +256,31 @@ class ApiAuthController extends Controller
                     $newPenjamin->alamat = $request->get('alamat_penjamin');
     
                     $newPenjamin->save();
+                    // END Hubungan 1
+
+                    // Hubungan 2
+                    $newPenjamin = new Penjamin;
+                    $newPenjamin->id_nasabah = $updateNasabah->id;
+                    $newPenjamin->hubungan = $request->get('hubungan2');
+                    $newPenjamin->nama = $request->get('nama_penjamin2');
+                    $newPenjamin->nik = $request->get('nik_penjamin2');
+                    $newPenjamin->no_hp = $request->get('no_hp_penjamin2');
+                    $newPenjamin->alamat = $request->get('alamat_penjamin2');
+    
+                    $newPenjamin->save();
+                    // END Hubungan 2
+
+                    // Hubungan 3
+                    $newPenjamin = new Penjamin;
+                    $newPenjamin->id_nasabah = $updateNasabah->id;
+                    $newPenjamin->hubungan = $request->get('hubungan3');
+                    $newPenjamin->nama = $request->get('nama_penjamin3');
+                    $newPenjamin->nik = $request->get('nik_penjamin3');
+                    $newPenjamin->no_hp = $request->get('no_hp_penjamin3');
+                    $newPenjamin->alamat = $request->get('alamat_penjamin3');
+    
+                    $newPenjamin->save();
+                    // END Hubungan 3
                 }
                 
             }
