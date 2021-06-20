@@ -88,6 +88,7 @@ class PinjamanController extends Controller
                 $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
                 $newPinjaman->nominal = $totalPinjaman;
                 $newPinjaman->tanggal_pengajuan = date('Y-m-d');
+                $newPinjaman->id_kantor_cabang = $request->get('id_kantor_cabang');
                 $newPinjaman->alasan_penolakan = '-';
                 
                 if (auth()->user()->skor >= 80) {

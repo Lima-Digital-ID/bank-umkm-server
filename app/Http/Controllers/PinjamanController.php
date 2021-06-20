@@ -10,6 +10,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Models\KantorCabang;
 use App\Models\AsuransiPinjaman;
+use App\Models\User;
 
 class PinjamanController extends Controller
 {
@@ -242,7 +243,8 @@ class PinjamanController extends Controller
             $notifMessage = '';
             if ($setStatus == 'Terima') {
                 $nasabah = Nasabah::find($pinjaman->id_nasabah);
-                $cabang = KantorCabang::where('kecamatan_id', $nasabah->kecamatan_id)->get();
+                $admin = User::find(auth()->user()->id);
+                $cabang = KantorCabang::where('id', $pinjaman->id_kantor_cabang)->get();
                 $kantorCabang = '';
                 
                 if(count($cabang) == 0) {
@@ -253,7 +255,7 @@ class PinjamanController extends Controller
                 }
                 
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
-                $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang;
+                $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang.'Diterima oleh '.$admin->nama.'.';
 
                 // $this->validate($request,[
                 //     'nominal' => 'required',
