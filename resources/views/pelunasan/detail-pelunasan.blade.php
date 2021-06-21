@@ -116,7 +116,7 @@
                     <td>{{date('d-m-Y', strtotime($item->jatuh_tempo_cicilan))}}</td>
                     <td>{{$item->tanggal_pembayaran ? date('d-m-Y', strtotime($item->tanggal_pembayaran)) : '-'}}</td>
                     {{-- <td>{{number_format($item->nominal_pembayaran, 2, ',', '.')."<span class='fa ml-5 fa-lg fa-check-circle color-green'></span>" }}</td> --}}
-                    <td>{{'Rp' . number_format($item->nominal_pembayaran, 2, ',', '.')}}</td>
+                    <td>{{'Rp' . number_format(($item->nominal_pembayaran + $item->bunga), 2, ',', '.')}}</td>
                     <td>{{$item->status == 'Belum' ? $item->status . ' Terbayar' : $item->status}}</td>
                     <td>{{$item->jatuh_tempo_cicilan < $date && $item->status == 'Belum' ? $keterlambatan->format("%R%a hari") : $keterlambatan . ' hari'}}</td>
                     <td>{{'Rp' .number_format($denda, 2, ',', '.')}}</td>
