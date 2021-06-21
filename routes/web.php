@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('pinjaman/update-status/{id}/{status}', 'PinjamanController@updateStatus')->name('update-status-pinjaman');
     Route::get('pinjaman/cekNotif', 'PinjamanController@cekNotif');
     Route::get('pinjaman/pencairan', 'PinjamanController@pencairanPinjaman');
+    Route::get('pinjaman/sudah-pencairan', 'PinjamanController@pencairanSudah');
     Route::get('pinjaman/proses-pencairan/{id}', 'PinjamanController@prosesPencairan');
     Route::get('pinjaman/update-pencairan/{id}/{status}', 'PinjamanController@updateStatusPencairan');
     Route::resource('pinjaman', 'PinjamanController');

@@ -153,6 +153,7 @@ class ApiAuthController extends Controller
             $updateNasabah->jabatan = $request->get('jabatan');
             $updateNasabah->alamat_perusahaan = $request->get('alamat_perusahaan');
             $updateNasabah->kontak_perusahaan = $request->get('kontak_perusahaan');
+            $updateNasabah->id_kantor_cabang = $request->get('id_kantor_cabang');
 
             $updateNasabah->save();
 

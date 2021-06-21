@@ -10,6 +10,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Models\KantorCabang;
 use App\Models\AsuransiPinjaman;
+use App\Models\Pencairan;
 use App\Models\User;
 
 class PinjamanController extends Controller
@@ -18,6 +19,8 @@ class PinjamanController extends Controller
 
     public function index(Request $request)
     {
+        $idCabang = auth()->user()->id_kantor_cabang;   
+
         $this->param['pageInfo'] = 'List Pinjaman';
         // $this->param['btnRight']['text'] = 'Tambah Data';
         // $this->param['btnRight']['link'] = route('pinjaman.create');
@@ -30,9 +33,16 @@ class PinjamanController extends Controller
             
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->whereHas('nasabah', function($query){
-                    return $query->where('nama','LIKE', "%$_GET[keyword]%");
-                });
+               if(auth()->user()->level == 'Administrator') {
+                    $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe)->whereHas('nasabah', function($query){
+                        return $query->where('nama','LIKE', "%$_GET[keyword]%");
+                    });
+               }
+               else {
+                    $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('pinjaman.id_kantor_cabang', $idCabang)->where('status', $tipe)->whereHas('nasabah', function($query){
+                        return $query->where('nama','LIKE', "%$_GET[keyword]%");
+                    });
+               }
             }
             else{
                 $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', $tipe);
@@ -95,6 +105,35 @@ class PinjamanController extends Controller
         }
 
         return \view('pinjaman.list-pencairan', $this->param);
+    }
+
+    public function pencairanSudah(Request $request)
+    {
+        $this->param['pageInfo'] = 'List Pinjaman yang sudah dicairkan ';
+        
+        try {
+            $keyword = $request->get('keyword');
+            if ($keyword) {
+                $pencairan = Pencairan::with('pinjaman');
+            }
+            else{
+                $pencairan = Pencairan::with('pinjaman');
+            }
+            if ($pencairan->count() > 0 && auth()->user()->level != 'Administrator') {
+                // $pencairan->where('pinjaman.id_kantor_cabang', auth()->user()->id_kantor_cabang);
+                $pencairan->whereHas('pinjaman', function($query){
+                    return $query->where('id_kantor_cabang', auth()->user()->id_kantor_cabang);
+                });
+            }
+            $this->param['pencairan'] = $pencairan->paginate(10);
+
+            // return $pencairan->paginate(10)
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e;
+            return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
+        }
+
+        return \view('pinjaman.list-sudah-pencairan', $this->param);
     }
 
     public function create()
@@ -385,6 +424,10 @@ class PinjamanController extends Controller
                     $cicilan->bunga = $bunga;
                     $cicilan->save();
                 }
+
+                $newPencairan = new Pencairan;
+                $newPencairan->id_pinjaman = $pinjaman->id;
+                $newPencairan->save();
 
             }
             if($setStatus=='Tolak'){

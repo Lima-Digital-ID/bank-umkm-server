@@ -217,7 +217,10 @@
                 @endif
                 @if (auth()->user()->level == 'Administrator' || auth()->user()->level == 'Pencairan')
                   <a class="nav-link" href="{{url('pinjaman/pencairan')}}">
-                    <span>Pencairan Pinjaman</span>
+                    <span>Pinjaman Belum dicairkan</span>
+                  </a>
+                  <a class="nav-link" href="{{url('pinjaman/sudah-pencairan')}}">
+                    <span>Pinjaman Sudah dicairkan</span>
                   </a>
                 @endif
               </div>
