@@ -56,6 +56,7 @@ return [
 
     'asset_url' => env('ASSET_URL', 'http://127.0.0.1:8000/assets'),
     // 'asset_url' => env('ASSET_URL', 'http://192.168.142.140:8000/assets'),
+    // 'asset_url' => env('ASSET_URL', 'http://192.168.1.20:8000/assets'),
 
     /*
     |--------------------------------------------------------------------------
