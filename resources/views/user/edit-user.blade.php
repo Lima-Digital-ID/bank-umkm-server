@@ -76,6 +76,20 @@
       @endif
       <br>
 
+        <br>
+        <label for="">Kantor Cabang</label>
+        <select name="id_kantor_cabang" id="id_kantor_cabang" class="form-control select2 {{ $errors->has('id_kantor_cabang') ? ' is-invalid' : '' }}">
+            <option value="">--Pilih Kantor Cabang--</option>
+            @foreach ($kantorCabang as $item)
+                <option value="{{$item->id}}" {{old('id_kantor_cabang', $user->id_kantor_cabang) == $item->id ? 'selected' : ''}} >{{$item->kecamatan->nama}}</option>
+            @endforeach
+        </select>
+        @if ($errors->has('id_kantor_cabang'))
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('id_kantor_cabang') }}</strong>
+            </span>
+        @endif
+
       <div class="mt-4">
           <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
           &nbsp;

@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('\App\Models\Pinjaman', 'id_user');
     }
+    
+    public function kantorCabang()
+    {
+        return $this->belongsTo('\App\Models\KantorCabang', 'id_kantor_cabang');
+    }
 }

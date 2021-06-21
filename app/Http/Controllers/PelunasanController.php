@@ -23,13 +23,19 @@ class PelunasanController extends Controller
             //     $pelunasan = Pelunasan::where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
             // }
             // else{
-                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal_pembayaran', 'pelunasan.cicilan_ke', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->where('pelunasan.status', 'Lunas')->paginate(10);
+                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal_pembayaran', 'pelunasan.cicilan_ke', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->where('pelunasan.status', 'Lunas');
+
+                if (auth()->user()->level != 'Administrator') {
+                    $pelunasan->where('pinjaman.id_kantor_cabang', auth()->user()->id_kantor_cabang);
+                }
+
+                $this->param['pelunasan'] = $pelunasan->paginate(10);
             // }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan'. $e->getMessage());
         }
                 
-        return \view('pelunasan.list-pelunasan', ['pelunasan' => $pelunasan], $this->param);
+        return \view('pelunasan.list-pelunasan', $this->param);
     }
 
     public function create()
@@ -176,6 +182,10 @@ class PelunasanController extends Controller
                 $latePayment->whereHas('pinjaman.nasabah', function ($query) use ($keyword) {
                     return $query->where('nama', 'LIKE', "$keyword");
                 });
+            }
+
+            if (auth()->user()->level != 'Administrator') {
+                $latePayment->where('pinjaman.id_kantor_cabang', auth()->user()->id_kantor_cabang);
             }
 
             $this->param['latePayment'] = $latePayment->paginate(10);

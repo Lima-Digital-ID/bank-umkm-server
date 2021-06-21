@@ -44,6 +44,7 @@
                         <td>Username</td>
                         <td>Email</td>
                         <td>Level</td>
+                        <td>Kantor Cabang</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -51,7 +52,9 @@
                     @php
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
-                    @endphp
+                        
+                        
+                        @endphp
                     @foreach ($user as $value)
                         <tr>
                             <td>{{$no}}</td>
@@ -59,6 +62,11 @@
                             <td>{{$value->username}}</td>
                             <td>{{$value->email}}</td>
                             <td>{{$value->level}}</td>
+                            @if ($value->level == 'Administrator')
+                            <td>-</td>
+                            @else
+                            <td>{{$value->kantorCabang->kecamatan->nama}}</td>
+                            @endif
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('user.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>

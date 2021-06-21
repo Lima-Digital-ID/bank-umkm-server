@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\User;
+use \App\Models\KantorCabang;
 
 class UserController extends Controller
 {
@@ -18,10 +19,10 @@ class UserController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $user = User::where('nama', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
+                $user = User::with(['kantorCabang.kecamatan'])->where('nama', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
-                $user = User::paginate(10);
+                $user = User::with('kantorCabang.kecamatan')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -35,7 +36,7 @@ class UserController extends Controller
         $this->param['pageInfo'] = 'Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('user.index');
-
+        $this->param['kantorCabang'] = KantorCabang::with('kecamatan')->get();
         return \view('user.tambah-user', $this->param);
     }
 
@@ -65,6 +66,7 @@ class UserController extends Controller
             $newUser->username = $request->get('username');
             $newUser->email = $request->get('email');
             $newUser->level = $request->get('level');
+            $newUser->id_kantor_cabang = $request->get('id_kantor_cabang');
             $newUser->password = \Hash::make($request->get('username'));
 
             $newUser->save();
@@ -86,6 +88,7 @@ class UserController extends Controller
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('user.index');
             $this->param['user'] = User::find($id);
+            $this->param['kantorCabang'] = KantorCabang::with('kecamatan')->get();
 
             return \view('user.edit-user', $this->param);
         }
@@ -124,6 +127,7 @@ class UserController extends Controller
             $user->email = $request->get('email');
             $user->username = $request->get('username');
             $user->level = $request->get('level');
+            $user->id_kantor_cabang = $request->get('id_kantor_cabang');
             // $user->akses = $request->get('akses');
             $user->save();
 

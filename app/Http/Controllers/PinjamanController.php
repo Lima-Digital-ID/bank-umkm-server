@@ -41,6 +41,10 @@ class PinjamanController extends Controller
                 $pinjaman->where('status_pencairan', 'Terima');
             }
 
+            if (auth()->user()->level != 'Administrator') {
+                $pinjaman->where('id_kantor_cabang', auth()->user()->id_kantor_cabang);
+            }
+
             $this->param['pinjaman'] = $pinjaman->paginate(10);
 
         } catch (\Illuminate\Database\QueryException $e) {
@@ -71,13 +75,19 @@ class PinjamanController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending')->whereHas('nasabah', function($query){
+                $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending')->whereHas('nasabah', function($query){
                     return $query->where('nama','LIKE', "%$_GET[keyword]%");
-                })->paginate(10);
+                });
             }
             else{
-                $this->param['pinjaman'] = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending')->paginate(10);
+                $pinjaman = Pinjaman::with('nasabah','jenisPinjaman')->where('status', 'Terima')->where('status_pencairan', 'Pending');
             }
+
+            if (auth()->user()->level != 'Administrator') {
+                $pinjaman->where('id_kantor_cabang', auth()->user()->id_kantor_cabang);
+            }
+
+            $this->param['pinjaman'] = $pinjaman->paginate(10);
 
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
