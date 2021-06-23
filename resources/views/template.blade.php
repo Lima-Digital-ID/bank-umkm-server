@@ -12,6 +12,7 @@
     <title>
       @php 
       $pageSegment = empty(Request::segment(1)) ? 'Dashboard' : Request::segment(1);
+      $pageSegment = $pageSegment == 'nasabah' ? 'Peminjam' : $pageSegment;
       @endphp
       {!!ucwords( str_replace("-"," ",$pageSegment) )!!} | Bank UMKM
     </title>
@@ -94,6 +95,13 @@
               <a class="nav-link" href="{{url('user')}}">
                 <i class="fas fa-fw fa-user"></i>
                 <span>User</span></a
+              >
+            </li>
+
+            <li class="nav-item {{Request::segment(1) == 'kantor-cabang' ? 'active' : ''}}">
+              <a class="nav-link" href="{{url('kantor-cabang')}}">
+                <i class="fas fa-fw fa-building"></i>
+                <span>Kantor Cabang</span></a
               >
             </li>
             
