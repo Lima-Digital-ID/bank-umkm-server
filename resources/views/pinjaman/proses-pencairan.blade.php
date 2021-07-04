@@ -124,7 +124,7 @@
                         <td>Jumlah Pencairan</td>
                         <td>:</td>
                         <td>
-                          Rp{{number_format($pinjaman->nominal - $asuransiPinjaman->jumlah_asuransi)}}
+                          Rp{{number_format($pinjaman->nominal - $asuransiPinjaman->jumlah_asuransi, 2, ',', '.')}}
                         </td>
                       </tr>
                       @endif
@@ -137,7 +137,7 @@
                       </tr>
                     </table>
                   </div>
-                  @if (auth()->user()->level == 'Pencairan')
+                  @if (auth()->user()->level == 'Pencairan' || auth()->user()->level == 'Administrator')
                     @if ($pinjaman->status_pencairan == 'Pending')
                       {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
                       <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>

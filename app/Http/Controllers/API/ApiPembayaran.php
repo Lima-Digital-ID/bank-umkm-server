@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AsuransiPinjaman;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\JenisPinjaman;
@@ -28,11 +29,13 @@ class ApiPembayaran extends Controller
         $hutang = '';
         
         try {
+            $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
+
             $pelunasan = Pelunasan::find($request->get('id'));
             $pelunasan->tanggal_pembayaran = date('Y-m-d');
             $pelunasan->metode_pembayaran = $request->get('metode_pembayaran');
             $pelunasan->status = 'Lunas';
-            // $pelunasan->save();
+            $pelunasan->save();
 
             $nasabah = Nasabah::find(auth()->user()->id);
             $hutang = $nasabah->hutang - $request->get('nominal_pembayaran');
@@ -70,7 +73,9 @@ class ApiPembayaran extends Controller
             //     $newNotification->device = "web";
             // }
             
-            if($terbayar > $pinjaman->nominal || $terbayar == $pinjaman->nominal) {
+            // if($terbayar > $pinjaman->nominal || $terbayar == $pinjaman->nominal) {
+            if($countLunas == 0) {
+                $terbayar += $asuransi;
                 $pinjaman->status = 'Lunas';
                 $pinjaman->tanggal_lunas = date("Y-m-d");
 
@@ -79,7 +84,7 @@ class ApiPembayaran extends Controller
 
                 $newNotification->id_nasabah = auth()->user()->id;
                 $newNotification->title = "Pelunasan";
-                $newNotification->message = "Nasabah ".$nasabah->nama." melakukan pelunasan";
+                $newNotification->message = $nasabah->nama." melakukan pelunasan";
                 // $newNotification->message = "Nasabah melakukan pembayaran";
                 $newNotification->jenis = "Pembayaran";
                 $newNotification->device = "web";
@@ -87,13 +92,13 @@ class ApiPembayaran extends Controller
             else {
                 $newNotification->id_nasabah = auth()->user()->id;
                 $newNotification->title = "Pembayaran";
-                $newNotification->message = "Nasabah ".$nasabah->nama." melakukan pembayaran";
+                $newNotification->message = $nasabah->nama." melakukan pembayaran";
                 // $newNotification->message = "Nasabah melakukan pembayaran";
                 $newNotification->jenis = "Pembayaran";
                 $newNotification->device = "web";
             }
             
-            $pelunasan->save();
+            // $pelunasan->save();
             
             $nasabah->save();
             

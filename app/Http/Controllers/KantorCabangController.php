@@ -45,7 +45,7 @@ class KantorCabangController extends Controller
         $this->param['pageInfo'] = 'Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('kantor-cabang.index');
-        $this->param['kecamatan'] = WilayahKecamatan::select('wilayah_kecamatan.*', 'wilayah_provinsi.nama AS nama_provinsi')
+        $this->param['kecamatan'] = WilayahKecamatan::select('wilayah_kecamatan.*', 'wilayah_provinsi.nama AS nama_provinsi', 'wilayah_kabupaten.nama AS nama_kabupaten')
                                                         ->join('wilayah_kabupaten', 'wilayah_kabupaten.id', 'wilayah_kecamatan.kabupaten_id')
                                                         ->join('wilayah_provinsi', 'wilayah_provinsi.id', 'wilayah_kabupaten.provinsi_id')                                            
                                                         ->where('wilayah_provinsi.nama', 'Jawa Timur')
@@ -121,7 +121,7 @@ class KantorCabangController extends Controller
         $this->param['pageInfo'] = 'Edit Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('kantor-cabang.index');
-        $this->param['kecamatan'] = WilayahKecamatan::select('wilayah_kecamatan.*', 'wilayah_provinsi.nama AS nama_provinsi')
+        $this->param['kecamatan'] = WilayahKecamatan::select('wilayah_kecamatan.*', 'wilayah_provinsi.nama AS nama_provinsi', 'wilayah_kabupaten.nama AS nama_kabupaten')
                                                         ->join('wilayah_kabupaten', 'wilayah_kabupaten.id', 'wilayah_kecamatan.kabupaten_id')
                                                         ->join('wilayah_provinsi', 'wilayah_provinsi.id', 'wilayah_kabupaten.provinsi_id')                                            
                                                         ->where('wilayah_provinsi.nama', 'Jawa Timur')

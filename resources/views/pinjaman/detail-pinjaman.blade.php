@@ -150,7 +150,7 @@
                       </tr>
                     </table>
                   </div>
-                  @if (auth()->user()->level == 'Verificator')
+                  @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
                     @if ($pinjaman->status == 'Pending')
                       {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
                       <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>

@@ -28,7 +28,7 @@
             <select name="id_kecamatan" id="id_kecamatan" class="form-control select2 {{ $errors->has('id_kecamatan') ? ' is-invalid' : '' }}">
                 <option value="0">--Pilih Kecamatan--</option>
                 @foreach ($kecamatan as $item)
-                    <option value="{{$item->id}}" {{old('id_kecamatan') == $item->id ? 'selected' : ''}} >{{$item->nama}}</option>
+                    <option value="{{$item->id}}" {{old('id_kecamatan') == $item->id ? 'selected' : ''}} >{{ $item->nama_kabupaten }} - Kec. {{$item->nama}}</option>
                 @endforeach
             </select>
             @if ($errors->has('id_kecamatan'))

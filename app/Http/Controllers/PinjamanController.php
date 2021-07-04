@@ -364,9 +364,6 @@ class PinjamanController extends Controller
                 // get nominal asuransi pinjaman
                 $asuransi = AsuransiPinjaman::first();
 
-                $notifTitle = 'Selamat pinjaman anda berhasil dicairkan.';
-                $notifMessage = 'Selamat untuk anda. Pinjaman Anda berhasil dicairkan.';
-
                 // $this->validate($request,[
                 //     'nominal' => 'required',
                 // ],
@@ -391,7 +388,7 @@ class PinjamanController extends Controller
                 
                 $tempLimit = $nasabah->limit_pinjaman;
                 
-                $hutang = $pinjaman->nominal;
+                $hutang = $pinjaman->nominal - $asuransi->jumlah_asuransi; // nominal pinjaman sudah include bunga
                     // $nasabah->hutang -= $request->get('nominal_pembayaran');
                 $nasabah->hutang = $hutang;
                 $nasabah->limit_pinjaman = 0;
@@ -412,8 +409,13 @@ class PinjamanController extends Controller
                 //         $cicilan->save();
                 //     }
                 // }
-                $nominalPembayaran = round($tempLimit / $pinjaman->jangka_waktu);
-                $bunga = 9 / 100 * $nominalPembayaran;
+                // $nominalPembayaran = round($tempLimit / $pinjaman->jangka_waktu);
+                /* pertama */
+                // $nominalPembayaran = round($hutang / $pinjaman->jangka_waktu);
+                // $bunga = 9 / 100 * $nominalPembayaran;
+                /* kedua */
+                $bunga = $tempLimit * 9 / 100; // untuk mengetahui jml bunga
+                $nominalPembayaran = round($hutang / $pinjaman->jangka_waktu); // untuk menentukan pembayaran tiap terminnya
             
                 for ($i=1; $i <= $pinjaman->jangka_waktu ; $i++) { 
                     $cicilan = new Pelunasan;
@@ -421,13 +423,16 @@ class PinjamanController extends Controller
                     $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime(date('Y-m-d'))));
                     $cicilan->cicilan_ke = $i;
                     $cicilan->nominal_pembayaran = $nominalPembayaran;
-                    $cicilan->bunga = $bunga;
+                    $cicilan->bunga = $bunga / $pinjaman->jangka_waktu;
                     $cicilan->save();
                 }
 
                 $newPencairan = new Pencairan;
                 $newPencairan->id_pinjaman = $pinjaman->id;
                 $newPencairan->save();
+
+                $notifTitle = 'Selamat pinjaman anda berhasil dicairkan.';
+                $notifMessage = 'Selamat untuk anda. Pinjaman Anda berhasil dicairkan ('.auth()->user()->nama.').';
 
             }
             if($setStatus=='Tolak'){

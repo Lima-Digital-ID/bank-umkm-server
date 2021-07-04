@@ -141,6 +141,7 @@ class ApiAuthController extends Controller
         $id_nasabah = auth()->user()->id;
         $updateNasabah = Nasabah::find($id_nasabah);
         $isVerified = $updateNasabah->is_verified;
+        $folder = '';
         try{
             $updateNasabah->nama = $request->get('nama');
             $updateNasabah->tanggal_lahir = $request->get('tgl_lahir');
@@ -167,7 +168,7 @@ class ApiAuthController extends Controller
                 if(!($path !== true AND is_dir($path)))
                 {
                     // Path/folder does not exist then create a new folder
-                    mkdir($folder);
+                    mkdir($folder, 0777, true);
                 }
                 if($request->get('scan_ktp') != null || $request->get('scan_ktp') != ''){
                     $extension = explode('.', $request->get('ktp_filename'));

@@ -136,7 +136,7 @@
                   </table>
                 </div>
 
-                @if (auth()->user()->level == 'Verificator')
+                @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
                   @if($nasabah->is_verified==2)
                     <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
                     <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
@@ -164,7 +164,13 @@
                       <tr>
                         <td>Limit Pinjaman</td>
                         <td>:</td>
-                        <td>{{number_format($nasabah->limit_pinjaman, 2, ',', '.')}}</td>
+                        <td>
+                          @if ($nasabah->limit_pinjaman != 0)
+                          {{number_format($nasabah->limit_pinjaman, 2, ',', '.')}}
+                          @else
+                          {{number_format($nasabah->temp_limit, 2, ',', '.')}}
+                          @endif
+                        </td>
                       </tr>
                     </thead>
                   </table>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AsuransiPinjaman;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\Pelunasan;
@@ -110,14 +111,14 @@ class PinjamanController extends Controller
                         // $newPinjaman->id_user = auth()->user()->id;
                         $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
     
-                        $cabang = KantorCabang::where('kecamatan_id', auth()->user()->kecamatan_id)->get();
+                        $cabang = KantorCabang::where('id', auth()->user()->id_kantor_cabang)->get();
                         $kantorCabang = '';
                         
                         if(count($cabang) == 0) {
-                            $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda.';
+                            $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda untuk mencairkan dana.';
                         }
                         else {
-                            $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera.'.$cabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
+                            $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera untuk mencairkan dana.'.$cabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
                         }
     
                         $notifTitle = 'Pengajuan Pinjaman Berhasil.';
@@ -194,6 +195,7 @@ class PinjamanController extends Controller
             $idNasabah = auth()->user()->id;
             // $pinjamanByNasabah = Pinjaman::with('jenisPinjaman', 'pelunasan', 'nasabah')->where('id_nasabah', $idNasabah)->get();
             $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->where('status', 'Terima')->where('status_pencairan', 'Terima')->get();
+            $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
             
             $status = 'success';
             $message = 'Berhasil';
@@ -210,7 +212,8 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $data
+                'data' => $data,
+                'asuransi' => $asuransi
             ], 200);
         }
     }
@@ -225,7 +228,8 @@ class PinjamanController extends Controller
             // ->orWhere('status', 'Terima')
             // ->where('status_pencairan', 'Pending')->get();
             $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->orderBy('created_at', 'DESC')->get();
-            
+            $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
+
             $status = 'success';
             $message = 'Berhasil';
             $data = $pinjamanByNasabah;
@@ -241,7 +245,8 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $data
+                'data' => $data,
+                'asuransi' => $asuransi
             ], 200);
         }
     }
@@ -251,6 +256,7 @@ class PinjamanController extends Controller
         $status = '';
         $message = '';
         $data = '';
+        $asuransi = '';
         try {
             $detailPinjaman = Pinjaman::
             with('jenisPinjaman', 'pelunasan', 'nasabah')
@@ -261,6 +267,8 @@ class PinjamanController extends Controller
             ->join('master_bank', 'informasi_bank.id_bank', 'master_bank.id')
             ->where('pinjaman.id', $id)
             ->get();
+
+            $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
 
             $status = 'success';
             $message = 'Berhasil';
@@ -277,7 +285,8 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $data
+                'data' => $data,
+                'asuransi' => $asuransi
             ], 200);
         }
     }
