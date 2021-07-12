@@ -43,6 +43,7 @@
                       <tr>
                         <td>#</td>
                         <td>Peminjam</td>
+                        <td>Jenis Pinjaman</td>
                         <td>Jangka Waktu</td>
                         <td>Jumlah Pinjaman</td>
                         <td>Status</td>
@@ -58,6 +59,7 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
+                                <td>{{$value->jenisPinjaman->jenis_pinjaman}}</td>
                                 <td>{{$value->jangka_waktu}} bulan</td>
                                 <td>{{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-danger">{{$value->status}}</span></td>

@@ -66,6 +66,10 @@
                 <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Pencairan" value="Pencairan" {{ old('level') == 'Pencairan' ? 'checked' : '' }}>
                 <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Pencairan">Pencairan</label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input {{ $errors->has('level') ? ' is-invalid' : '' }}" type="radio" name="level" id="Survei" value="Survei" {{ old('level') == 'Survei' ? 'checked' : '' }}>
+                <label class="form-check-label {{ $errors->has('level') ? ' is-invalid' : '' }}" for="Survei">Survei</label>
+            </div>
             @if ($errors->has('level'))
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $errors->first('level') }}</strong>

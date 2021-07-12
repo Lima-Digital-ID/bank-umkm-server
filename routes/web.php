@@ -28,8 +28,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('asuransi-pinjaman', 'AsuransiPinjamanController');
     Route::get('pelunasan/late-payment', 'PelunasanController@latePayment');
     Route::resource('pelunasan', 'PelunasanController');
-    Route::get('data-tambahan-nasabah/update-status/{id}', 'DataTambahanNasabahController@updateStatus');
-    Route::resource('data-tambahan-nasabah', 'DataTambahanNasabahController');
+    Route::get('data-tambahan-peminjam/update-status/{id}', 'DataTambahanNasabahController@updateStatus')->name('update-status-pinmo');
+    Route::resource('data-tambahan-peminjam', 'DataTambahanNasabahController');
     
     Route::get('syarat-pinjaman-umroh/update-status/{id}', 'SyaratPinjamanUmrohController@updateStatus');
     Route::resource('syarat-pinjaman-umroh', 'SyaratPinjamanUmrohController');

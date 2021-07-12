@@ -58,7 +58,19 @@
                             <td>{{$value->nasabah->nama}}</td>
                             <td>{{$value->nasabah->nik}}</td>
                             <td>{{$value->nasabah->alamat}}</td>
-                            <td><span class="badge badge-{{$value->nasabah->status_kelengkapan_data == '1' ? 'success' : ($value->is_verified=='0' ? 'primary' : 'danger')}}">{{$value->nasabah->status_kelengkapan_data == '1' ? 'Terverifikasi' : 'Pending'}}</span></td>
+                            <td>
+                                @php
+                                    if ($value->nasabah->syarat_pinjaman_umroh == '1')
+                                        $statusData = 'Terverifikasi';
+                                    elseif($value->nasabah->syarat_pinjaman_umroh == '2')
+                                        $statusData = 'Pending';
+                                    elseif($value->nasabah->syarat_pinjaman_umroh == '3')
+                                        $statusData = 'Ditolak';
+                                    else
+                                        $statusData = 'Pending'                                    
+                                @endphp
+                                <span class="badge badge-{{$value->nasabah->syarat_pinjaman_umroh == '1' ? 'success' : ($value->is_verified=='2' ? 'primary' : 'danger')}}">{{$statusData}}</span>
+                            </td>
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('syarat-pinjaman-umroh.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>

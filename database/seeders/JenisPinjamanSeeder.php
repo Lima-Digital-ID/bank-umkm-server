@@ -25,7 +25,7 @@ class JenisPinjamanSeeder extends Seeder
         $newJenisPinjaman->save();
 
         $newJenisPinjaman = new JenisPinjaman;
-        $newJenisPinjaman->jenis_pinjaman = 'Diatas 5jt';
+        $newJenisPinjaman->jenis_pinjaman = 'Pinjaman Modal';
         $newJenisPinjaman->limit_pinjaman = 50000000;
         $newJenisPinjaman->save();
 

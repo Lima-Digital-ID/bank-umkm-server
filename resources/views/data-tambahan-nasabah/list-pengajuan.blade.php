@@ -23,7 +23,7 @@
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div> --}}
           <div class="col-auto ml-auto">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('data-tambahan-nasabah.index') }}" method="get">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('data-tambahan-peminjam.index') }}" method="get">
               <div class="input-group">
                 <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
                 <div class="input-group-append">
@@ -58,11 +58,23 @@
                             <td>{{$value->nasabah->nama}}</td>
                             <td>{{$value->nasabah->nik}}</td>
                             <td>{{$value->tempat_tinggal}}</td>
-                            <td><span class="badge badge-{{$value->nasabah->status_kelengkapan_data == '1' ? 'success' : ($value->is_verified=='0' ? 'primary' : 'danger')}}">{{$value->nasabah->status_kelengkapan_data == '1' ? 'Terverifikasi' : 'Pending'}}</span></td>
+                            <td>
+                                @php
+                                    if ($value->nasabah->kelengkapan_data == '1')
+                                        $statusData = 'Terverifikasi';
+                                    elseif($value->nasabah->kelengkapan_data == '2')
+                                        $statusData = 'Pending';
+                                    elseif($value->nasabah->kelengkapan_data == '3')
+                                        $statusData = 'Ditolak';
+                                    else
+                                        $statusData = 'Pending'                                    
+                                @endphp
+                                <span class="badge badge-{{$value->nasabah->kelengkapan_data == '1' ? 'success' : ($value->nasabah->kelengkapan_data=='2' ? 'primary' : 'danger')}}">{{$statusData}}</span>
+                            </td>
                             <td>
                                 <div class="form-inline">
                                     {{-- <a href="{{ route('data-tambahan-nasabah.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a> --}}
-                                    <a href="{{ route('data-tambahan-nasabah.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
+                                    <a href="{{ route('data-tambahan-peminjam.show', $value) }}" class="btn btn-warning mr-2" title="Detail" data-toggle="tooltip"> <span class="fa fa-eye"></span> </a>
                                     {{-- <form action="{{ route('data-tambahan-nasabah.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')

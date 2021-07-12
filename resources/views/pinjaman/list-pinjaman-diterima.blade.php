@@ -43,6 +43,7 @@
                       <tr>
                           <td>#</td>
                           <td>Peminjam</td>
+                          <td>Jenis Pinjaman</td>
                           <td>Tanggal Pinjaman</td>
                           <td>Jangka Waktu</td>
                           <td>Jatuh Tempo</td>
@@ -60,6 +61,7 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
+                                <td>{{$value->jenisPinjaman->jenis_pinjaman}}</td>
                                 <td>{{date('d-m-Y', strtotime($value->tanggal_diterima))}}</td>
                                 <td>{{$value->jangka_waktu}}</td>
                                 <td>{{date('d-m-Y', strtotime($value->jatuh_tempo))}}</td>

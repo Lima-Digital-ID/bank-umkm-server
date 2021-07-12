@@ -37,6 +37,7 @@ class UserController extends Controller
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('user.index');
         $this->param['kantorCabang'] = KantorCabang::with('kecamatan')->get();
+        
         return \view('user.tambah-user', $this->param);
     }
 

@@ -13,6 +13,7 @@
       @php 
       $pageSegment = empty(Request::segment(1)) ? 'Dashboard' : Request::segment(1);
       $pageSegment = $pageSegment == 'nasabah' ? 'Peminjam' : $pageSegment;
+      $pageSegment = $pageSegment == 'data-tambahan-peminjam' ? 'Syarat Pinjaman Modal' : $pageSegment;
       @endphp
       {!!ucwords( str_replace("-"," ",$pageSegment) )!!} | Bank UMKM
     </title>
@@ -179,12 +180,12 @@
                   <a class="nav-link" href="{{url('nasabah?verified=1')}}">
                     <span>Peminjam Terverifikasi</span>
                   </a>
-                  {{-- <a class="nav-link" href="{{url('data-tambahan-nasabah')}}">
-                    <span>Pengajuan Data Tambahan Peminjam</span>
+                  <a class="nav-link" href="{{ url('data-tambahan-peminjam') }}">
+                    <span>Pengajuan Syarat Pinjaman Modal</span>
                   </a>
                   <a class="nav-link" href="{{url('syarat-pinjaman-umroh')}}">
                     <span>Pengajuan Syarat Pinjaman Umroh</span>
-                  </a> --}}
+                  </a>
                 </div>
               </div>
             </li>
@@ -345,7 +346,10 @@
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="h4 mb-0 solid-color font-weight-bold infopage">
                   <?php 
-                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) == 'nasabah' ?'Peminjam' : Request::segment(1) : '';
+                    $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) == 'nasabah' ? 'Peminjam' : Request::segment(1) : '';
+                    if($pageSegment == 'data-tambahan-peminjam') {
+                      $pageSegment = 'syarat-pinjaman-modal';
+                    }
                   ?>
                   {{ ucwords( str_replace("-"," ",$pageSegment) ) }}
             </div>

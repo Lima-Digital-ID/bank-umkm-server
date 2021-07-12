@@ -85,7 +85,7 @@
                         <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->selfie_ktp }}" alt="" width="200px">
                       </td> --}}
                     </tr>
-                    <tr>
+                    {{-- <tr>
                       <td>NPWP</td>
                       <td>:</td>
                       <td>
@@ -96,9 +96,9 @@
                             
                         @endif
                       </td>
-                      {{-- <td>
+                      <td>
                         <img src="{{ url($nasabah->selfie_ktp) }}" alt="" width="200px">
-                      </td> --}}
+                      </td>
                     </tr>
                     <tr>
                       <td>Surat Nikah</td>
@@ -108,9 +108,9 @@
                           <img src="{{ $nasabah->surat_nikah}}" alt="" width="200px">
                         </a>
                       </td>
-                      {{-- <td>
+                      <td>
                         <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_nikah }}" alt="" width="200px">
-                      </td> --}}
+                      </td>
                     </tr>
                     <tr>
                       <td>Surat Domisili Usaha</td>
@@ -120,10 +120,10 @@
                           <img src="{{ $nasabah->surat_domisili_usaha }}" alt="" width="200px">
                         </a>
                       </td>
-                      {{-- <td>
+                      <td>
                         <img src="{{ url('upload/nasabah') . '/' . $nasabah->nik . '/' .$nasabah->surat_domisili_usaha }}" alt="" width="200px">
-                      </td> --}}
-                    </tr>
+                      </td>
+                    </tr> --}}
                     
                     @if($nasabah->is_verified=='3')
                     <tr>

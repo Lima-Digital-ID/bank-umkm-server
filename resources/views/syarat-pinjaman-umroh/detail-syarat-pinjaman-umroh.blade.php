@@ -96,7 +96,9 @@
 
                 @if($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh==2)
                   <a href="{{ url('syarat-pinjaman-umroh/update-status?status=1', $syaratPinjamanUmroh->id)}}" class="btn btn-success">ACC</a>
+                  @if ($syaratPinjamanUmroh->nasabah->syarat_pinjaman_umroh != 3)
                   <a href="{{ url('syarat-pinjaman-umroh/update-status?status=3', $syaratPinjamanUmroh->id)}}"class="btn btn-danger">Tolak</a>
+                  @endif
                 @endif
                 </div>
               </div>

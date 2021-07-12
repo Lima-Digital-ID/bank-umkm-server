@@ -12,6 +12,7 @@ use App\Models\KantorCabang;
 use App\Models\AsuransiPinjaman;
 use App\Models\Pencairan;
 use App\Models\User;
+use App\Models\JenisPinjaman;
 
 class PinjamanController extends Controller
 {
@@ -55,6 +56,8 @@ class PinjamanController extends Controller
             if (auth()->user()->level != 'Administrator') {
                 $pinjaman->where('id_kantor_cabang', auth()->user()->id_kantor_cabang);
             }
+
+            $this->param['jenis_pinjaman'] = JenisPinjaman::orderBy('jenis_pinjaman', 'ASC')->get();
 
             $this->param['pinjaman'] = $pinjaman->paginate(10);
 
@@ -129,7 +132,7 @@ class PinjamanController extends Controller
 
             // return $pencairan->paginate(10)
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e;
+            // return $e;
             return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
         }
 

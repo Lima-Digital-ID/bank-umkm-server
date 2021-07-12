@@ -22,6 +22,19 @@
           {{-- <div class="col-2">
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div> --}}
+          <div class="col-auto mr-auto">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
+              <div class="input-group">
+                <input type="hidden" name="t" value="Pending">
+                <select class="form form-control" name="jenis_pinjaman" id="jenis_pinjaman">
+                    <option value="0">-- Pilih Jenis Pinjaman --</option>
+                    @foreach ($jenis_pinjaman as $item)
+                        <option value="{{ $item->id }}">{{ ucwords( $item->jenis_pinjaman ) }}</option>
+                    @endforeach
+                </select>
+              </div>
+            </form>
+          </div>
           <div class="col-auto ml-auto">
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
               <div class="input-group">
@@ -43,6 +56,7 @@
                         <tr>
                             <td>#</td>
                             <td>Peminjam</td>
+                            <td>Jenis Pinjaman</td>
                             <td>Jangka Waktu</td>
                             <td>Jumlah Pinjaman</td>
                             <td>Status</td>
@@ -58,6 +72,7 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
+                                <td>{{ ucwords($value->jenisPinjaman->jenis_pinjaman) }}</td>
                                 <td>{{$value->jangka_waktu}} bulan</td>
                                 <td>Rp {{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-{{$value->status == 'Pending' ? 'warning' : ($value->status == 'Terima' ? 'success' : 'warning')}}">{{$value->status}}</span></td>

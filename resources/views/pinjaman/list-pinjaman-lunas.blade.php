@@ -43,7 +43,8 @@
                       <tr>
                           <td>#</td>
                           <td>Peminjam</td>
-                          <td>Tanggal Pinjaman</td>
+                            <td>Jenis Pinjaman</td>
+                            <td>Tanggal Pinjaman</td>
                           <td>Jangka Waktu</td>
                           <td>Jatuh Tempo</td>
                           <td>Jumlah Pinjaman</td>
@@ -60,9 +61,10 @@
                             <tr>
                                 <td>{{$no}}</td>
                                 <td>{{$value->nasabah->nama}}</td>
+                                <td>{{$value->jenisPinjaman->jenis_pinjaman}}</td>
                                 <td>{{date('d-m-Y', strtotime($value->tanggal_diterima))}}</td>
+                                <td>{{$value->jangka_waktu}} bulan</td>
                                 <td>{{date('d-m-Y', strtotime($value->tanggal_batas_pelunasan))}}</td>
-                                <td>{{$value->jangka_waktu}}</td>
                                 <td>Rp {{number_format($value->nominal, 2, ',', '.')}}</td>
                                 <td><span class="badge badge-{{$value->status == 'Terima' ? 'primary' : 'success'}}">{{$value->status}}</span></td>
                                 <td>
