@@ -289,7 +289,24 @@ class PinjamanController extends Controller
     public function updateStatus(Request $request, $id, $status)
     {
         try{
-            $pinjaman = Pinjaman::find($id);
+            $pinjaman = Pinjaman::with('jenisPinjaman')->find($id);
+
+            if($pinjaman->jenisPinjaman->jenis_pinjaman != 'Pinjaman Cepat') {
+                $this->validate($request,[
+                    'nominal' => 'required',
+                ],
+                [
+                    'required' => ':atributte harus diisi.'
+                ],
+                [
+                    'nominal' => 'Nominal'
+                ]);
+
+                if($pinjaman->nominal != $request->get('nominal')) {
+                    $pinjaman->nominal = $request->get('nominal');
+                }
+            }
+
             $setStatus = $status;
             $notifTitle = '';
             $notifMessage = '';
@@ -309,21 +326,10 @@ class PinjamanController extends Controller
                 $notifTitle = 'Selamat pengajuan pinjaman Anda telah diterima.';
                 $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang.'Diterima oleh '.$admin->nama.'.';
 
-                // $this->validate($request,[
-                //     'nominal' => 'required',
-                // ],
-                // [
-                //     'required' => ':atributte harus diisi.'
-                // ],
-                // [
-                //     'nominal' => 'Nominal'
-                // ]);
                 $date = date('Y-m-d');
                 $pinjaman->tanggal_diterima = $date;
                 $pinjaman->id_user = auth()->user()->id;
-                $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
-                
-                
+                $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));               
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';

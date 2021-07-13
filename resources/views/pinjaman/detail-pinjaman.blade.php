@@ -130,12 +130,14 @@
                       </tr>
                       @if ($pinjaman->status != 'Tolak')
                       <tr>
-                        <td>Nominal</td>
+                        <td>Nominal (Rp)</td>
                         <td>:</td>
                         <td>
-                          @if ($pinjaman->status == 'Pending')
-                          Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
+                          @if ($pinjaman->jenisPinjaman->jenis_pinjaman != 'Pinjaman Cepat')
+                          <input type="text" name="nominal" id="nominal" class="form form-control" value="{{ $pinjaman->nominal }}" {{ $pinjaman->status == 'Pending' ? '' : 'readonly' }}>
+                          {{-- Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}} --}}
                           @else
+                          {{-- <input type="text" name="nominal" id="nominal" class="form form-control" value="{{number_format($pinjaman->nominal, 2, ',', '.')}}"> --}}
                           Rp. {{number_format($pinjaman->nominal, 2, ',', '.')}}
                           @endif
                         </td>
@@ -152,7 +154,6 @@
                   </div>
                   @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
                     @if ($pinjaman->status == 'Pending')
-                      {{-- <a href="{{ url('pinjaman/update-status', $pinjaman->id) }}?status=Terima" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</a> --}}
                       <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin?')">Terima</button>
                       <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
                     @endif

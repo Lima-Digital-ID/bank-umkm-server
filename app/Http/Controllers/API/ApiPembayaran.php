@@ -44,7 +44,7 @@ class ApiPembayaran extends Controller
             // $nasabah->hutang -= $request->get('nominal_pembayaran');
             $nasabah->hutang = $hutang;
 
-            $pinjaman = Pinjaman::find($request->get('id_pinjaman'));
+            $pinjaman = Pinjaman::with('jenisPinjaman')->find($request->get('id_pinjaman'));
             $terbayar = $pinjaman->terbayar + $request->get('nominal_pembayaran');
             $newNotification = new Notification;
             
@@ -79,8 +79,10 @@ class ApiPembayaran extends Controller
                 $pinjaman->status = 'Lunas';
                 $pinjaman->tanggal_lunas = date("Y-m-d");
 
-                $nasabah->limit_pinjaman = $limitPinjaman;
-                $nasabah->temp_limit = 0;
+                if($pinjaman->jenisPinjaman->jenis_pinjaman == 'Pinjaman Cepat') {
+                    $nasabah->limit_pinjaman = $limitPinjaman;
+                    $nasabah->temp_limit = 0;
+                }
 
                 $newNotification->id_nasabah = auth()->user()->id;
                 $newNotification->title = "Pelunasan";

@@ -22,7 +22,7 @@
           {{-- <div class="col-2">
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
           </div> --}}
-          <div class="col-auto mr-auto">
+          {{-- <div class="col-auto mr-auto">
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
               <div class="input-group">
                 <input type="hidden" name="t" value="Pending">
@@ -34,7 +34,7 @@
                 </select>
               </div>
             </form>
-          </div>
+          </div> --}}
           <div class="col-auto ml-auto">
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
               <div class="input-group">
