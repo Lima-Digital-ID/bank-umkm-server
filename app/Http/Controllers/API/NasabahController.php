@@ -177,7 +177,7 @@ class NasabahController extends Controller
             if(!($path !== true AND is_dir($path)))
             {
                 // Path/folder does not exist then create a new folder
-                mkdir($folder);
+                mkdir($folder, 0755, true);
             }
 
             // upload new profile
@@ -357,7 +357,7 @@ class NasabahController extends Controller
             if(!($path !== true AND is_dir($path)))
             {
                 // Path/folder does not exist then create a new folder
-                mkdir($folder);
+                mkdir($folder, 0755, true);
             }
 
             $newData = new DataTambahanNasabah;
@@ -455,7 +455,15 @@ class NasabahController extends Controller
                 file_put_contents($filename, $img);
                 $newData->notaris = $filename;
             }
-            
+            // upload jaminan
+            if($request->get('jaminan') != null || $request->get('jaminan_filename') != ''){
+                $extension = explode('.', $request->get('jaminan_filename'));
+                $ext = end($extension);
+                $filename = $folder.'/'.date('YmdHis').$id.'_jaminan.'.$ext;
+                $img = base64_decode($request->get('jaminan'));
+                file_put_contents($filename, $img);
+                $newData->scan_jaminan = $filename;
+            }
             if($newData->save()) {
                 $nasabah->kelengkapan_data = 2; // 2 = pending
                 $nasabah->updated_at = time();
@@ -524,7 +532,7 @@ class NasabahController extends Controller
             if(!($path !== true AND is_dir($path)))
             {
                 // Path/folder does not exist then create a new folder
-                mkdir($folder);
+                mkdir($folder, 0755, true);
             }
 
             $newData = new SyaratPinjamanUmroh;
