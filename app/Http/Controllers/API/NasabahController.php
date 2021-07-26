@@ -446,15 +446,15 @@ class NasabahController extends Controller
                 file_put_contents($filename, $img);
                 $newData->akta = $filename;
             }
-            // upload surat notaris
-            if($request->get('notaris') != null || $request->get('notaris_filename') != ''){
-                $extension = explode('.', $request->get('notaris_filename'));
-                $ext = end($extension);
-                $filename = $folder.'/'.date('YmdHis').$id.'_notaris.'.$ext;
-                $img = base64_decode($request->get('notaris'));
-                file_put_contents($filename, $img);
-                $newData->notaris = $filename;
-            }
+            // // upload surat notaris
+            // if($request->get('notaris') != null || $request->get('notaris_filename') != ''){
+            //     $extension = explode('.', $request->get('notaris_filename'));
+            //     $ext = end($extension);
+            //     $filename = $folder.'/'.date('YmdHis').$id.'_notaris.'.$ext;
+            //     $img = base64_decode($request->get('notaris'));
+            //     file_put_contents($filename, $img);
+            //     $newData->notaris = $filename;
+            // }
             // upload jaminan
             if($request->get('jaminan') != null || $request->get('jaminan_filename') != ''){
                 $extension = explode('.', $request->get('jaminan_filename'));
@@ -602,15 +602,15 @@ class NasabahController extends Controller
                 file_put_contents($filename, $img);
                 $newData->akta = $filename;
             }            
-            // upload scan notaris usaha
-            if($request->get('notaris') != null || $request->get('notaris_filename') != ''){
-                $extension = explode('.', $request->get('notaris_filename'));
-                $ext = end($extension);
-                $filename = $folder.'/'.date('YmdHis').$id.'_notaris.'.$ext;
-                $img = base64_decode($request->get('notaris'));
-                file_put_contents($filename, $img);
-                $newData->notaris = $filename;
-            }
+            // // upload scan notaris usaha
+            // if($request->get('notaris') != null || $request->get('notaris_filename') != ''){
+            //     $extension = explode('.', $request->get('notaris_filename'));
+            //     $ext = end($extension);
+            //     $filename = $folder.'/'.date('YmdHis').$id.'_notaris.'.$ext;
+            //     $img = base64_decode($request->get('notaris'));
+            //     file_put_contents($filename, $img);
+            //     $newData->notaris = $filename;
+            // }
             // upload scan surat_domisili usaha
             if($request->get('surat_domisili') != null || $request->get('surat_domisili_filename') != ''){
                 $extension = explode('.', $request->get('surat_domisili_filename'));
