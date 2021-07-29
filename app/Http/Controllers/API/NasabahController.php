@@ -464,6 +464,15 @@ class NasabahController extends Controller
                 file_put_contents($filename, $img);
                 $newData->scan_jaminan = $filename;
             }
+            // upload scan kuangan 3 bulan terakhir
+            if($request->get('keuangan') != null || $request->get('keuangan_filename') != ''){
+                $extension = explode('.', $request->get('keuangan_filename'));
+                $ext = end($extension);
+                $filename = $folder.'/'.date('YmdHis').$id.'_keuangan.'.$ext;
+                $img = base64_decode($request->get('keuangan'));
+                file_put_contents($filename, $img);
+                $newData->scan_keuangan = $filename;
+            }
             if($newData->save()) {
                 $nasabah->kelengkapan_data = 2; // 2 = pending
                 $nasabah->updated_at = time();
@@ -619,6 +628,15 @@ class NasabahController extends Controller
                 $img = base64_decode($request->get('surat_domisili'));
                 file_put_contents($filename, $img);
                 $newData->surat_domisili = $filename;
+            }
+            // upload scan kuangan 3 bulan terakhir
+            if($request->get('keuangan') != null || $request->get('keuangan_filename') != ''){
+                $extension = explode('.', $request->get('keuangan_filename'));
+                $ext = end($extension);
+                $filename = $folder.'/'.date('YmdHis').$id.'_keuangan.'.$ext;
+                $img = base64_decode($request->get('keuangan'));
+                file_put_contents($filename, $img);
+                $newData->scan_keuangan = $filename;
             }
             $newData->save();
             
