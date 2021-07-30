@@ -25,7 +25,7 @@ class SyaratPinjamanUmrohController extends Controller
                     // $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->whereHas('nasabah', function ($query) {
                     //     return $query->where('syarat_pinjaman_umroh', 2);
                     // })->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->paginate(10);
-                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->orderBy('nasabah.syarat_pinjaman_umroh', 'ASC')->paginate(10);
+                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->paginate(10);
                 }
                 else {
                     // $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->whereHas('nasabah', function ($query) {
@@ -33,7 +33,7 @@ class SyaratPinjamanUmrohController extends Controller
                     // })->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
                     $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->whereHas('nasabah', function ($query) {
                         return $query->where('syarat_pinjaman_umroh', 2);
-                    })->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->where('nasabah.id_kantor_cabang', $idCabang)->orderBy('nasabah.syarat_pinjaman_umroh', 'ASC')->paginate(10);
+                    })->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('syarat_pinjaman_umroh', 2)->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
                 }
             }
             else{
@@ -41,10 +41,10 @@ class SyaratPinjamanUmrohController extends Controller
                     // $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->whereHas('nasabah', function ($query) {
                     //     return $query->where('syarat_pinjaman_umroh', 2);
                     // })->paginate(10);
-                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->orderBy('nasabah.syarat_pinjaman_umroh', 'ASC')->paginate(10);
+                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->paginate(10);
                 }
                 else {
-                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->where('nasabah.id_kantor_cabang', $idCabang)->orderBy('nasabah.syarat_pinjaman_umroh', 'ASC')->paginate(10);
+                    $syaratPinjamanUmroh = SyaratPinjamanUmroh::with('nasabah')->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
                 }
             }
         } catch (\Illuminate\Database\QueryException $e) {

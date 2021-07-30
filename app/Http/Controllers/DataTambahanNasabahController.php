@@ -25,10 +25,10 @@ class DataTambahanNasabahController extends Controller
             $keyword = $request->get('keyword');
             if ($keyword) {
                 if(auth()->user()->level == 'Administrator') {
-                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('kelengkapan_data', 2)->orderBy('nasabah.kelengkapan_data', 'ASC')->paginate(10);
+                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('kelengkapan_data', 2)->paginate(10);
                 }
                 else {
-                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('kelengkapan_data', 2)->where('nasabah.id_kantor_cabang', $idCabang)->orderBy('nasabah.kelengkapan_data', 'ASC')->paginate(10);
+                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('kelengkapan_data', 2)->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
                 }
             }
             else{
@@ -36,13 +36,13 @@ class DataTambahanNasabahController extends Controller
                     // $dataTambahan = DataTambahanNasabah::with('nasabah')->whereHas('nasabah', function ($query) {
                     //     return $query->where('kelengkapan_data', 2);
                     // })->paginate(10);
-                    $dataTambahan = DataTambahanNasabah::with('nasabah')->orderBy('nasabah.kelengkapan_data', 'ASC')->paginate(10);
+                    $dataTambahan = DataTambahanNasabah::with('nasabah')->paginate(10);
                 }
                 else {
                     // $dataTambahan = DataTambahanNasabah::with('nasabah')->whereHas('nasabah', function ($query) {
                     //     return $query->where('kelengkapan_data', 2);
                     // })->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
-                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nasabah.id_kantor_cabang', $idCabang)->orderBy('nasabah.kelengkapan_data', 'ASC')->paginate(10);
+                    $dataTambahan = DataTambahanNasabah::with('nasabah')->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
                 }
             }
         }

@@ -268,7 +268,12 @@ class PinjamanController extends Controller
             // ->where('status', 'Pending')
             // ->orWhere('status', 'Terima')
             // ->where('status_pencairan', 'Pending')->get();
-            $pinjamanByNasabah = Pinjaman::where('id_nasabah', $idNasabah)->orderBy('created_at', 'DESC')->get();
+            $pinjamanByNasabah = Pinjaman::select('pinjaman.*', 'jenis_pinjaman.jenis_pinjaman')
+                                        ->join('jenis_pinjaman', 'jenis_pinjaman.id', 'pinjaman.id_jenis_pinjaman')
+                                        ->where('id_nasabah', $idNasabah)
+                                        ->orderBy('pinjaman.created_at', 'DESC')
+                                        ->get();
+                                        
             $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
 
             $status = 'success';
