@@ -425,10 +425,24 @@ class PinjamanController extends Controller
                 /* kedua */
                 $bunga = $tempLimit * 9 / 100; // untuk mengetahui jml bunga
                 $nominalPembayaran = round($hutang / $pinjaman->jangka_waktu); // untuk menentukan pembayaran tiap terminnya
-            
+
+                $noPelunasan = '00001';
                 for ($i=1; $i <= $pinjaman->jangka_waktu ; $i++) { 
+                    $countPelunasan = Pelunasan::select('kode_pelunasan')->count();
+                    $getDate = date('Ymd');
+
+                    if($countPelunasan > 0){
+                        $lastPinjaman = Pelunasan::orderBy('created_at', 'DESC')
+                                                ->first()
+                                                ->kode_pelunasan;
+        
+                        $lastIncreament = substr($lastPinjaman, 11);
+        
+                        $noPelunasan = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
+                    }
                     $cicilan = new Pelunasan;
                     $cicilan->id_pinjaman = $pinjaman->id;
+                    $cicilan->kode_pelunasan = 'INV'.$getDate.$noPelunasan;
                     $cicilan->jatuh_tempo_cicilan = date('Y-m-d', strtotime("+$i months", strtotime(date('Y-m-d'))));
                     $cicilan->cicilan_ke = $i;
                     $cicilan->nominal_pembayaran = $nominalPembayaran;

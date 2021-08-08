@@ -84,7 +84,7 @@ class PinjamanController extends Controller
 
                     if($countPinjaman > 0){
                         $lastPinjaman = Pinjaman::where('kode_pinjaman', 'LIKE', $kode.'%')
-                                                ->orderBy('kode_pinjaman', 'desc')
+                                                ->orderBy('created_at', 'desc')
                                                 ->first()
                                                 ->kode_pinjaman;
         

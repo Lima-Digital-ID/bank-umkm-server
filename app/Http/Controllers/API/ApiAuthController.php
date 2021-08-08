@@ -73,27 +73,27 @@ class ApiAuthController extends Controller
 
     public function register(Request $request)
     {
-        $validatedData = $request->validate([
-            'nama' => 'required|min:6',
-            // 'tanggal_lahir' => 'required|date',
-            // 'jenis_kelamin' => 'required',
-            'no_hp' => 'required',
-            'email' => 'required|unique:nasabah|email:rfc,dns',
-            'password' => 'required|min:4'
-        ],
-        [
-            'required' => ':attribute tidak boleh kosong.',
-            'email' => 'Masukan email yang valid.',
-            'unique' => ':attribute telah terdaftar.',
-            'nama.min' => ':attribute minimal 6 karakter.',
-            'password.min' => ':attribute minimal 4 karakter.'
-        ],
-        [
-            'nama' => 'Nama Lengkap',
-            'no_hp' => 'Nomor Handphone',
-            'email' => 'Alamat Email',
-            'password' => 'Password'
-        ]);
+        // $validatedData = $request->validate([
+        //     'nama' => 'required|min:6',
+        //     // 'tanggal_lahir' => 'required|date',
+        //     // 'jenis_kelamin' => 'required',
+        //     'no_hp' => 'required',
+        //     'email' => 'required|unique:nasabah|email:rfc,dns',
+        //     'password' => 'required|min:4'
+        // ],
+        // [
+        //     'required' => ':attribute tidak boleh kosong.',
+        //     'email' => 'Masukan email yang valid.',
+        //     'unique' => ':attribute telah terdaftar.',
+        //     'nama.min' => ':attribute minimal 6 karakter.',
+        //     'password.min' => ':attribute minimal 4 karakter.'
+        // ],
+        // [
+        //     'nama' => 'Nama Lengkap',
+        //     'no_hp' => 'Nomor Handphone',
+        //     'email' => 'Alamat Email',
+        //     'password' => 'Password'
+        // ]);
 
         $status = '';
         $message = '';
