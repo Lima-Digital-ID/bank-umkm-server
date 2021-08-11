@@ -14,6 +14,7 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.10",
         "laravel/tinker": "^2.5",
+        "midtrans/midtrans-php": "^2.4",
         "vonage/client": "^2.4"
     },
     "require-dev": {

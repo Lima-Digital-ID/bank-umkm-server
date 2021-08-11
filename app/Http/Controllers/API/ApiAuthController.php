@@ -14,23 +14,24 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-        $validatedData = $request->validate([
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required|min:4'
-        ],
-        [
-            'required' => ':attribute tidak boleh kosong.',
-            'email' => 'Harap masukkan :attribute dengan benar',
-            'password.min' => ':attribute minimal 4 karakter.'
-        ],
-        [
-            'email' => 'Alamat Email',
-            'password' => 'Password'
-        ]);
+        // $validatedData = $request->validate([
+        //     'email' => 'required|email:rfc,dns',
+        //     'password' => 'required|min:4'
+        // ],
+        // [
+        //     'required' => ':attribute tidak boleh kosong.',
+        //     'email' => 'Harap masukkan :attribute dengan benar',
+        //     'password.min' => ':attribute minimal 4 karakter.'
+        // ],
+        // [
+        //     'email' => 'Alamat Email',
+        //     'password' => 'Password'
+        // ]);
         
         $status = '';
         $message = '';
         $token = '';
+        $nasabah = '';
         try {
             $nasabah = Nasabah::where('email', $request->get('email'))->first();
             if($nasabah == null) {

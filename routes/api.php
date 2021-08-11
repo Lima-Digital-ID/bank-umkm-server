@@ -53,7 +53,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // bank
     Route::get('bank', 'API\PinjamanController@getBank');
 
-    Route::post('pembayaran', 'API\ApiPembayaran@store');
+    // Pembayaran
+    Route::prefix('pembayaran')->group(function() {
+        Route::post('/', 'API\ApiPembayaran@store');
+    });
+    // END Pembayaran
 
     Route::get('get-cicilan/{id_pinjaman}', 'API\ApiPembayaran@getCicilan');
     // get saldo per nasabah
@@ -84,9 +88,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::post('register', 'API\ApiAuthController@register');
 // login
 Route::post('login', 'API\ApiAuthController@login');
-
+// midtrans callback
+Route::post('midtrans', 'API\MidtransController@callback');
 // Route::post('register-user', 'API\ApiController@registerUser');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
 Route::post('resend-verification', 'API\ApiController@resendVerificationCode');
-

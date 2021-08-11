@@ -10,6 +10,9 @@ use \App\Models\JenisPinjaman;
 use App\Models\Nasabah;
 use App\Models\Notification;
 use \App\Models\Pelunasan;
+use Midtrans\Config;
+use Midtrans\CoreApi;
+use Midtrans\Transaction;
 
 class ApiPembayaran extends Controller
 {
@@ -27,7 +30,8 @@ class ApiPembayaran extends Controller
         $status = '';
         $message = '';
         $hutang = '';
-        
+        $response = '';
+
         try {
             $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
 
@@ -35,7 +39,7 @@ class ApiPembayaran extends Controller
             $pelunasan->tanggal_pembayaran = date('Y-m-d');
             $pelunasan->metode_pembayaran = $request->get('metode_pembayaran');
             $pelunasan->status = 'Lunas';
-            $pelunasan->save();
+            // $pelunasan->save();
 
             $nasabah = Nasabah::find(auth()->user()->id);
             $hutang = $nasabah->hutang - $request->get('nominal_pembayaran');
@@ -49,31 +53,7 @@ class ApiPembayaran extends Controller
             $newNotification = new Notification;
             
             $countLunas = Pelunasan::where('id_pinjaman', $request->get('id_pinjaman'))->where('status', 'Belum')->count();
-            // jika variabel countLunas hasilnya adalah 0 maka, pinjaman tersebut sudah lunas
-            // if($countLunas == 0) {
-            //     $pinjaman->status = 'Lunas';
-            //     $pinjaman->tanggal_lunas = date("Y-m-d");
-
-            //     $nasabah->limit_pinjaman = $limitPinjaman;
-            //     $nasabah->temp_limit = 0;
-
-            //     $newNotification->id_nasabah = auth()->user()->id;
-            //     $newNotification->title = "Pelunasan";
-            //     $newNotification->message = "Nasabah ".$nasabah->nama." melakukan pelunasan";
-            //     // $newNotification->message = "Nasabah melakukan pembayaran";
-            //     $newNotification->jenis = "Pembayaran";
-            //     $newNotification->device = "web";
-            // }
-            // else {
-            //     $newNotification->id_nasabah = auth()->user()->id;
-            //     $newNotification->title = "Pembayaran";
-            //     $newNotification->message = "Nasabah ".$nasabah->nama." melakukan pembayaran";
-            //     // $newNotification->message = "Nasabah melakukan pembayaran";
-            //     $newNotification->jenis = "Pembayaran";
-            //     $newNotification->device = "web";
-            // }
             
-            // if($terbayar > $pinjaman->nominal || $terbayar == $pinjaman->nominal) {
             if($countLunas == 0) {
                 $terbayar += $asuransi;
                 $pinjaman->status = 'Lunas';
@@ -100,7 +80,7 @@ class ApiPembayaran extends Controller
                 $newNotification->device = "web";
             }
             
-            // $pelunasan->save();
+            $pelunasan->save();
             
             $nasabah->save();
             
