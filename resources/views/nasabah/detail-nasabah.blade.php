@@ -23,6 +23,14 @@
             <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-arrow-alt-circle-left"></span> {{$btnRight['text']}}</a>
           </div>
         </div>
+        @if ($nasabah->is_verified == 2 && $nasabah->skor == 0)
+            <div class="alert alert-warning fade show" role="alert">
+                Nasabah belum melakukan skoring.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -137,7 +145,7 @@
                 </div>
 
                 @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
-                  @if($nasabah->is_verified==2)
+                  @if($nasabah->is_verified==2 && $nasabah->skor > 0)
                     <a href="" data-toggle="modal" data-target=".modal-acc" class="btn btn-success">ACC</a>
                     <a href="" data-toggle="modal" data-target=".modal-tolak" class="btn btn-danger">Tolak</a>
                   {{-- @elseif($nasabah->is_verified==3)

@@ -432,7 +432,7 @@ class PinjamanController extends Controller
                     $getDate = date('Ymd');
 
                     if($countPelunasan > 0){
-                        $lastPinjaman = Pelunasan::orderBy('created_at', 'DESC')
+                        $lastPinjaman = Pelunasan::orderBy('id', 'DESC')
                                                 ->first()
                                                 ->kode_pelunasan;
         

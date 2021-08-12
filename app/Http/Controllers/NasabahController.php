@@ -235,35 +235,41 @@ class NasabahController extends Controller
     {
         try{
             $nasabah = Nasabah::find($id);
-            if($request->tipe=="acc"){
-                // $nasabah->limit_pinjaman = $request->get('limit');
-                $nasabah->alasan_penolakan = "";
-                $nasabah->is_verified = 1;
-                // if ($request->tipe=="acc") {
-                    $notifTitle = 'Verifikasi Data Berhasil.';
-                    $notifMessage = 'Selamat data anda telah diverifikasi, anda dapat melalukan pinjaman.';
-                // }
+
+            if($nasabah->skor > 0){
+                if($request->tipe=="acc"){
+                    // $nasabah->limit_pinjaman = $request->get('limit');
+                    $nasabah->alasan_penolakan = "";
+                    $nasabah->is_verified = 1;
+                    // if ($request->tipe=="acc") {
+                        $notifTitle = 'Verifikasi Data Berhasil.';
+                        $notifMessage = 'Selamat data anda telah diverifikasi, anda dapat melalukan pinjaman.';
+                    // }
+                }
+                else if($request->tipe=="tolak"){
+                    $nasabah->alasan_penolakan = $request->get('alasan');
+                    $nasabah->is_verified = 3;
+    
+                    $notifTitle = 'Verifikasi data gagal.';
+                    $notifMessage = 'Maaf data anda gagal di verifikasi. \n'.$request->get('alasan');
+                }
+                $nasabah->save();
+    
+                $newNotification = new Notification;
+    
+                $newNotification->id_nasabah = $id;
+                $newNotification->title = $notifTitle;
+                $newNotification->message = $notifMessage;
+                $newNotification->jenis = "Verifikasi";
+                $newNotification->device = "mobile";
+    
+                $newNotification->save();
+    
+                return back()->withStatus('Data berhasil diperbarui.');
             }
-            else if($request->tipe=="tolak"){
-                $nasabah->alasan_penolakan = $request->get('alasan');
-                $nasabah->is_verified = 3;
-
-                $notifTitle = 'Verifikasi data gagal.';
-                $notifMessage = 'Maaf data anda gagal di verifikasi. \n'.$request->get('alasan');
+            else {
+                return redirect()->back()->withError('Nasabah belum melakukan scoring');
             }
-            $nasabah->save();
-
-            $newNotification = new Notification;
-
-            $newNotification->id_nasabah = $id;
-            $newNotification->title = $notifTitle;
-            $newNotification->message = $notifMessage;
-            $newNotification->jenis = "Verifikasi";
-            $newNotification->device = "mobile";
-
-            $newNotification->save();
-
-            return back()->withStatus('Data berhasil diperbarui.');
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());

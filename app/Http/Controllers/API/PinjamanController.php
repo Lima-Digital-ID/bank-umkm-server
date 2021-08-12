@@ -59,9 +59,10 @@ class PinjamanController extends Controller
         $status = '';
         $message = '';
         $idPinjaman = '';
+        $currentPinjaman = 0;
 
         try {
-            $currentPinjaman = Pinjaman::where('id_nasabah', auth()->user()->id)->where('status', 'Pending')->orWhere('status', 'Terima')->orderBy('kode_pinjaman', 'DESC')->count();
+            $currentPinjaman = Pinjaman::where('id_nasabah', auth()->user()->id)->whereIn('status', ['Pending', 'Terima'])->orderBy('kode_pinjaman', 'DESC')->count();
             if($currentPinjaman > 0) {
                 $status = 'failed';
                 $message = 'Tidak boleh melakukan lebih dari 1 pinjaman secara bersamaan.';
@@ -225,7 +226,8 @@ class PinjamanController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'data' => $idPinjaman
+                'data' => $idPinjaman,
+                'current' => $currentPinjaman,
             ]);
         }
     }
