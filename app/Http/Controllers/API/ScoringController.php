@@ -56,7 +56,7 @@ class ScoringController extends Controller
             $data = json_decode($data, true);
             // return $data['data'];
             $totalSkor = 0;
-            
+            $jenisKelamin = '';
             if($nasabah->skor > 0) {
                 // jika sudah pernah skoring
                 // $deleteSkor = Scoring::where('id_nasabah', auth()->user()->id);
@@ -71,6 +71,17 @@ class ScoringController extends Controller
                         $newScore->id_nasabah = auth()->user()->id;
                         
                         $newScore->save();
+
+                        if($data['data'][$i] == 1) {
+                            // jenis kelamin laki-laki
+                            $jenisKelamin = 'Laki-laki';
+                        }
+
+                        if($data['data'][$i] == 2) {
+                            // jenis kelamin perempuan
+                            $jenisKelamin = 'Perempuan';
+                        }
+
                         // $editScore = Scoring::find(auth()->user()->id);
                         // $editScore->id_option = $data['data'][$i];
                         // $editScore->id_nasabah = auth()->user()->id;
@@ -95,40 +106,28 @@ class ScoringController extends Controller
                     
                     $newScore->save();
     
+                    if($data['data'][$i] == 1) {
+                        // jenis kelamin laki-laki
+                        $jenisKelamin = 'Laki-laki';
+                    }
+
+                    if($data['data'][$i] == 2) {
+                        // jenis kelamin perempuan
+                        $jenisKelamin = 'Perempuan';
+                    }
                     // DB::table('scoring')->insert([
                     //     'id_option' => $data['data'][$i],
                     //     'id_nasabah' => auth()->user()->id,
                     // ]);
                 }    
             }
-            // for($i=0; $i<count($data['score']); $i++){
-            //         $totalSkor += $data['score'][$i];
-            //         $newScore = new Scoring;
-            //         $newScore->id_option = $data['data'][$i];
-            //         $newScore->id_nasabah = auth()->user()->id;
-                    
-            //         $newScore->save();
-    
-            //         // DB::table('scoring')->insert([
-            //         //     'id_option' => $data['data'][$i],
-            //         //     'id_nasabah' => auth()->user()->id,
-            //         // ]);
-            //     }   
-            
-            // $totalSkor = array_sum(array_column($data['score'],'skor'));
-            
-            // foreach ($data['data'] as $key => $value) {
-            //     DB::table('scoring')->insert([
-            //         'id_option' => $value['id_option'],
-            //         'id_nasabah' => auth()->user()->id
-            //     ]);
-            // }
 
             DB::table('nasabah')
                 ->where('id', auth()->user()->id)
                 ->update([
                         'skor' => $totalSkor,
                         'limit_pinjaman' => $totalSkor / 100 * 1500000,
+                        'jenis_kelamin' => $jenisKelamin,
                         ]);
 
             $status = 'success';
