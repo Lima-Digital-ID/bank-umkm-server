@@ -124,7 +124,12 @@
                         <td>Jumlah Pencairan</td>
                         <td>:</td>
                         <td>
-                          Rp{{number_format($pinjaman->nominal - $asuransiPinjaman->jumlah_asuransi, 2, ',', '.')}}
+                          @if ($pinjaman->nasabah->limit_pinjaman > 0)
+                          Rp{{number_format($pinjaman->nasabah->limit_pinjaman - $asuransiPinjaman->jumlah_asuransi, 2, ',', '.')}}                              
+                          @endif
+                          @if ($pinjaman->nasabah->temp_limit > 0)
+                          Rp{{number_format($pinjaman->nasabah->temp_limit - $asuransiPinjaman->jumlah_asuransi, 2, ',', '.')}}                              
+                          @endif
                         </td>
                       </tr>
                       @endif

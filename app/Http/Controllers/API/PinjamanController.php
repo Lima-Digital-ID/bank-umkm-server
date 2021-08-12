@@ -94,15 +94,17 @@ class PinjamanController extends Controller
                         $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
                     }
                     $newPinjaman = new Pinjaman;
+                    /** Rumus Baru */
+                    $limit = $request->get('nominal');
+                    $bunga = 9 / 100 * $limit;
+                    $totalPinjaman = $limit + $bunga;
+                    /** END Rumus Baru */
+
                     // Pinjaman Dana Umroh
                     if($request->get('id_jenis_pinjaman') == 1) {
                         $kodePinjaman = 'PU'.$getDate.$noPinjaman;
                         // proses perhitungan cicilan
                         // nilai 3 = jangka waktu cicilan 3 tahun
-                        $cicil = $request->get('nominal') / 3;
-                        $bunga = 10 / 100 * $cicil;
-                        $totalCicilan = $cicil + $bunga;
-                        $totalPinjaman = $totalCicilan * 3;
 
                         $notifTitle = 'Pengajuan Pinjaman Berhasil.';
                         $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
@@ -131,12 +133,6 @@ class PinjamanController extends Controller
                             // }
             
                             $kodePinjaman = 'PC'.$getDate.$noPinjaman;
-                            // proses perhitungan cicilan
-                            
-                            $cicil = auth()->user()->limit_pinjaman / $request->get('jangka_waktu');
-                            $bunga = 9 / 100 * $cicil;
-                            $totalCicilan = $cicil + $bunga;
-                            $totalPinjaman = $totalCicilan * $request->get('jangka_waktu');
                                         
                             if (auth()->user()->skor >= 80) {
                                 $newPinjaman->status = 'Terima';
@@ -173,11 +169,6 @@ class PinjamanController extends Controller
                         $kodePinjaman = 'PM'.$getDate.$noPinjaman;
                         // proses perhitungan cicilan
                         // nilai 3 = jangka waktu cicilan 3 tahun
-                        $cicil = $request->get('nominal') / 3;
-                        $bunga = 10 / 100 * $cicil;
-                        $totalCicilan = $cicil + $bunga;
-                        $totalPinjaman = $totalCicilan * 3;
-
                         $notifTitle = 'Pengajuan Pinjaman Berhasil.';
                         $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
                     }
