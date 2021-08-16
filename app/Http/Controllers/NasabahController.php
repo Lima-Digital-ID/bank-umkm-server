@@ -243,7 +243,7 @@ class NasabahController extends Controller
                     $nasabah->is_verified = 1;
                     // if ($request->tipe=="acc") {
                         $notifTitle = 'Verifikasi Data Berhasil.';
-                        $notifMessage = 'Selamat data anda telah diverifikasi, anda dapat melalukan pinjaman.';
+                        $notifMessage = 'Selamat data anda telah diverifikasi, anda dapat melakukan pinjaman.';
                     // }
                 }
                 else if($request->tipe=="tolak"){
