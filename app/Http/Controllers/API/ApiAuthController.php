@@ -272,18 +272,6 @@ class ApiAuthController extends Controller
     
                     $newPenjamin->save();
                     // END Hubungan 2
-
-                    // Hubungan 3
-                    $newPenjamin = new Penjamin;
-                    $newPenjamin->id_nasabah = $updateNasabah->id;
-                    $newPenjamin->hubungan = $request->get('hubungan3');
-                    $newPenjamin->nama = $request->get('nama_penjamin3');
-                    $newPenjamin->nik = $request->get('nik_penjamin3');
-                    $newPenjamin->no_hp = $request->get('no_hp_penjamin3');
-                    $newPenjamin->alamat = $request->get('alamat_penjamin3');
-    
-                    $newPenjamin->save();
-                    // END Hubungan 3
                 }
                 
             }
