@@ -23,13 +23,13 @@ class PelunasanController extends Controller
             //     $pelunasan = Pelunasan::where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->paginate(10);
             // }
             // else{
-                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal_pembayaran', 'pelunasan.cicilan_ke', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->where('pelunasan.status', 'Lunas');
+                $pelunasan = Pelunasan::select('pelunasan.id','pelunasan.id_pinjaman','pelunasan.tanggal_pembayaran', 'pelunasan.nominal_pembayaran', 'pelunasan.cicilan_ke', 'pelunasan.updated_at', 'nasabah.nama')->join('pinjaman', 'pinjaman.id', '=', 'pelunasan.id_pinjaman')->join('nasabah', 'nasabah.id', '=', 'pinjaman.id_nasabah')->where('pelunasan.status', 'Lunas');
 
                 if (auth()->user()->level != 'Administrator') {
                     $pelunasan->where('pinjaman.id_kantor_cabang', auth()->user()->id_kantor_cabang);
                 }
 
-                $this->param['pelunasan'] = $pelunasan->paginate(10);
+                $this->param['pelunasan'] = $pelunasan->orderBy('pelunasan.updated_at', 'DESC')->paginate(10);
             // }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan'. $e->getMessage());

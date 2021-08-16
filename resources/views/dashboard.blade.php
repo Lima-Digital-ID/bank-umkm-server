@@ -27,13 +27,13 @@
             </div>
         </div>
     </div>
-    {{-- <div class="col-md-3 mb-4">
+    <div class="col-md-3 mb-4">
         <div class="card card-dashboard py-2">
             <div class="card-body">    
                 <div class="row">
                     <div class="col-md-8 pr-0">
                         <h2 class="color-primary font-weight-bold">{{$nasabahVerified}}</h2>
-                        Nasabah Aktif
+                        Peminjam Terverifikasi
                     </div>
                     <div class="col-md-4 pl-0 text-center">
                         <span class="fas fa-fw fa-user-check fa-4x"></span>
@@ -43,7 +43,7 @@
                 <a href="{{url('nasabah')}}">Lihat Detail</a>
             </div>
         </div>
-    </div> --}}
+    </div>
     <div class="col-md-3 mb-4">
         <div class="card card-dashboard py-2 {{$pengajuanPinjaman > 0 ? 'has-notif' : ''}}">
             <div class="card-body">    
@@ -59,6 +59,26 @@
                 <hr>
                 @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
                     <a href="{{url('pinjaman?t=Pending')}}">Lihat Detail</a>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card card-dashboard py-2 {{$pinjamanBelumDicairkan > 0 ? 'has-notif' : ''}}">
+            <div class="card-body">    
+                <div class="row">
+                    <div class="col-md-8 pr-0">
+                        <h2 class="color-primary font-weight-bold">{{$pinjamanBelumDicairkan}}</h2>
+                        Pinjaman Belum Dicairkan
+                    </div>
+                    <div class="col-md-4 pl-0 text-center">
+                        <span class="fas fa-fw fa-money-check fa-4x"></span>
+                    </div>
+                </div>
+                <hr>
+                @if (auth()->user()->level == 'Verificator' || auth()->user()->level == 'Administrator')
+                    <a href="{{url('pinjaman/pencairan')}}">Lihat Detail</a>
                 @endif
             </div>
         </div>
@@ -93,7 +113,7 @@
                         Pembayaran Terlambat
                     </div>
                     <div class="col-md-4 pl-0 text-center">
-                        <span class="fas fa-fw fa-money-check-alt fa-4x"></span>
+                        <span class="fas fa-fw fa-clock fa-4x"></span>
                     </div>
                 </div>
                 <hr>
