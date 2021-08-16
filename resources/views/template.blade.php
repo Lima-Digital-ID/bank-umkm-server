@@ -18,8 +18,8 @@
       {!!ucwords( str_replace("-"," ",$pageSegment) )!!} | Bank UMKM
     </title>
     {{-- favicon --}}
-    <link href="{{ asset('img/icon.png') }}" rel="icon">
-    <link href="{{ asset('img/icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('img/icon.jpg') }}" rel="icon">
+    <link href="{{ asset('img/icon.jpg') }}" rel="apple-touch-icon">
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <!-- Custom styles for this template-->
@@ -76,7 +76,7 @@
             href="{{ url('dashboard') }}"
           >
             <div class="sidebar-brand-icon">
-              <i class="fas fa-donate fa-fw"></i>
+              <img class="m-2" src="{{asset('img/icon.jpg')}}" width="40px" alt="">
             </div>
             <div class="sidebar-brand-text"> Bank UMKM </div>
           </a>

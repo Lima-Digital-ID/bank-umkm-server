@@ -14,8 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LOGIN</title>
     {{-- favicon --}}
-    <link href="{{ asset('img/icon.png') }}" rel="icon">
-    <link href="{{ asset('img/icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('img/icon.jpg') }}" rel="icon">
+    <link href="{{ asset('img/icon.jpg') }}" rel="apple-touch-icon">
 </head>
 <body class="bg-light">
     <div class="container container-login">
@@ -23,7 +23,7 @@
             <div class="col-md-10" id="body_form" style="overflow:auto">
                 <div class="box-login">
                     <div class="left">
-                        <img src="{{asset('img/icon.png')}}" width="40px" alt="">
+                        <img src="{{asset('img/icon.jpg')}}" width="40px" alt="">
                         <div class="form mt-3">
                             <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
                                 @csrf
