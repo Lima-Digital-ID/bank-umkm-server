@@ -30,18 +30,18 @@ class NasabahController extends Controller
             $keyword = $request->get('keyword');
             if ($keyword) {
                 if(auth()->user()->level == 'Administrator') {
-                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('is_verified', $verified)->paginate(10);
+                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->where('skor', '>', 0)->orWhere('nik', 'LIKE', "%$keyword%")->where('is_verified', $verified)->paginate(10);
                 }
                 else {
-                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('is_verified', $verified)->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
+                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->where('nama', 'LIKE', "%$keyword%")->orWhere('nik', 'LIKE', "%$keyword%")->where('is_verified', $verified)->where('nasabah.id_kantor_cabang', $idCabang)->where('skor', '>', 0)->paginate(10);
                 }
             }
             else{
                 if(auth()->user()->level == 'Administrator') {
-                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified')->where('is_verified', $verified)->paginate(10);
+                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified', 'skor')->where('is_verified', $verified)->where('skor', '>', 0)->paginate(10);
                 }
                 else {
-                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified')->where('is_verified', $verified)->where('nasabah.id_kantor_cabang', $idCabang)->paginate(10);
+                    $nasabah = Nasabah::with('tipe')->with('dataTambahan')->select('id', 'nama', 'jenis_kelamin', 'nik','email', 'is_verified', 'skor')->where('is_verified', $verified)->where('nasabah.id_kantor_cabang', $idCabang)->where('skor', '>', 0)->paginate(10);
                 }
             }
         } catch (\Illuminate\Database\QueryException $e) {

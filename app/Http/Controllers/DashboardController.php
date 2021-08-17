@@ -16,9 +16,10 @@ class DashboardController extends Controller
     {
         try {
             $date = date('Y-m-d');
-            $this->param['nasabahBaru'] = Nasabah::where('is_verified', 2)->count();
+            $this->param['nasabahBaru'] = Nasabah::where('is_verified', 2)->where('skor', '>', 0)->count();
             $this->param['nasabahVerified'] = Nasabah::where('is_verified', 1)->count();
             $this->param['pengajuanPinjaman'] = Pinjaman::where('status', 'Pending')->count();
+            $this->param['pinjamanBelumDicairkan'] = Pinjaman::where('status', 'Terima')->where('status_pencairan', 'Pending')->count();
             $this->param['pinjamanBerjalan'] = Pinjaman::where('status', 'Terima')->where('status_pencairan', 'Terima')->count();
             $this->param['cicilanTelat'] = Pelunasan::where('jatuh_tempo_cicilan', '<', $date)->where('status', 'Belum')->count();
             // chart pinjaman bulanan
