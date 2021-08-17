@@ -90,8 +90,8 @@
                     <td>{{date('d-m-Y', strtotime($value->tanggal_diterima))}}</td>
                     <td>{{$value->jangka_waktu}} bulan</td>
                     <td>{{date('d-m-Y', strtotime($value->jatuh_tempo))}}</td>
-                    <td>{{number_format($value->nominal, 2, ',', '.')}}</td>
-                    <td>{{number_format($value->terbayar, 2, ',', '.')}}</td>
+                    <td>Rp.{{number_format($value->nominal, 2, ',', '.')}}</td>
+                    <td>Rp.{{number_format($value->terbayar, 2, ',', '.')}}</td>
                     <td><span class="badge badge-{{$value->status == 'Lunas' ? 'success' : 'primary'}}">{{$value->status == 'Lunas' ? 'Lunas' : 'Berjalan'}}</span></td>
                   </tr>
                 @endforeach
@@ -99,8 +99,8 @@
               <tfoot>
                 <tr>
                   <th colspan="5" style="text-align: center">Total</th>
-                  <th>{{number_format($totalPinjaman, 2, ',', '.')}}</th>
-                  <th>{{number_format($totalPelunasan, 2, ',', '.')}}</th>
+                  <th>Rp.{{number_format($totalPinjaman, 2, ',', '.')}}</th>
+                  <th>Rp.{{number_format($totalPelunasan, 2, ',', '.')}}</th>
                   <th></th>
                 </tr>
               </tfoot>
