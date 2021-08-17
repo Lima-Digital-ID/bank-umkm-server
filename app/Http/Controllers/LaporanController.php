@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanTransaksiExport as ExportsLaporanTransaksiExport;
+use App\Models\LaporanTransaksiExport;
 use Illuminate\Http\Request;
 use \App\Models\Pinjaman;
 use \App\Models\Pelunasan;
@@ -44,5 +46,36 @@ class LaporanController extends Controller
         }
 
         return \view('laporan.laporan', $this->param);
+    }
+
+    public function export(Request $request)
+    {
+        try {
+            $dari = $request->get('dari');
+            $sampai = $request->get('sampai');
+            $nasabah = $request->get('nasabah');
+            $this->param['laporan'] = '';
+
+            if ($dari && $sampai) {
+                $getLaporan = Pinjaman::with('nasabah', 'pelunasan')->whereBetween('tanggal_diterima', [$dari, $sampai])->whereIn('pinjaman.status', ['Terima', 'Lunas'])->where('pinjaman.status_pencairan', 'Terima');
+
+                if ($nasabah) {
+                    $getLaporan->where('id_nasabah', $nasabah);
+                }
+    
+                $this->param['laporan'] = $getLaporan->get();
+                $this->param['dari'] = $dari;
+                $this->param['sampai'] = $sampai;
+            }
+
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : '. $e->getMessage());
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : '. $e->getMessage());
+        }
+        
+        return view('laporan.laporan-transaksi-excel', $this->param);
     }
 }

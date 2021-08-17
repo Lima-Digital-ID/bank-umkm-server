@@ -49,6 +49,16 @@
                     <i class="fa fa-chart-line" aria-hidden="true"></i> Detail
                 </a>
             </div>
+            <div class="form-group">
+              <form action="{{ route('export-excel') }}" target="_blank" method="get">
+                <input type="hidden" name="dari" value="{{ $_GET['dari'] }}" />
+                <input type="hidden" name="sampai" value="{{ $_GET['sampai'] }}" />
+                <input type="hidden" name="nasabah" value="{{ $_GET['nasabah'] }}" />
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fa fa-file-excel" aria-hidden="true"></i> Export Excel
+                </button>
+              </form>
+            </div>
           </div>
           <div class="table-responsive">
             <table class="table table-custom">

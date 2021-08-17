@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('syarat-pinjaman-umroh', 'SyaratPinjamanUmrohController');
 
     Route::get('laporan/', 'LaporanController@index');
+    Route::get('laporan/excel', 'LaporanController@export')->name('export-excel');
     Route::get('laporan/chart', 'ChartLaporanController@index');
 
     Route::prefix('master-scoring')->group(function () {
