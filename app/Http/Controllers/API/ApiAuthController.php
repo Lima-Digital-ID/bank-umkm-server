@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use \App\Models\Nasabah;
 use App\Models\Penjamin;
 use Exception;
+use App\Models\EmailVerification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
@@ -40,7 +44,11 @@ class ApiAuthController extends Controller
                 // $nasabah = '';
             }
             else {
-                if (!$nasabah || !(\Hash::check($request->get('password'), $nasabah->password))) {
+                if($nasabah->email_verified_at == null){
+                    $status = 'not_verified';
+                    $message = 'Gagal login. Silahkan verifikasi email anda terlebih dahulu.';
+                }
+                elseif (!$nasabah || !(\Hash::check($request->get('password'), $nasabah->password))) {
                     $status = 'Unauthorized';
                     $message = 'Gagal login. password salah.';
                     $nasabah = '';
@@ -113,8 +121,19 @@ class ApiAuthController extends Controller
 
             $newNasabah->save();
 
+            $key = Str::random(40) . $newNasabah->id;
+            $newEmailVerification = new EmailVerification();
+            $newEmailVerification->id_nasabah = $newNasabah->id;
+            $newEmailVerification->verification_key = $key;
+            $newEmailVerification->save();
+
+            // $details = [
+            //     $key'verificationKey' => Str::random(20) . $newNasabah->id,
+            // ];
+            Mail::to($request->get('email'))->send(new \App\Mail\EmailVerification($key));
+
             $status = 'success';
-            $message = 'Berhasil register';
+            $message = 'Berhasil register, silahkan cek email anda untuk verifikasi email.';
         } catch(\Exception $e){
             // return response()->json([
             //     'error' => true,
@@ -335,6 +354,48 @@ class ApiAuthController extends Controller
                 'status' => $status,
                 'message' => $message,
             ], 200);
+        }
+    }
+
+    public function verifyEmail($key)
+    {
+        $status = '';
+        $message = '';
+        
+        try {
+            $getNasabah = EmailVerification::where('verification_key', $key)->select('id_nasabah');
+
+            if ($getNasabah->count() > 0) {
+                $idNasabah = $getNasabah->first();
+
+                $nasabah = Nasabah::find($idNasabah->id_nasabah);
+                $nasabah->email_verified_at = date('Y-m-d H:i:s');
+                $nasabah->save();
+
+                $status = 'success';
+                $message = 'Verifikasi email berhasil.';
+            }
+            else {
+                $status = 'failed';
+                $message = 'Verifikasi email gagal.';
+                
+            }
+
+        } catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Verifikasi email gagal.';
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'success';
+            $message = 'Verifikasi email gagal.';
+        }
+        finally{
+            $data = [
+                'status' => $status,
+                'message' => $message
+            ];
+            // Redirect
+            return Redirect::to('http://127.0.0.1:8000/masuk')->with(['data' => $data]);
         }
     }
 }

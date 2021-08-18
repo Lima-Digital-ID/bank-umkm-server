@@ -94,3 +94,4 @@ Route::post('midtrans', 'API\MidtransController@callback');
 Route::post('send-verification', 'API\ApiController@sendVerificationCode');
 Route::get('check-verification', 'API\ApiController@checkVerificationCode');
 Route::post('resend-verification', 'API\ApiController@resendVerificationCode');
+Route::get('verify-email/{key}', 'API\ApiAuthController@verifyEmail');

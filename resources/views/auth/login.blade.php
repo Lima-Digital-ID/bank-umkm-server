@@ -27,7 +27,7 @@
                         <div class="form mt-3">
                             <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
                                 @csrf
-        
+    
                                     <label for="">Username</label>
                                     <div class="form-underline">
                                         <input type="text" name="username" placeholder="Masukkan Username" class="@error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus>
