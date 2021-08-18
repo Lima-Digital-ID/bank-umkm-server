@@ -49,6 +49,16 @@
                     <i class="fa fa-chart-line" aria-hidden="true"></i> Detail
                 </a>
             </div>
+            <div class="form-group">
+              <form action="{{ route('export-excel') }}" target="_blank" method="get">
+                <input type="hidden" name="dari" value="{{ $_GET['dari'] }}" />
+                <input type="hidden" name="sampai" value="{{ $_GET['sampai'] }}" />
+                <input type="hidden" name="nasabah" value="{{ $_GET['nasabah'] }}" />
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fa fa-file-excel" aria-hidden="true"></i> Export Excel
+                </button>
+              </form>
+            </div>
           </div>
           <div class="table-responsive">
             <table class="table table-custom">
@@ -80,8 +90,8 @@
                     <td>{{date('d-m-Y', strtotime($value->tanggal_diterima))}}</td>
                     <td>{{$value->jangka_waktu}} bulan</td>
                     <td>{{date('d-m-Y', strtotime($value->jatuh_tempo))}}</td>
-                    <td>{{number_format($value->nominal, 2, ',', '.')}}</td>
-                    <td>{{number_format($value->terbayar, 2, ',', '.')}}</td>
+                    <td>Rp.{{number_format($value->nominal, 2, ',', '.')}}</td>
+                    <td>Rp.{{number_format($value->terbayar, 2, ',', '.')}}</td>
                     <td><span class="badge badge-{{$value->status == 'Lunas' ? 'success' : 'primary'}}">{{$value->status == 'Lunas' ? 'Lunas' : 'Berjalan'}}</span></td>
                   </tr>
                 @endforeach
@@ -89,8 +99,8 @@
               <tfoot>
                 <tr>
                   <th colspan="5" style="text-align: center">Total</th>
-                  <th>{{number_format($totalPinjaman, 2, ',', '.')}}</th>
-                  <th>{{number_format($totalPelunasan, 2, ',', '.')}}</th>
+                  <th>Rp.{{number_format($totalPinjaman, 2, ',', '.')}}</th>
+                  <th>Rp.{{number_format($totalPelunasan, 2, ',', '.')}}</th>
                   <th></th>
                 </tr>
               </tfoot>
