@@ -396,7 +396,7 @@ class ApiAuthController extends Controller
                 'message' => $message
             ];
             // Redirect
-            return Redirect::to('http://127.0.0.1:8000/masuk')->with(['data' => $data]);
+            return Redirect::to('http://127.0.0.1:8080/masuk')->with(['data' => $data]);
         }
     }
 }

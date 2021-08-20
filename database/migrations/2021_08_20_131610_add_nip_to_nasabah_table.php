@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddKodePelunasanToPelunasanTable extends Migration
+class AddNipToNasabahTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddKodePelunasanToPelunasanTable extends Migration
      */
     public function up()
     {
-        Schema::table('pelunasan', function (Blueprint $table) {
-            // $table->string('kode_pelunasan', 20)->after('id');
+        Schema::table('nasabah', function (Blueprint $table) {
+            $table->string('nip')->after('nik')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddKodePelunasanToPelunasanTable extends Migration
      */
     public function down()
     {
-        Schema::table('pelunasan', function (Blueprint $table) {
-            $table->dropColumn('kode_pelunasan');
+        Schema::table('nasabah', function (Blueprint $table) {
+            $table->dropColumn('nip');
         });
     }
 }
