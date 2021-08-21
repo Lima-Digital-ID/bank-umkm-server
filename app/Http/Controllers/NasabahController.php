@@ -78,6 +78,7 @@ class NasabahController extends Controller
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'nik' => 'required|unique:nasabah',
+            'nip' => 'required',
             'no_hp' => 'required',
             'alamat' => 'required',
             'scan_ktp' => 'required',
@@ -117,6 +118,7 @@ class NasabahController extends Controller
             $newNasabah->tanggal_lahir = $request->get('tanggal_lahir');
             $newNasabah->jenis_kelamin = $request->get('jenis_kelamin');
             $newNasabah->nik = $request->get('nik');
+            $newNasabah->nip = $request->get('nip');
             $newNasabah->no_hp = $request->get('no_hp');
             $newNasabah->alamat = $request->get('alamat');
             $newNasabah->id_tipe = $request->get('id_tipe');
