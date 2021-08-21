@@ -80,6 +80,17 @@ class ApiAuthController extends Controller
         }
     }
 
+    function generateRandomString() {
+        $length = 60;
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     public function register(Request $request)
     {
         // $validatedData = $request->validate([
@@ -121,10 +132,13 @@ class ApiAuthController extends Controller
 
             $newNasabah->save();
 
-            $key = Str::random(40) . $newNasabah->id;
+            $new_time = date("Y-m-d H:i:s", strtotime('+5 minutes'));
+
+            $key = $this->generateRandomString();
             $newEmailVerification = new EmailVerification();
             $newEmailVerification->id_nasabah = $newNasabah->id;
             $newEmailVerification->verification_key = $key;
+            $newEmailVerification->expired_at = $new_time;
             $newEmailVerification->save();
 
             // $details = [
@@ -364,17 +378,35 @@ class ApiAuthController extends Controller
         $message = '';
         
         try {
-            $getNasabah = EmailVerification::where('verification_key', $key)->select('id_nasabah');
+            $getNasabah = EmailVerification::where('verification_key', $key)->select('id_nasabah', 'used');
 
             if ($getNasabah->count() > 0) {
-                $idNasabah = $getNasabah->first();
-
-                $nasabah = Nasabah::find($idNasabah->id_nasabah);
-                $nasabah->email_verified_at = date('Y-m-d H:i:s');
-                $nasabah->save();
-
-                $status = 'success';
-                $message = 'Verifikasi email berhasil.';
+                if(strtotime($currentTime) > strtotime($newTime)) {
+                    $expiredCode = \DB::table('email_verification')->where('verification_key', $key)->update([
+                        'is_expired' => 1
+                    ]);
+                    
+                    $status = 'failed';
+                    $message = 'Gagal verifikasi. Mohon untuk verifikasi ulang.';
+                }
+                elseif($getNasabah->used) {
+                    $status = 'failed';
+                    $message = 'Anda sudah melakukan verifikasi digunakan.';
+                }
+                else {
+                    $idNasabah = $getNasabah->first();
+    
+                    $nasabah = Nasabah::find($idNasabah->id_nasabah);
+                    $nasabah->email_verified_at = date('Y-m-d H:i:s');
+                    $nasabah->save();
+    
+                    $usedCode = \DB::table('email_verification')->where('verification_key', $key)->update([
+                        'used' => 1
+                    ]);
+    
+                    $status = 'success';
+                    $message = 'Verifikasi email berhasil.';
+                }
             }
             else {
                 $status = 'failed';

@@ -11,7 +11,7 @@ class Nasabah extends Model
     use HasApiTokens,HasFactory;
     protected $table = 'nasabah';
 
-    protected $hidden = array('password', 'token');
+    protected $hidden = array('token');
 
 
     public function pinjaman()

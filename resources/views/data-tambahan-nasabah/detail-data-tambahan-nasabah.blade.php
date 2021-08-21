@@ -72,6 +72,11 @@
                         <td><a href="{{ url($dataTambahan->scan_npwp) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
                       </tr>
                       <tr>
+                        <td>Kartu Keluarga</td>
+                        <td>:</td>
+                        <td><a href="{{ url($dataTambahan->kartu_keluarga) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>
+                      </tr>
+                      <tr>
                         <td>KTP Suami</td>
                         <td>:</td>
                         <td><a href="{{ url($dataTambahan->ktp_suami) }}" target="_blank" class="btn btn-sm btn-primary">Lihat</a></td>

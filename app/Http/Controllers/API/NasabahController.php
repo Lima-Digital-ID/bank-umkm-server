@@ -104,6 +104,44 @@ class NasabahController extends Controller
         }
     }
 
+    public function updatePassword(Request $request)
+    {
+        $status = '';
+        $message = '';
+        
+        try {
+            $id = auth()->user()->id;
+            $nasabah = Nasabah::find($id);
+            
+            $nasabah->password = \Hash::make($request->get('password'));
+
+            $nasabah->save();
+            
+            if($nasabah->save()) {
+                $status = 'success';
+                $message = 'Berhasil';
+            }
+            else {
+                $status = 'failed';
+                $message = 'Gagal merubah data';
+            }
+
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message
+            ], 200);
+        }
+    }
+
     public function deletePhoto()
     {
         $status = '';
@@ -364,6 +402,16 @@ class NasabahController extends Controller
             
             $newData->id_nasabah = $id;
             $newData->tempat_tinggal = $request->get('tempat_tinggal');
+
+            // upload kartu keluarga
+            if($request->get('kartu_keluarga') != null || $request->get('kartu_keluarga_filename') != ''){
+                $extension = explode('.', $request->get('kartu_keluarga_filename'));
+                $ext = end($extension);
+                $filename = $folder.'/'.date('YmdHis').$id.'_npwp.'.$ext;
+                $img = base64_decode($request->get('kartu_keluarga'));
+                file_put_contents($filename, $img);
+                $newData->kartu_keluarga = $filename;
+            }
 
             // upload npwp
             if($request->get('scan_npwp') != null || $request->get('npwp_filename') != ''){
