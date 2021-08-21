@@ -104,6 +104,44 @@ class NasabahController extends Controller
         }
     }
 
+    public function updatePassword(Request $request)
+    {
+        $status = '';
+        $message = '';
+        
+        try {
+            $id = auth()->user()->id;
+            $nasabah = Nasabah::find($id);
+            
+            $nasabah->password = \Hash::make($request->get('password'));
+
+            $nasabah->save();
+            
+            if($nasabah->save()) {
+                $status = 'success';
+                $message = 'Berhasil';
+            }
+            else {
+                $status = 'failed';
+                $message = 'Gagal merubah data';
+            }
+
+        }catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            $status = 'failed';
+            $message = 'Gagal. ' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message
+            ], 200);
+        }
+    }
+
     public function deletePhoto()
     {
         $status = '';
