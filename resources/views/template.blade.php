@@ -52,6 +52,8 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
     <script src="{{ asset('js/firebase-messaging-sw.js') }}"></script>
+
+    @stack('timeline-style')
   </head>
 
   <body id="page-top">
@@ -223,6 +225,12 @@
                   <a class="nav-link" href="{{url('pinjaman?t=Tolak')}}">
                     <span>Pinjaman Ditolak</span>
                   </a>
+
+                  {{-- monitoring pinjaman dapat diakses oleh siapa saja? --}}
+                  <a class="nav-link" href="{{url('pinjaman/monitoring')}}">
+                    <span>Monitoring Pinjaman</span>
+                  </a>
+
                 @endif
                 @if (auth()->user()->level == 'Administrator' || auth()->user()->level == 'Pencairan')
                   <a class="nav-link" href="{{url('pinjaman/pencairan')}}">
@@ -351,7 +359,7 @@
                       $pageSegment = 'syarat-pinjaman-modal';
                     }
                   ?>
-                  {{ ucwords( str_replace("-"," ",$pageSegment) ) }}
+                  {{ !empty($pageInfo) ? $pageInfo : ucwords( str_replace("-"," ",$pageSegment) ) }}
             </div>
             <div class="float-right info-text-page">
               <a href="#"> 

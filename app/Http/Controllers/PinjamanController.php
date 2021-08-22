@@ -334,7 +334,8 @@ class PinjamanController extends Controller
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';
                 $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan');
-
+                $date = date('Y-m-d');
+                $pinjaman->tanggal_diterima = $date;
                 $pinjaman->alasan_penolakan = $request->get('alasan');
             }
             $pinjaman->status = $setStatus;
@@ -384,7 +385,7 @@ class PinjamanController extends Controller
                 // ]);
                 // $date = date('Y-m-d');
                 // $pinjaman->tanggal_diterima = $date;
-                $pinjaman->id_user = auth()->user()->id;
+                
                 $pinjaman->asuransi_pinjaman = $asuransi->jumlah_asuransi;
                 // $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));
                 // $nasabah = Nasabah::find($pinjaman->id_nasabah);
@@ -451,7 +452,10 @@ class PinjamanController extends Controller
                 // $nasabah->hutang -= $pinjaman->nominal;
                 // $nasabah->save();
             }
+            
             $pinjaman->status_pencairan = $setStatus;
+            $pinjaman->id_staff_pencairan = auth()->user()->id;
+            $pinjaman->tanggal_pencairan = date('Y-m-d');
             $pinjaman->updated_at = time();
             $pinjaman->save();
 
@@ -542,5 +546,82 @@ class PinjamanController extends Controller
         $count = Pinjaman::select(DB::raw("count('id') as ttl"))->where('view','0')->get();
         echo $count[0]->ttl;
         
+    }
+
+    public function monitoringPinjaman(Request $request)
+    {
+        $this->param['pageInfo'] = 'Monitoring Pinjaman';
+
+        try {
+
+            $getAllPinjaman = DB::table('pinjaman as p')
+                                ->select('p.id', 'p.kode_pinjaman', 'p.tanggal_pengajuan','n.nama', 'n.nik', 'p.jangka_waktu', 'p.jatuh_tempo','j.jenis_pinjaman', 'wk.nama as kecamatan')
+                                ->join('nasabah as n', 'p.id_nasabah', 'n.id')
+                                ->join('users as u', 'p.id_user', 'u.id')
+                                ->join('kantor_cabang as k', 'k.id', 'p.id_kantor_cabang')
+                                ->join('wilayah_kecamatan as wk', 'wk.id', 'k.kecamatan_id')
+                                ->join('jenis_pinjaman as j', 'j.id', 'p.id_jenis_pinjaman')
+                                ->orderBy('p.id', 'DESC');
+
+            $idKantorCabang = $request->get('id_kantor_cabang');
+            $idJenisPinjaman = $request->get('id_jenis_pinjaman');
+
+            if ($idKantorCabang) {
+                $getAllPinjaman->where('p.id_kantor_cabang', $idKantorCabang);
+            
+            }
+            if ($idJenisPinjaman) {
+                $getAllPinjaman->where('p.id_jenis_pinjaman', $idJenisPinjaman);
+            }
+
+            if(auth()->user()->level != 'Administrator') {
+                $idCabang = auth()->user()->id_kantor_cabang;   
+                $getAllPinjaman->where('p.id_kantor_cabang', $idCabang);
+            }
+
+            $this->param['jenisPinjaman'] = JenisPinjaman::orderBy('jenis_pinjaman', 'ASC')->get();
+
+            if(auth()->user()->level == 'Administrator') {
+                $this->param['kantorCabang'] = DB::table('kantor_cabang')
+                                                ->select('kantor_cabang.id', 'wilayah_kecamatan.nama')
+                                                ->join('wilayah_kecamatan', 'wilayah_kecamatan.id', 'kantor_cabang.kecamatan_id')
+                                                ->orderBy('wilayah_kecamatan.nama', 'ASC')
+                                                ->get();
+            }
+            $this->param['pinjaman'] = $getAllPinjaman->paginate(10);
+
+            return \view('pinjaman.monitoring-pinjaman', $this->param);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
+        }
+    }
+    
+    public function detailMonitoringPinjaman($id)
+    {
+        $this->param['pageInfo'] = 'Monitoring Pinjaman';
+
+        try {
+            $this->param['detail'] = DB::table('pinjaman as p')
+                                        ->select('n.nama', 'n.nik', 'n.tanggal_lahir', 'n.jenis_kelamin', 'n.pekerjaan', 'n.alamat', 'n.no_hp', 'n.email' , 'p.id', 'p.kode_pinjaman', 'p.jangka_waktu', 'p.tanggal_pengajuan', 'p.status', 'p.status_pencairan', 'p.tanggal_pencairan', 'p.alasan_penolakan_pencairan', 'p.alasan_penolakan', 'p.tanggal_diterima', 'p.jatuh_tempo', 'p.tanggal_lunas', 'p.id_user', 'p.id_staff_pencairan', 'j.jenis_pinjaman', 'wk.nama as kecamatan', 'u.nama as nama_staff')
+                                        ->join('nasabah as n', 'p.id_nasabah', 'n.id')
+                                        ->join('users as u', 'p.id_user', 'u.id')
+                                        // ->join('pencairan', 'p.id', 'pencairan.id_pinjaman')
+                                        ->join('kantor_cabang as k', 'k.id', 'p.id_kantor_cabang')
+                                        ->join('wilayah_kecamatan as wk', 'wk.id', 'k.kecamatan_id')
+                                        ->join('jenis_pinjaman as j', 'j.id', 'p.id_jenis_pinjaman')
+                                        ->where('p.id', $id)
+                                        ->first();
+
+            $this->param['pelunasan'] = DB::table('pelunasan')
+                                        ->select('kode_pelunasan', 'jatuh_tempo_cicilan', 'nominal_pembayaran', 'bunga', 'tanggal_pembayaran', 'cicilan_ke', 'metode_pembayaran', 'status')
+                                        ->where('id_pinjaman', $id)
+                                        ->get();
+
+            return \view('pinjaman.detail-monitoring', $this->param);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
+        }
     }
 }

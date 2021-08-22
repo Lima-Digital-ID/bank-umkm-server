@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('pinjaman/sudah-pencairan', 'PinjamanController@pencairanSudah');
     Route::get('pinjaman/proses-pencairan/{id}', 'PinjamanController@prosesPencairan');
     Route::get('pinjaman/update-pencairan/{id}/{status}', 'PinjamanController@updateStatusPencairan');
+    Route::get('pinjaman/monitoring', 'PinjamanController@monitoringPinjaman');
+    Route::get('pinjaman/monitoring-detail/{id}', 'PinjamanController@detailMonitoringPinjaman')->name('pinjaman.monitoring-detail');
     Route::resource('pinjaman', 'PinjamanController');
     Route::resource('asuransi-pinjaman', 'AsuransiPinjamanController');
     Route::get('pelunasan/late-payment', 'PelunasanController@latePayment');
