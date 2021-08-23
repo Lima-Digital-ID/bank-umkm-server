@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Pelunasan;
 use \App\Models\Pinjaman;
+use \App\Models\AsuransiPinjaman;
+use \App\Models\Nasabah;
+use \App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
 class PelunasanController extends Controller
@@ -200,5 +203,124 @@ class PelunasanController extends Controller
         // print_r ($this->param['latePayment']);
         // echo "</pre>";
         
+    }
+
+    public function pembayaranPinjaman(Request $request)
+    {
+        try {
+            //  $list = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima');
+            
+            // if ($request->get('keyword')) {
+            //     $list->whereHas('nasabah', function($query){
+            //         return $query->where('nama','LIKE', "%$_GET[keyword]%");
+            //     });
+            // }
+
+            // $list->orderBy('id')->paginate(10);
+
+            // $this->param['listPembayaran'] = $list;
+            $this->param['listPembayaran'] = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima')->orderBy('id')->paginate(10);
+
+            return view('pelunasan.list-pembayaran', $this->param);
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan' . $e->getMessage());
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan pada database' . $e->getMessage());
+        }
+    }
+
+    public function detailPembayaranPinjaman($id)
+    {
+        try{
+            $this->param['pageInfo'] = 'Detail Pembayaran Pinjaman';
+            // $this->param['btnRight']['text'] = 'Lihat Data';
+            // $this->param['btnRight']['link'] = route('pelunasan.index');
+            $this->param['pinjaman'] = Pinjaman::with('nasabah', 'pelunasan')->find($id);
+            // $this->param['pelunasan'] = Pelunasan::where('id_pinjaman', $idPinjaman)->orderBy('tanggal_pembayaran')->get();
+        //  return \view('pelunasan.detail-pelunasan', $this->param);
+            // return $this->param['pinjaman'];
+            return view('pelunasan.detail-pembayaran', $this->param);
+
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
+
+    public function bayarPinjaman($kode_pelunasan)
+    {
+        try{
+            $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
+
+            $pelunasan = Pelunasan::where('kode_pelunasan', $kode_pelunasan)->first();
+            // return $pelunasan;
+            $pelunasan->tanggal_pembayaran = date('Y-m-d');
+            $pelunasan->metode_pembayaran = 'Kantor Cabang';
+            $pelunasan->status = 'Lunas';
+            $pelunasan->id_user = auth()->user()->id;
+            // $pelunasan->save();
+            $pinjaman = Pinjaman::with('jenisPinjaman')->find($pelunasan->id_pinjaman);
+            // return $pinjaman;
+            $nasabah = Nasabah::find($pinjaman->id_nasabah);
+            $hutang = $nasabah->hutang - $pelunasan->nominal_pembayaran;
+            $limitPinjaman = $nasabah->temp_limit;
+
+            // $nasabah->hutang -= $request->get('nominal_pembayaran');
+            $nasabah->hutang = $hutang;
+
+            $terbayar = $pinjaman->terbayar + $pelunasan->nominal_pembayaran;
+            $newNotification = new Notification;
+            
+            $countLunas = Pelunasan::where('id_pinjaman', $pelunasan->id_pinjaman)->where('status', 'Belum')->count();
+            // return $countLunas;
+            if($countLunas == 0) {
+                $terbayar += $asuransi;
+                $pinjaman->status = 'Lunas';
+                $pinjaman->tanggal_lunas = date("Y-m-d");
+
+                if($pinjaman->jenisPinjaman->jenis_pinjaman == 'Pinjaman Cepat') {
+                    $nasabah->limit_pinjaman = $limitPinjaman;
+                    $nasabah->temp_limit = 0;
+                }
+
+                $newNotification->id_nasabah = auth()->user()->id;
+                $newNotification->title = "Pelunasan";
+                $newNotification->message = $nasabah->nama." melakukan pelunasan";
+                // $newNotification->message = "Nasabah melakukan pembayaran";
+                $newNotification->jenis = "Pembayaran";
+                $newNotification->device = "web";
+            }
+            else {
+                $newNotification->id_nasabah = auth()->user()->id;
+                $newNotification->title = "Pembayaran";
+                $newNotification->message = $nasabah->nama." melakukan pembayaran";
+                // $newNotification->message = "Nasabah melakukan pembayaran";
+                $newNotification->jenis = "Pembayaran";
+                $newNotification->device = "web";
+            }
+            
+            $pelunasan->save();
+            
+            $nasabah->save();
+            
+            $pinjaman->terbayar = $terbayar;
+
+            $pinjaman->save();
+
+            $newNotification->save();
+
+            return back()->withStatus('Berhasil melakukan pembayaran');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
     }
 }

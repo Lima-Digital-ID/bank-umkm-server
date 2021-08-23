@@ -267,6 +267,9 @@
                   <a class="nav-link" href="{{url('pelunasan')}}">
                     <span>Pelunasan</span>
                   </a>
+                  <a class="nav-link" href="{{url('/pembayaran-pinjaman/list-pembayaran')}}">
+                    <span>Pembayaran Pinjaman</span>
+                  </a>
                   <a class="nav-link" href="{{url('pelunasan/late-payment')}}">
                     <span>Pembayaran Terlambat</span>
                   </a>
