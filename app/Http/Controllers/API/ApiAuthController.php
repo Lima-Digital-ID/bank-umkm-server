@@ -379,10 +379,13 @@ class ApiAuthController extends Controller
         $message = '';
         
         try {
-            $getNasabah = EmailVerification::where('verification_key', $key)->select('id_nasabah', 'used');
+            $getNasabah = EmailVerification::where('verification_key', $key)->select('id_nasabah', 'used', 'expired_at');
 
             if ($getNasabah->count() > 0) {
-                if(strtotime($currentTime) > strtotime($newTime)) {
+                $nasabah = $getNasabah->first();
+                $expiredAt = $nasabah->expired_at;
+                $currentTime = date('Y-m-d H:i:s');
+                if(strtotime($currentTime) > strtotime($expiredAt)) {
                     $expiredCode = \DB::table('email_verification')->where('verification_key', $key)->update([
                         'is_expired' => 1
                     ]);
@@ -390,14 +393,13 @@ class ApiAuthController extends Controller
                     $status = 'failed';
                     $message = 'Gagal verifikasi. Mohon untuk verifikasi ulang.';
                 }
-                elseif($getNasabah->used) {
+                elseif($nasabah->used == 1) {
                     $status = 'failed';
-                    $message = 'Anda sudah melakukan verifikasi digunakan.';
+                    $message = 'Anda telah melakukan verifikasi.';
                 }
                 else {
-                    $idNasabah = $getNasabah->first();
     
-                    $nasabah = Nasabah::find($idNasabah->id_nasabah);
+                    $nasabah = Nasabah::find($nasabah->id_nasabah);
                     $nasabah->email_verified_at = date('Y-m-d H:i:s');
                     $nasabah->save();
     
@@ -412,24 +414,19 @@ class ApiAuthController extends Controller
             else {
                 $status = 'failed';
                 $message = 'Verifikasi email gagal.';
-                
             }
 
         } catch(\Exception $e){
             $status = 'failed';
-            $message = 'Verifikasi email gagal.';
+            $message = 'Verifikasi email gagal.' . $e->getMessage();
         }
         catch(\Illuminate\Database\QueryException $e){
             $status = 'success';
-            $message = 'Verifikasi email gagal.';
+            $message = 'Verifikasi email gagal.'. $e->getMessage();
         }
         finally{
-            $data = [
-                'status' => $status,
-                'message' => $message
-            ];
-            // Redirect
-            return Redirect::to('http://127.0.0.1:8080/masuk')->with(['data' => $data]);
+            // return $message;
+            return Redirect::to('http://127.0.0.1:8080/masuk')->with($status)->with($message);
         }
     }
 }
