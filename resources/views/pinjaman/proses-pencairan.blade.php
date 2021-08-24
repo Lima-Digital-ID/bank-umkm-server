@@ -168,8 +168,9 @@
             <div class="modal-body">
               <form action="{{ url('pinjaman/update-pencairan', $pinjaman->id).'/Tolak' }}" method="get">
                 @csrf
-                <label for="">Alasan</label>
-                <textarea name="alasan_penolakan_pencairan" class="form-control"  id="" rows="5"></textarea>
+                Anda yakin akan menolak?
+                <!--<label for="">Alasan</label>-->
+                <!--<textarea name="alasan_penolakan_pencairan" class="form-control"  id="" rows="5"></textarea>-->
                 <div class="mt-4">
                   <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
                   &nbsp;

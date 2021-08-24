@@ -261,11 +261,14 @@ class PelunasanController extends Controller
     {
         try{            
             $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
-            
-            $pelunasan = Pelunasan::select('pelunasan.*','users.nama')->join('users','users.id','pelunasan.id_user')->where('kode_pelunasan', $kode_pelunasan)->first();
+            // return $kode_pelunasan;
+            $pelunasan = Pelunasan::select('pelunasan.*','users.nama', 'pinjaman.id_nasabah')
+                                    ->join('pinjaman', 'pinjaman.id', 'pelunasan.id_pinjaman')
+                                    ->join('users','users.id','pinjaman.id_user')
+                                    ->where('pelunasan.kode_pelunasan', $kode_pelunasan)
+                                    ->first();
             // dd($pelunasan);
 
-            // return $pelunasan;
             $pelunasan->tanggal_pembayaran = date('Y-m-d');
             $pelunasan->metode_pembayaran = 'Kantor Cabang';
             $pelunasan->status = 'Lunas';
@@ -296,7 +299,7 @@ class PelunasanController extends Controller
                     $nasabah->temp_limit = 0;
                 }
 
-                $newNotification->id_nasabah = auth()->user()->id;
+                $newNotification->id_nasabah = $pelunasan->id_nasabah;
                 $newNotification->title = "Pelunasan";
                 $newNotification->message = $nasabah->nama." melakukan pelunasan";
                 // $newNotification->message = "Nasabah melakukan pembayaran";
@@ -304,7 +307,7 @@ class PelunasanController extends Controller
                 $newNotification->device = "web";
             }
             else {
-                $newNotification->id_nasabah = auth()->user()->id;
+                $newNotification->id_nasabah = $pelunasan->id_nasabah;
                 $newNotification->title = "Pembayaran";
                 $newNotification->message = $nasabah->nama." melakukan pembayaran";
                 // $newNotification->message = "Nasabah melakukan pembayaran";

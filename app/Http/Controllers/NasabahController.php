@@ -249,11 +249,11 @@ class NasabahController extends Controller
                     // }
                 }
                 else if($request->tipe=="tolak"){
-                    $nasabah->alasan_penolakan = $request->get('alasan');
+                    $nasabah->alasan_penolakan = 'Anda belum memenuhi syarat.';
                     $nasabah->is_verified = 3;
     
                     $notifTitle = 'Verifikasi data gagal.';
-                    $notifMessage = 'Maaf data anda gagal di verifikasi. \n'.$request->get('alasan');
+                    $notifMessage = 'Maaf data anda gagal di verifikasi. \n'.'Anda belum memenuhi syarat.';
                 }
                 $nasabah->save();
     

@@ -83,9 +83,9 @@
     -->
 
     <script>
-        // function printStruk() {
-        //     window.print();
-        // }
+        function printStruk() {
+            window.print();
+        }
     </script>
 
   </body>

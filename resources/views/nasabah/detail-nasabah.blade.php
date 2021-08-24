@@ -282,8 +282,9 @@
               <form action="{{ url('nasabah/update-status', $nasabah->id) }}" method="POST">
                 @csrf
                 <input type="hidden" name="tipe" value="tolak">
-                <label for="">Alasan</label>
-                <textarea name="alasan" class="form-control"  id="" rows="5"></textarea>
+                Anda yakin akan menolak?
+                <!--<label for="">Alasan</label>-->
+                <!--<textarea name="alasan" class="form-control"  id="" rows="5"></textarea>-->
                 <div class="mt-4">
                   <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
                   &nbsp;

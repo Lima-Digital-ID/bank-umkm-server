@@ -333,10 +333,10 @@ class PinjamanController extends Controller
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';
-                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan');
+                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.'Anda belum memenuhi syarat.';
                 $date = date('Y-m-d');
                 $pinjaman->tanggal_diterima = $date;
-                $pinjaman->alasan_penolakan = $request->get('alasan');
+                $pinjaman->alasan_penolakan = 'Anda belum memenuhi syarat.';
             }
             $pinjaman->status = $setStatus;
             $pinjaman->updated_at = time();
@@ -442,9 +442,9 @@ class PinjamanController extends Controller
             }
             if($setStatus=='Tolak'){
                 $notifTitle = 'Maaf, proses pencairan gagal.';
-                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.$request->get('alasan_penolakan_pencairan');
+                $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.'Anda belum memenuhi syarat.';
 
-                $pinjaman->alasan_penolakan_pencairan = $request->get('alasan_penolakan_pencairan');
+                $pinjaman->alasan_penolakan_pencairan = 'Anda belum memenuhi syarat.';
                 $pinjaman->status = $setStatus;
 
                 // $nasabah = Nasabah::find($pinjaman->id_nasabah);

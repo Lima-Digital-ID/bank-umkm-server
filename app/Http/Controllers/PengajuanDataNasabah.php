@@ -185,7 +185,7 @@ class PengajuanDataNasabah extends Controller
                 $nasabah->save();
             }
             if($setStatus=='Tolak'){
-                $pinjaman->alasan_penolakan = $request->get('alasan');
+                $pinjaman->alasan_penolakan = 'Anda belum memenuhi syarat.';
             }
             $pinjaman->status = $setStatus;
             $pinjaman->save();
