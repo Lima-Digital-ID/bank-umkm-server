@@ -55,12 +55,12 @@
                         <tr>
                           <td>Jumlah Pinjaman</td>
                           <td>:</td>
-                          <td>{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
+                          <td>Rp.{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
                         </tr>
                         <tr>
                           <td>Terbayar</td>
                           <td>:</td>
-                          <td>{{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
+                          <td>Rp.{{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
                         </tr>
                       </thead>
                     </table>

@@ -49,12 +49,12 @@
                         <tr>
                           <td>Jumlah Pinjaman</td>
                           <td>:</td>
-                          <td>{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
+                          <td>Rp.{{number_format($pinjaman->nominal, 2, ',', '.')}}</td>
                         </tr>
                         <tr>
                           <td>Terbayar</td>
                           <td>:</td>
-                          <td>{{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
+                          <td>Rp.{{number_format($pinjaman->terbayar, 2, ',', '.')}}</td>
                         </tr>
                       </thead>
                     </table>
@@ -67,10 +67,11 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <td>Termin</td>
-                        <td>Jatuh Tempo</td>
-                        <td>Jumlah Tagihan</td>
-                        <td>Pembayaran</td>
+                      <td>Termin</td>
+                      <td>Kode Pelunasan</td>
+                      <td>Jatuh Tempo</td>
+                      <td>Jumlah Tagihan</td>
+                      <td>Pembayaran</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,6 +100,7 @@
                   @endphp
                   <tr>
                     <td>{{$item->cicilan_ke}}</td>
+                    <td>{{$item->kode_pelunasan}}</td>
                     <td>{{date('d-m-Y', strtotime($item->jatuh_tempo_cicilan))}}</td>
                     <td>{{'Rp' . number_format(($item->nominal_pembayaran + $item->bunga), 2, ',', '.')}}</td>
                     <td>
