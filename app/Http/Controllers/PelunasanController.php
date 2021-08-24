@@ -270,7 +270,7 @@ class PelunasanController extends Controller
             $pelunasan->metode_pembayaran = 'Kantor Cabang';
             $pelunasan->status = 'Lunas';
             $pelunasan->id_user = auth()->user()->id;
-            // $pelunasan->save();
+            $pelunasan->save();
             $pinjaman = Pinjaman::with('jenisPinjaman')->find($pelunasan->id_pinjaman);
             // return $pinjaman;
             $nasabah = Nasabah::find($pinjaman->id_nasabah);
@@ -312,7 +312,7 @@ class PelunasanController extends Controller
                 $newNotification->device = "web";
             }
             
-            $pelunasan->save();
+            // $pelunasan->save();
             
             $nasabah->save();
             

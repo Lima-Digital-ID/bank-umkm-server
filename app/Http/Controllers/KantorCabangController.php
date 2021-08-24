@@ -51,7 +51,7 @@ class KantorCabangController extends Controller
                                                         ->where('wilayah_provinsi.nama', 'Jawa Timur')
                                                         ->orderBy('wilayah_kecamatan.nama', 'ASC')->get();
 
-        return \view('kantor-cabang.tambah-kantor-cabang', $this->param);
+    return \view('kantor-cabang.tambah-kantor-cabang', $this->param);
     }
 
     /**
@@ -64,9 +64,12 @@ class KantorCabangController extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required',
+            'kode_area' => 'required',
             'id_kecamatan' => 'required|not_in:0',
+            'jenis' => 'required|not_in:0',
             'alamat' => 'required|min:10',
             'phone' => 'required',
+            'fax' => 'required'
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -75,15 +78,21 @@ class KantorCabangController extends Controller
         ],
         [
             'nama' => 'Nama Kantor Cabang',
+            'kode_area' => 'Kode Area',
             'id_kecamatan' => 'Kecamatan',
+            'jenis' => 'Jenis Kantor',
             'alamat' => 'Alamat Kantor Cabang',
-            'phone' => 'Nomor Telepon'
+            'phone' => 'Nomor Telepon',
+            'fax' => 'Fax'
         ]);
         try{
             $newKantorCabang = new KantorCabang;
     
             $newKantorCabang->nama = $request->get('nama');
             $newKantorCabang->kecamatan_id = $request->get('id_kecamatan');
+            $newKantorCabang->kode_area = $request->get('kode_area');
+            $newKantorCabang->jenis = $request->get('jenis');
+            $newKantorCabang->fax = $request->get('fax');
             $newKantorCabang->alamat = $request->get('alamat');
             $newKantorCabang->phone = $request->get('phone');
 
@@ -142,8 +151,12 @@ class KantorCabangController extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required',
+            'kode_area' => 'required',
+            'id_kecamatan' => 'required|not_in:0',
+            'jenis' => 'required|not_in:0',
             'alamat' => 'required|min:10',
             'phone' => 'required',
+            'fax' => 'required'
         ],
         [
             'required' => ':attribute tidak boleh kosong.',
@@ -152,8 +165,12 @@ class KantorCabangController extends Controller
         ],
         [
             'nama' => 'Nama Kantor Cabang',
+            'kode_area' => 'Kode Area',
+            'id_kecamatan' => 'Kecamatan',
+            'jenis' => 'Jenis Kantor',
             'alamat' => 'Alamat Kantor Cabang',
-            'phone' => 'Nomor Telepon'
+            'phone' => 'Nomor Telepon',
+            'fax' => 'Fax'
         ]);
         try{
             $updateKantorCabang = KantorCabang::find($id);
@@ -164,6 +181,9 @@ class KantorCabangController extends Controller
             }
             $updateKantorCabang->alamat = $request->get('alamat');
             $updateKantorCabang->phone = $request->get('phone');
+            $updateKantorCabang->kode_area = $request->get('kode_area');
+            $updateKantorCabang->jenis = $request->get('jenis');
+            $updateKantorCabang->fax = $request->get('fax');
 
             $updateKantorCabang->save();
 

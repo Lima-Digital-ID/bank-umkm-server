@@ -40,9 +40,13 @@
                 <thead>
                     <tr>
                         <td>#</td>
+                        <td>Kode Area</td>
                         <td>Nama Kantor Cabang</td>
+                        <td>Jenis</td>
                         <td>Kecamatan</td>
                         <td>Alamat Kantor Cabang</td>
+                        <td>Telp</td>
+                        <td>Fax</td>
                         <td>Aksi</td>
                     </tr>
                 </thead>
@@ -56,9 +60,13 @@
                     @foreach ($kantorCabang as $value)
                         <tr>
                             <td>{{$no}}</td>
+                            <td>{{$value->kode_area}}</td>
                             <td>{{$value->nama}}</td>
+                            <td>{{$value->jenis}}</td>
                             <td>{{$value->nama_kecamatan}}</td>
                             <td>{{$value->alamat}}</td>
+                            <td>{{$value->phone}}</td>
+                            <td>{{$value->fax}}</td>
                             <td>
                                 <div class="form-inline">
                                     <a href="{{ route('kantor-cabang.edit', $value) }}" class="btn btn-success mr-2" title="Edit" data-toggle="tooltip"> <span class="fa fa-pen"></span> </a>

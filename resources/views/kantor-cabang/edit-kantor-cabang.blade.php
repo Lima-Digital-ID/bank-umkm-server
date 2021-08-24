@@ -30,7 +30,7 @@
             <select name="id_kecamatan" id="id_kecamatan" class="form-control select2 {{ $errors->has('id_kecamatan') ? ' is-invalid' : '' }}">
                 <option value="0">--Pilih disini untuk mengganti--</option>
                 @foreach ($kecamatan as $item)
-                    <option value="{{$item->id}}" {{old('id_kecamatan') == $item->id ? 'selected' : ''}} >{{ $item->nama_kabupaten }} - Kec. {{$item->nama}}</option>
+                    <option value="{{$item->id}}" {{old('id_kecamatan', $kantorCabang->kecamatan_id) == $item->id ? 'selected' : ''}} >{{ $item->nama_kabupaten }} - Kec. {{$item->nama}}</option>
                 @endforeach
             </select>
             @if ($errors->has('id_kecamatan'))
@@ -41,6 +41,30 @@
             <br>
 
             <br>
+            <label for="">Jenis</label>
+            <select name="jenis" id="jenis" class="form-control select2 {{ $errors->has('jenis') ? ' is-invalid' : '' }}">
+                <option value="0">--Pilih Jenis Kantor--</option>
+                <option value="Pusat" {{old('jenis', $kantorCabang->jenis) == 'Pusat' ? 'selected' : ''}} >Pusat</option>
+                <option value="Cabang" {{old('jenis', $kantorCabang->jenis) == 'Cabang' ? 'selected' : ''}} >Cabang</option>
+            </select>
+            @if ($errors->has('jenis'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('jenis') }}</strong>
+                </span>
+            @endif
+            <br>
+
+            <br>
+            <label>Kode Area</label>
+            <input type="text" class="form-control {{ $errors->has('kode_area') ? ' is-invalid' : '' }}" value="{{ old('kode_area', $kantorCabang->kode_area) }}" autofocus name="kode_area" placeholder="ex : 03xx">
+            @if ($errors->has('kode_area'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('kode_area') }}</strong>
+                </span>
+            @endif
+
+            <br>
+
             <label>Nama Kantor Cabang</label>
             <input type="text" class="form-control {{ $errors->has('nama') ? ' is-invalid' : '' }}" value="{{ old('nama', $kantorCabang->nama) }}" autofocus name="nama" placeholder="ex : Nama Kantor Cabang">
             @if ($errors->has('nama'))
@@ -66,6 +90,16 @@
             @if ($errors->has('phone'))
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $errors->first('phone') }}</strong>
+                </span>
+            @endif
+
+            <br>
+
+            <label>Fax</label>
+            <input type="text" class="form-control {{ $errors->has('fax') ? ' is-invalid' : '' }}" value="{{ old('fax', $kantorCabang->fax) }}" autofocus name="fax" placeholder="ex : 112xxxx">
+            @if ($errors->has('fax'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('fax') }}</strong>
                 </span>
             @endif
 
