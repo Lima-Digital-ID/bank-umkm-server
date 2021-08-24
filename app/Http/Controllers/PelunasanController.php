@@ -254,10 +254,12 @@ class PelunasanController extends Controller
 
     public function bayarPinjaman($kode_pelunasan)
     {
-        try{
+        try{            
             $asuransi = AsuransiPinjaman::first()->jumlah_asuransi;
+            
+            $pelunasan = Pelunasan::select('pelunasan.*','users.nama')->join('users','users.id','pelunasan.id_user')->where('kode_pelunasan', $kode_pelunasan)->first();
+            // dd($pelunasan);
 
-            $pelunasan = Pelunasan::where('kode_pelunasan', $kode_pelunasan)->first();
             // return $pelunasan;
             $pelunasan->tanggal_pembayaran = date('Y-m-d');
             $pelunasan->metode_pembayaran = 'Kantor Cabang';
@@ -267,6 +269,7 @@ class PelunasanController extends Controller
             $pinjaman = Pinjaman::with('jenisPinjaman')->find($pelunasan->id_pinjaman);
             // return $pinjaman;
             $nasabah = Nasabah::find($pinjaman->id_nasabah);
+
             $hutang = $nasabah->hutang - $pelunasan->nominal_pembayaran;
             $limitPinjaman = $nasabah->temp_limit;
 
@@ -314,12 +317,19 @@ class PelunasanController extends Controller
 
             $newNotification->save();
 
-            return back()->withStatus('Berhasil melakukan pembayaran');
+            return view("pelunasan.print", [
+                'pelunasan' => $pelunasan,
+                'nasabah'   => $nasabah,
+            ]);
+
+            // return back()->withStatus('Berhasil melakukan pembayaran');
         }
         catch(\Exception $e){
+            return $e;
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
+            return $e;
             return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }

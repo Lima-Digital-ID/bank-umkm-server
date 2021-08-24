@@ -120,3 +120,18 @@
             </table>
         </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $("a[href^='http://']").attr("target","_blank");
+
+        $('#paid').on("click", function(){
+
+            $('#modal').modal('hide');
+            window.location.reload();
+
+            window.open(url, '_blank');
+
+        })
+    </script>
+@endpush
