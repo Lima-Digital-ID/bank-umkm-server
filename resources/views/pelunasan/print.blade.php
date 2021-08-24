@@ -20,20 +20,29 @@
                     <br>
                     (031) 5677844
                 </address>
+                <p>
+                    Tanggal Pembayaran <br>
+                    <strong> 26-08-2000 </strong>
+                </p>
+                <p>
+                    Disetujui oleh : Admin
+                </p>
+                <hr>
                 <div class="row mt-4">
-                    <div class="col-md-4">
+                    <div class="col-md-10">
+                        <h5>Pembayaran Pelunasan  </h5>
                         <table>
                             <tr>
                                 <td>
                                     Kode Pelunasan
                                 </td>
                                 <td>
-                                    : {{$pelunasan->kode_pelunasan}}
+                                    : <strong> {{$pelunasan->kode_pelunasan}} </strong>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Nama Nasabah
+                                    Nama
                                 </td>
                                 <td>
                                     : {{$nasabah->nama}}
@@ -47,27 +56,12 @@
                                     : Rp {{number_format($pelunasan->nominal_pembayaran, 2, ',', '.')}}
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Nama Admin
-                                </td>
-                                <td>
-                                    : {{$pelunasan->nama}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Tanggal Pembayaran:
-                                </td>
-                                <td>
-                                    : {{$pelunasan->tanggal_pembayaran}}
-                                </td>
-                            </tr>
+
                         </table>
-                        <br> <br>
+                        <br> <br> <br>
                         <b>Terima kasih</b>
                         <p>
-                            Mohon disimpan, struk ini adalah bukti pembayaran yang sah
+                            Mohon disimpan struk ini adalah bukti pembayaran yang sah.
                         </p>
                     </div>
                 </div>
@@ -89,9 +83,9 @@
     -->
 
     <script>
-        function printStruk() {
-            window.print();
-        }
+        // function printStruk() {
+        //     window.print();
+        // }
     </script>
 
   </body>
