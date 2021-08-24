@@ -7,6 +7,9 @@ use App\Models\Nasabah;
 use App\Models\VerificationCode;
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\EmailVerification;
+use Illuminate\Support\Facades\Mail;
+
 class ApiController extends Controller
 {
     public function registerUser(Request $request)
@@ -119,6 +122,48 @@ class ApiController extends Controller
             $sms = "The message was sent successfully";
         } else {
             $sms = "The message failed with status: " . $sms->getStatus() . "\n";
+        }
+    }
+
+    function generateRandomString() {
+        $length = 60;
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function resendEmail(Request $request)
+    {
+        $status = '';
+        $message = '';
+        try{
+            $new_time = date("Y-m-d H:i:s", strtotime('+5 minutes'));
+
+            $key = $this->generateRandomString();
+            $newEmailVerification = new EmailVerification();
+            $newEmailVerification->id_nasabah = $request->get('id');
+            $newEmailVerification->verification_key = $key;
+            $newEmailVerification->expired_at = $new_time;
+            $newEmailVerification->save();
+
+            Mail::to($request->get('email'))->send(new \App\Mail\EmailVerification($key));
+
+            $status = 'success';
+            $message = 'Silahkan cek email anda.';
+        }
+        catch(\Exception $e){
+            $status = 'failed';
+            $message = 'Gagal mengirim email' . $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+            ], 200);
         }
     }
 
