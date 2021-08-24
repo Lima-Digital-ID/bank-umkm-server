@@ -14,7 +14,7 @@ class AddExpiredAtToEmailVerificationTable extends Migration
     public function up()
     {
         Schema::table('email_verification', function (Blueprint $table) {
-            $table->dateTime('expired_at')->after('used');
+            $table->dateTime('expired_at')->after('used')->nullable();
         });
     }
 
