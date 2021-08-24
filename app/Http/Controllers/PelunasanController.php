@@ -8,6 +8,7 @@ use \App\Models\Pinjaman;
 use \App\Models\AsuransiPinjaman;
 use \App\Models\Nasabah;
 use \App\Models\Notification;
+use \App\Models\JenisPinjaman;
 use Illuminate\Support\Facades\DB;
 
 class PelunasanController extends Controller
@@ -19,7 +20,7 @@ class PelunasanController extends Controller
         $this->param['pageInfo'] = 'List Pelunasan';
         // $this->param['btnRight']['text'] = 'Tambah Data';
         // $this->param['btnRight']['link'] = route('pelunasan.create');
-
+        
         try {
             $keyword = $request->get('keyword');
             // if ($keyword) {
@@ -208,18 +209,22 @@ class PelunasanController extends Controller
     public function pembayaranPinjaman(Request $request)
     {
         try {
-            //  $list = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima');
+            $this->param['jenisPinjaman'] = JenisPinjaman::orderBy('jenis_pinjaman', 'ASC')->get();
+
+             $data = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima');
             
-            // if ($request->get('keyword')) {
-            //     $list->whereHas('nasabah', function($query){
-            //         return $query->where('nama','LIKE', "%$_GET[keyword]%");
-            //     });
-            // }
+            if ($request->get('keyword') != null || $request->get('keyword') != '') {
+                $data = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima')->whereHas('nasabah', function($query){
+                    return $query->where('nama','LIKE', '%'.$_GET['keyword'].'%');
+                });
+            }
+            
+            if ($request->get('id_jenis_pinjaman') != null || $request->get('id_jenis_pinjaman') != '') {
+                $data->where('id_jenis_pinjaman', $request->get('id_jenis_pinjaman'));
+            }
 
-            // $list->orderBy('id')->paginate(10);
-
-            // $this->param['listPembayaran'] = $list;
-            $this->param['listPembayaran'] = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima')->orderBy('id')->paginate(10);
+            $this->param['listPembayaran'] = $data->orderBy('id')->paginate(10);
+            // $this->param['listPembayaran'] = Pinjaman::with('nasabah', 'jenisPinjaman')->where('status', 'Terima')->orderBy('id')->paginate(10);
 
             return view('pelunasan.list-pembayaran', $this->param);
         }

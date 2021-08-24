@@ -18,22 +18,30 @@
             </div>
         @endif
         {{-- </div> --}}
-        <div class="row">
-          {{-- <div class="col-2">
-            <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
-          </div> --}}
-          <div class="col-auto ml-auto">
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
-              <div class="input-group">
-                <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search fa-sm"></i>
-                  </button>
+        <div class="col-6 ml-auto">
+            <form class="" action=""
+                method="get">
+                <div class="input-group">
+                    <div class="col-md-5">
+                        <select class="form-control select2" name="id_jenis_pinjaman" id="id_jenis_pinjaman">
+                            <option value="">Semua Jenis Pinjaman</option>
+                            @foreach ($jenisPinjaman as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ Request::get('id_jenis_pinjaman') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->jenis_pinjaman }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
                 </div>
-              </div>
             </form>
-          </div>
         </div>
         <div class="table-responsive">
             <table class="table table-custom">
@@ -56,7 +64,7 @@
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
-                    @foreach ($listPembayaran as $value)
+                    @forelse ($listPembayaran as $value)
                         <tr>
                             <td>{{$no}}</td>
                             <td>{{$value->nasabah->nama}}</td>
@@ -78,7 +86,11 @@
                         @php
                             $no++
                         @endphp
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="10">Tidak ada data.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
             {{$listPembayaran->appends(Request::all())->links('vendor.pagination.custom')}}
