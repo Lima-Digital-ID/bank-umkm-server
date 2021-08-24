@@ -43,8 +43,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('laporan/excel', 'LaporanController@export')->name('export-excel');
     Route::get('laporan/chart', 'ChartLaporanController@index');
 
-    Route::view("print","pelunasan.print");
-
     Route::prefix('master-scoring')->group(function () {
         Route::resource('kategori-kriteria', 'KategoriKriteriaController');
         Route::resource('kriteria', 'KriteriaController');
