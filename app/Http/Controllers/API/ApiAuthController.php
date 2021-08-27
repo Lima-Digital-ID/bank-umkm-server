@@ -261,19 +261,6 @@ class ApiAuthController extends Controller
      
                      $editPenjamin->save();
                      // END Hubungan 2
-
-                    // Hubungan 3
-                    $editPenjamin = Penjamin::where('id_nasabah', $id_nasabah)->orderBy('id', 'ASC')->get()[2];
-                    $editPenjamin->id_nasabah = $id_nasabah;
-                    $editPenjamin->hubungan = $request->get('hubungan3');
-                    $editPenjamin->nama = $request->get('nama_penjamin3');
-                    $editPenjamin->nik = $request->get('nik_penjamin3');
-                    $editPenjamin->no_hp = $request->get('no_hp_penjamin3');
-                    $editPenjamin->alamat = $request->get('alamat_penjamin3');
-                    $editPenjamin->updated_at = time();
-    
-                    $editPenjamin->save();
-                    // END Hubungan 3
                 }
                 else {
                     $newBank = new InformasiBank;
@@ -425,8 +412,8 @@ class ApiAuthController extends Controller
             $message = 'Verifikasi email gagal.'. $e->getMessage();
         }
         finally{
-            // return $message;
-            return Redirect::to('http://127.0.0.1:8080/masuk')->with($status)->with($message);
+            // return Redirect::to('http://127.0.0.1:8080/masuk')->with($status)->with($message);
+            return view('email.verification-success');
         }
     }
 }

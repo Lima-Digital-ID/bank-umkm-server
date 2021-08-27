@@ -153,11 +153,11 @@ class ApiController extends Controller
             Mail::to($request->get('email'))->send(new \App\Mail\EmailVerification($key));
 
             $status = 'success';
-            $message = 'Silahkan cek email anda.';
+            $message = 'Silahkan cek email anda. ';
         }
         catch(\Exception $e){
             $status = 'failed';
-            $message = 'Gagal mengirim email' . $e->getMessage();
+            $message = 'Gagal mengirim email. ' . $e->getMessage();
         }
         finally{
             return response()->json([
