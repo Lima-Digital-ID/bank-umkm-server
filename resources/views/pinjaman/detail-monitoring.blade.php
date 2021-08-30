@@ -209,7 +209,7 @@
                                             </p>
                                         @elseif ($detail->status_pencairan == 'Terima')
                                             <p>
-                                                Pencairan pinjaman dilakukan di kantor cabang {{$detail->kecamatan}} oleh {{$verificatorPencairan->nama}}
+                                                Pencairan pinjaman dilakukan di kantor cabang {{$detail->kecamatan}} oleh {{$detail->nama_staff}}
                                             </p>
                                         @endif
                                         <span class="vertical-timeline-element-date">

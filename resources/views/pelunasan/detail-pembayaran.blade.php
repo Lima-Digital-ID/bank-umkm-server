@@ -71,7 +71,8 @@
                       <td>Kode Pelunasan</td>
                       <td>Jatuh Tempo</td>
                       <td>Jumlah Tagihan</td>
-                      <td>Pembayaran</td>
+                      <td>Keterlambatan</td>
+                      <td>Status Pembayaran</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,29 +81,31 @@
                   @endphp
                 @foreach ($pinjaman->pelunasan as $item)
                 @php         
-                      //jika belum bayar dan terlambat dari jatuh tempo           
-                      if ($item->jatuh_tempo_cicilan < $date && $item->status == 'Belum') {
-                        # code...
-                        $keterlambatan = date_diff(date_create($date),date_create($item->jatuh_tempo_cicilan), true);
-                        $keterlambatan = $keterlambatan->format("%a");
-                        $denda = $keterlambatan * 1000;
-                      }
-                      // jika sudah terbayar dan terlambat
-                      elseif($item->jatuh_tempo_cicilan < $item->tanggal_pembayaran && $item->status == 'Lunas'){
-                        $keterlambatan = date_diff(date_create($item->tanggal_pembayaran),date_create($item->jatuh_tempo_cicilan), true);
-                        $keterlambatan = $keterlambatan->format("%a");
-                        $denda = $keterlambatan * 1000;
-                      }
-                      else{
-                        $keterlambatan = 0;
-                        $denda = 0;
-                      }
-                  @endphp
+                  $status = '';
+                  //jika belum bayar dan terlambat dari jatuh tempo           
+                  if (strtotime($item->jatuh_tempo_cicilan) < strtotime($date) && $item->status == 'Belum') {
+                    # code...
+                    $keterlambatan = date_diff(date_create($date),date_create($item->jatuh_tempo_cicilan), true);
+                    $keterlambatan = $keterlambatan->format("%a");
+                    $denda = $keterlambatan * 1000;
+                  }
+                  // jika sudah terbayar dan terlambat
+                  elseif(strtotime($item->jatuh_tempo_cicilan) < strtotime($item->tanggal_pembayaran) && $item->status == 'Lunas'){
+                    $keterlambatan = date_diff(date_create($item->tanggal_pembayaran),date_create($item->jatuh_tempo_cicilan), true);
+                    $keterlambatan = $keterlambatan->format("%a");
+                    $denda = $keterlambatan * 1000;
+                  }
+                  else{
+                    $keterlambatan = 0;
+                    $denda = 0;
+                  }
+                @endphp
                   <tr>
                     <td>{{$item->cicilan_ke}}</td>
                     <td>{{$item->kode_pelunasan}}</td>
                     <td>{{date('d-m-Y', strtotime($item->jatuh_tempo_cicilan))}}</td>
                     <td>{{'Rp' . number_format(($item->nominal_pembayaran + $item->bunga), 2, ',', '.')}}</td>
+                    <td>{{$item->jatuh_tempo_cicilan < $date && $item->status == 'Belum' ? $keterlambatan->format("%R%a hari") : $keterlambatan . ' hari'}}</td>
                     <td>
                         {{--  {{$item->status == 'Belum' ? $item->status . ' Terbayar' : $item->status}}  --}}
                         {{--  {{ $item->status   }}  --}}

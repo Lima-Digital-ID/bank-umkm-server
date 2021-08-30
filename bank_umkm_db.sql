@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 12, 2021 at 10:09 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.7
+-- Generation Time: Aug 30, 2021 at 07:44 PM
+-- Server version: 10.4.13-MariaDB
+-- PHP Version: 7.4.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,6 +51,7 @@ CREATE TABLE `data_tambahan_nasabah` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_nasabah` int(10) UNSIGNED NOT NULL,
   `tempat_tinggal` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kartu_keluarga` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `scan_npwp` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ktp_suami` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ktp_istri` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -71,9 +72,26 @@ CREATE TABLE `data_tambahan_nasabah` (
 -- Dumping data for table `data_tambahan_nasabah`
 --
 
-INSERT INTO `data_tambahan_nasabah` (`id`, `id_nasabah`, `tempat_tinggal`, `scan_npwp`, `ktp_suami`, `ktp_istri`, `surat_nikah`, `bpkb`, `domisili_usaha`, `foto_agunan`, `npwp_usaha`, `nib`, `akta`, `scan_keuangan`, `created_at`, `updated_at`, `scan_jaminan`) VALUES
-(1, 1, 'Kos', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_npwp.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_ktp_suami.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_ktp_istri.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_surat_nikah.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_bpkb.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_domisili_usaha.jpg', NULL, NULL, NULL, NULL, NULL, '2021-07-05 13:31:43', '2021-07-05 13:31:43', NULL),
-(2, 2, 'Kos', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_npwp.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_ktp_suami.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_ktp_istri.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_surat_nikah.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_bpkb.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_domisili_usaha.jpg', NULL, NULL, NULL, NULL, NULL, '2021-07-13 13:44:08', '2021-07-13 13:44:08', NULL);
+INSERT INTO `data_tambahan_nasabah` (`id`, `id_nasabah`, `tempat_tinggal`, `kartu_keluarga`, `scan_npwp`, `ktp_suami`, `ktp_istri`, `surat_nikah`, `bpkb`, `domisili_usaha`, `foto_agunan`, `npwp_usaha`, `nib`, `akta`, `scan_keuangan`, `created_at`, `updated_at`, `scan_jaminan`) VALUES
+(1, 1, 'Kos', NULL, 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_npwp.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_ktp_suami.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_ktp_istri.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_surat_nikah.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_bpkb.jpg', 'upload/nasabah/3511185656000011/data-tambahan/202107052031431_domisili_usaha.jpg', NULL, NULL, NULL, NULL, NULL, '2021-07-05 13:31:43', '2021-07-05 13:31:43', NULL),
+(2, 2, 'Kos', NULL, 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_npwp.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_ktp_suami.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_ktp_istri.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_surat_nikah.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_bpkb.jpg', 'upload/nasabah/3511186757100001/data-tambahan/202107132044082_domisili_usaha.jpg', NULL, NULL, NULL, NULL, NULL, '2021-07-13 13:44:08', '2021-07-13 13:44:08', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_verification`
+--
+
+CREATE TABLE `email_verification` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `id_nasabah` int(10) UNSIGNED DEFAULT NULL,
+  `verification_key` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_expired` tinyint(1) DEFAULT 0,
+  `used` tinyint(1) DEFAULT 0,
+  `expired_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -148,10 +166,13 @@ INSERT INTO `jenis_pinjaman` (`id`, `jenis_pinjaman`, `limit_pinjaman`, `created
 
 CREATE TABLE `kantor_cabang` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `kode_area` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nama` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `kecamatan_id` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(13) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `phone` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `fax` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -160,27 +181,39 @@ CREATE TABLE `kantor_cabang` (
 -- Dumping data for table `kantor_cabang`
 --
 
-INSERT INTO `kantor_cabang` (`id`, `nama`, `kecamatan_id`, `alamat`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 'BANK UMKM Jawa Timur', '3507160', 'Jl. Kawi, Banurejo, Kepanjen, Kec. Kepanjen, Malang, Jawa Timur 65163', '(0341) 394466', NULL, NULL),
-(2, 'BANK UMKM Jawa Timur', '3578110', 'Jl. Ciliwung No.11, Darmo, Kec. Wonokromo, Kota SBY, Jawa Timur 60241', '(031) 5677844', NULL, NULL),
-(3, 'BANK UMKM Jawa Timur', '3508060', 'Jalan Veteran, Kepuharjo, Kecamatan Lumajang, Kepuharjo, Kec. Lumajang, Kabupaten Lumajang, Jawa Timur 67316', '-', NULL, NULL),
-(4, 'BANK UMKM Jawa Timur', '3578170', 'Sawahan, Kec. Sawahan, Kota SBY, Jawa Timur 60251', '-', NULL, NULL),
-(5, 'BANK UMKM Jawa Timur', '3509210', 'kav, Jl. Dharmawangsa No.14, Darungan, Jubung, Kec. Sukorambi, Kabupaten Jember, Jawa Timur 68151', '-', NULL, NULL),
-(6, 'BANK UMKM Jawa Timur', '3507300', 'Jl. Raya Jetis, Jetis, Mulyoagung, Kec. Dau, Malang, Jawa Timur 65151', '(0341) 461961', NULL, NULL),
-(7, 'BANK UMKM Jawa Timur', '3512100', 'Jl. Wijaya Kusuma No.82A, RT.04/RW.01, Parse, Dawuhan, Kec. Situbondo, Kabupaten Situbondo, Jawa Timur 68311', '(0338) 678810', NULL, NULL),
-(8, 'BANK UMKM Jawa Timur', '3517130', 'Jalan Dokter Sutomo No.7, Kepanjen, Kec. Jombang, Kabupaten Jombang, Jawa Timur 61419', '(0321) 855056', NULL, NULL),
-(9, 'BANK UMKM Jawa Timur', '3573040', 'Jl. R. Tumenggung Suryo No.Kav. 7, Bunulrejo, Kec. Blimbing, Kota Malang, Jawa Timur 65123', '(0341) 405818', NULL, NULL),
-(10, 'BANK UMKM Jawa Timur', '3578070', 'Jl. Rungkut Alang-Alang No.73, Kali Rungkut, Kec. Rungkut, Kota SBY, Jawa Timur 60293', '(031) 8709640', NULL, NULL),
-(11, 'BANK UMKM Jawa Timur', '3522160', 'Kadipaten, Sumbang, Kec. Bojonegoro, Kabupaten Bojonegoro, Jawa Timur 62115', '(0353) 311122', NULL, NULL),
-(12, 'BANK UMKM Jawa Timur', '3510180', 'Singonegaran, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68415', '-', NULL, NULL),
-(13, 'BANK UMKM Jawa Timur', '3574031', 'Jl. KH. Hasan Genggong No.126, Kebonsari Wetan, Kec. Kanigaran, Kota Probolinggo, Jawa Timur 67214', '(0323) 325228', NULL, NULL),
-(14, 'BANK UMKM Jawa Timur', '3518140', 'Jl. Merdeka No.2, Mangundikaran, Mangun Dikaran, Kec. Nganjuk, Kabupaten Nganjuk, Jawa Timur 64419', '(0358) 323152', NULL, NULL),
-(15, 'BANK UMKM Jawa Timur', '3504110', 'Jalan Ki Mangun Surkoro, Dusun Krajan, Beji, Kec. Boyolangu, Kabupaten Tulungagung, Jawa Timur 66233', '(0355) 328436', NULL, NULL),
-(16, 'BANK UMKM Jawa Timur', '3510070', 'Dusun Kp. Baru, Jajag, Kec. Gambiran, Kabupaten Banyuwangi, Jawa Timur 68486', '(0333) 394037', NULL, NULL),
-(17, 'BANK UMKM Jawa Timur', '3528050', 'Jl. Jokotole No. 114, Pademawu, Murleke, Barurambat Tim., Kec. Pamekasan, Kabupaten Pamekasan, Jawa Timur 69317', '(0324) 334726', NULL, NULL),
-(18, 'BANK UMKM Jawa Timur', '3524130', 'Jl. Dokter Wahidin Sudiro Husodo No.96, Kendaruan, Banjarmendalan, Kec. Lamongan, Kabupaten Lamongan, Jawa Timur 62212', '(0322) 324920', NULL, NULL),
-(19, 'BANK UMKM Jawa Timur', '3525100', 'Jl. Jaksa Agung Suprapto No.8, Tlogobendung, Bedilan, Kec. Gresik, Kabupaten Gresik, Jawa Timur 61111', '(031) 3982985', NULL, NULL),
-(20, 'BANK UMKM Jawa Timur', '3571010', 'Jl. Kawi No.4 B, Mojoroto, Kec. Mojoroto, Kediri, Jawa Timur 64112', '(0354) 773093', NULL, NULL);
+INSERT INTO `kantor_cabang` (`id`, `kode_area`, `nama`, `jenis`, `kecamatan_id`, `alamat`, `phone`, `fax`, `created_at`, `updated_at`) VALUES
+(1, '031', 'Surabaya', 'Pusat', '3578110', 'Jl. Ciliwung No. 11, Surabaya', '5677844, 5688542-45', '5661099', '2021-08-24 00:46:39', '2021-08-24 01:02:50'),
+(2, '0324', 'Pamekasan', 'Cabang', '3528020', 'Jl. Jokotole No. 114, Pamekasan', '334726', '334725', '2021-08-24 01:07:56', '2021-08-24 01:07:56'),
+(3, '031', 'Bangkalan', 'Cabang', '3526110', 'Jl. Teuku Umar No. 33 A,  Bangkalan', '3099760', '3061490', '2021-08-24 01:09:20', '2021-08-24 01:09:20'),
+(4, '0333', 'Banyuwangi', 'Cabang', '3510180', 'Jl. Letkol Istiqlah No. 9, Banyuwangi', '411585', '421061', '2021-08-24 01:11:12', '2021-08-24 01:11:12'),
+(5, '0334', 'Lumajang', 'Cabang', '3508060', 'Jl. Veteran No. 18 B,  Lumajang', '894101', '890400', '2021-08-24 01:12:25', '2021-08-24 01:12:25'),
+(6, '0335', 'Probolinggo', 'Cabang', '3574031', 'Jl. KH. Hasan Genggong No. 244, Kebonsari Wetan, Kec. Kanigaran, Probolinggo', '432774', '436484', '2021-08-24 01:13:30', '2021-08-24 01:13:30'),
+(7, '0343', 'Pasuruan', 'Cabang', '3575020', 'Jl. KH. Ahmad Dahlan No. 10,  Pasuruan', '431530', '417600', '2021-08-24 01:40:02', '2021-08-24 01:40:02'),
+(8, '0341', 'Malang', 'Cabang', '3573040', 'Jl. R. Tumenggung Suryo No. 35 Kav. 7,  Malang', '419325', '405818', '2021-08-24 01:40:49', '2021-08-24 01:40:49'),
+(9, '0351', 'Ngawi', 'Cabang', '3521110', 'Jl. S. Parman No. 8, Ngawi', '749778', '749419', '2021-08-24 01:41:36', '2021-08-24 01:41:36'),
+(10, '0342', 'Blitar', 'Cabang', '3572030', 'Jl. Kalimantan No. 59, Sananwetan - Blitar', '816369', '816866', '2021-08-24 01:42:24', '2021-08-24 01:42:24'),
+(11, '0354', 'Kediri', 'Cabang', '3571030', 'Jl. Kilisuci No. 81 C-D, RT. 28 / RW. 6, Kel. Singonegaran, Kec. Pesantren - Kediri', '2892410', '2893413', '2021-08-24 01:43:09', '2021-08-24 01:43:09'),
+(12, '0321', 'Mojokerto', 'Cabang', '3576010', 'Jl. Majapahit No. 381, Prajurit Kulon - Mojokerto', '396422', '323228', '2021-08-24 01:44:12', '2021-08-24 01:44:12'),
+(13, '0321', 'Jombang', 'Cabang', '3517180', 'Jl. Dr. Sutomo No. 7 Ploso, Jombang', '855056', '855057', '2021-08-24 01:48:10', '2021-08-24 01:48:10'),
+(14, '0358', 'Nganjuk', 'Cabang', '3518140', 'Jl. Merdeka 2 Kav. 2 B, Kec. Nganjuk, Kab. Nganjuk', '323152', '325665', '2021-08-24 01:48:57', '2021-08-24 01:48:57'),
+(15, '0351', 'Madiun', 'Cabang', '3577030', 'Jl. Parikesit No. 6, Madiun', '481197', '481196', '2021-08-24 01:49:45', '2021-08-24 01:49:45'),
+(16, '0355', 'Tulungagung', 'Cabang', '3504110', 'Jl. Ki Mangun Sarkoro Vila Satwika No. A 1', '328436', '333354', '2021-08-24 01:51:29', '2021-08-24 01:51:29'),
+(17, '0355', 'Trenggalek', 'Cabang', '3503110', 'JL. Jaksa Agung Suprapto No. 17, Trenggalek', '792831', '796695', '2021-08-24 01:52:27', '2021-08-24 01:52:27'),
+(18, '0352', 'Ponorogo', 'Cabang', '3502170', 'JL. MH. Thamrin No. 51, Ponorogo', '487475', '484063', '2021-08-24 01:53:14', '2021-08-24 01:53:14'),
+(19, '031', 'Gresik', 'Cabang', '3525100', 'Jl. Jaksa Agung Suprapto No. 8,  Gresik', '3982985', '3982983', '2021-08-24 01:54:09', '2021-08-24 01:54:09'),
+(20, '0322', 'Lamongan', 'Cabang', '3524130', 'Jl. Wahidin Sudiro Husodo No. 96, Banjar Mendalan - Lamongan', '324920', '318921', '2021-08-24 01:54:50', '2021-08-24 01:54:50'),
+(21, '0351', 'Magetan', 'Cabang', '3520040', 'Jl. Raya Gorang - gareng, Maospati, Magetan', '439960', '438407', '2021-08-24 01:56:16', '2021-08-24 01:56:16'),
+(22, '0357', 'Pacitan', 'Cabang', '3501040', 'Jl. Tentara Pelajar No. 165,  Pacitan', '886042', '886043', '2021-08-24 01:56:59', '2021-08-24 01:56:59'),
+(23, '031', 'Sidoarjo', 'Cabang', '3515070', 'Jl. Raya Gelam No. 49, Kec. Candi - Sidoarjo', '8923886', '8062076', '2021-08-24 01:57:34', '2021-08-24 01:57:34'),
+(24, '0331', 'Jember', 'Cabang', '3509210', 'Jl. Darmawangsa Ruko Graha Wijaya Kav. 14, Kec. Sukorambi - Jember', '484200', '410083', '2021-08-24 01:58:21', '2021-08-24 01:58:21'),
+(25, '0356', 'Tuban', 'Cabang', '3523130', 'Jl. Pramuka No. 10 A,  Tuban', '323331', '320110', '2021-08-24 01:59:43', '2021-08-24 01:59:43'),
+(26, '0341', 'Batu', 'Cabang', '3579010', 'Jl. A Yani nomor 4, Kel. Ngaglik, Kec. Batu, Kota Batu', '594414', '594415', '2021-08-24 02:00:19', '2021-08-24 02:00:19'),
+(27, '0338', 'Situbondo', 'Cabang', '3512100', 'Jl. Wijaya Kusuma 82 A RT.04 RW.01 Des/Kel. Dawuhan Kec/Kab. Situbondo.', '678810', '674225', '2021-08-24 02:01:09', '2021-08-24 02:01:09'),
+(28, '0353', 'Bojonegoro', 'Cabang', '3522160', 'Jl. Teuku Umar No. 30, Bojonegoro', '311122', '311500', '2021-08-24 02:01:52', '2021-08-24 02:01:52'),
+(29, '0332', 'Bondowoso', 'Cabang', '3511100', 'Jl. Kyai Haji Wahid Hasyim Nomor 168, Ruko Crown Plaza Kavling 3 Bondowoso, Kab. Bondowoso', '420430', '420431', '2021-08-24 02:02:35', '2021-08-24 02:02:35'),
+(30, '0328', 'Sumenep', 'Cabang', '3529070', 'Jl. Trunojoyo, Desa Kolor, Kec Kota Sumenep, Kab. Sumenep (Komplek Ruko Arya Wiraraja)', '664642', '664643', '2021-08-24 02:04:24', '2021-08-24 02:04:24'),
+(31, '0341', 'Kepanjen', 'Cabang', '3507160', 'Jl. Kawi, Kec. Kepanjen, Kab. Malang (Ruko Kepanjen City)', '394466', '398815', '2021-08-24 02:05:33', '2021-08-24 02:05:33'),
+(32, '0323', 'Sampang', 'Cabang', '3527030', 'Jl. Rajawali No. 48, Kel. Karangdalem, Kec. Sampang, Kab. Sampang', '325228', '325229', '2021-08-24 02:06:11', '2021-08-24 02:06:11');
 
 -- --------------------------------------------------------
 
@@ -373,7 +406,21 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (83, '2021_07_26_145759_drop_surat_domisili_on_data_tambahan_nasabah_table', 6),
 (84, '2021_07_26_210202_add_scan_jaminan_to_data_tambahan_nasabah_table', 6),
 (85, '2021_07_29_194834_add_scan_keuangan_to_data_tambahan_nasabah_table', 7),
-(86, '2021_07_29_195024_add_scan_keuangan_to_syarat_pinjaman_umroh_table', 7);
+(86, '2021_07_29_195024_add_scan_keuangan_to_syarat_pinjaman_umroh_table', 7),
+(87, '2021_08_08_221154_add_kode_pelunasan_to_pelunasan_table', 8),
+(88, '2021_08_11_104528_add_pending_to_status_on_pelunasan_table', 8),
+(89, '2021_08_17_213256_add_field_email_verified_at_to_nasabah_table', 8),
+(90, '2021_08_17_220124_create_email_verification_table', 8),
+(91, '2021_08_17_224251_add_ibu_kandung_to_nasabah_table', 8),
+(92, '2021_08_20_131610_add_nip_to_nasabah_table', 8),
+(93, '2021_08_21_213245_add_kartu_keluarga_to_data_tambahan_nasabah', 8),
+(94, '2021_08_21_224729_add_used_to_email_verification_table', 8),
+(95, '2021_08_21_225825_add_expired_at_to_email_verification_table', 8),
+(96, '2021_08_21_235927_add_id_staff_pencairan_at_pinjaman', 8),
+(97, '2021_08_22_002145_add_tanggal_pencairan_at_pinjaman_table', 8),
+(98, '2021_08_23_235151_add_id_user_to_pelunasan_table', 8),
+(99, '2021_08_24_130215_add_fields_to_kantor_cabang_table', 8),
+(100, '2021_08_24_144029_change_phone_length_on_kantor_cabang_table', 8);
 
 -- --------------------------------------------------------
 
@@ -394,6 +441,8 @@ CREATE TABLE `nasabah` (
   `alamat_perusahaan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `kontak_perusahaan` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nik` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nip` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ibu_kandung` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `no_hp` varchar(13) COLLATE utf8mb4_unicode_ci NOT NULL,
   `kecamatan_id` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_kantor_cabang` bigint(20) UNSIGNED DEFAULT NULL,
@@ -419,18 +468,19 @@ CREATE TABLE `nasabah` (
   `alasan_penolakan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `token` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `nasabah`
 --
 
-INSERT INTO `nasabah` (`id`, `nama`, `limit_pinjaman`, `temp_limit`, `tanggal_lahir`, `tempat_lahir`, `jenis_kelamin`, `pekerjaan`, `jabatan`, `alamat_perusahaan`, `kontak_perusahaan`, `nik`, `no_hp`, `kecamatan_id`, `id_kantor_cabang`, `alamat`, `foto_profil`, `scan_ktp`, `selfie_ktp`, `npwp`, `surat_nikah`, `surat_jaminan`, `surat_domisili_usaha`, `saldo`, `hutang`, `email`, `username`, `password`, `id_tipe_nasabah`, `is_verified`, `skor`, `status_nikah`, `syarat_pinjaman_umroh`, `kelengkapan_data`, `alasan_penolakan`, `token`, `created_at`, `updated_at`) VALUES
-(1, 'Sinta Rozani', 1290000, 0, '1991-07-24', 'Bondowoso', 'Perempuan', 'Pengusaha', 'Direktur', 'Bondowoso', '031452121', '3511185656000011', '081554556223', '3511100', 7, 'Bondowoso', NULL, 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_dengan_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 0, 0, 'sinta@gmail.com', NULL, '$2y$10$va8ShlVkfvlV6tBU4wN/2Ohd0h5lQNJ5/.Ji8LPFJPntz3PlBL02u', NULL, 1, 86, 'Lainnya', 1, 1, '', NULL, '2021-07-04 16:37:52', '2021-07-13 09:03:12'),
-(2, 'Tegar Shallahudin', 1000000, 0, '1991-07-09', 'Bondowoso', 'Lainnya', 'PNS', 'PNS', 'Bondowoso', '032152145', '3511186757100001', '087554225332', '3512020', 7, 'Situbondo', 'upload/nasabah/3511186757100001/profile/202108011442512_foto_profil.jfif', 'upload/nasabah/3511186757100001/202107132001322_ktp.jpg', 'upload/nasabah/3511186757100001/202107132001322_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 0, 'tegar@gmail.com', NULL, '$2y$10$171sgZ3KgbMAjUSrWFOhMu.r88E9T2zDanFWPRtQSuU7kcc0tz4eS', NULL, 1, 66, 'Lainnya', 0, 0, '', NULL, '2021-07-04 18:26:08', '2021-08-12 14:59:07'),
-(3, 'dafrin maulana', 780000, 0, '2001-03-01', 'Lamongan', 'Lainnya', 'freelance', 'leadership', 'bondowoso', '085853656272', '3511110301010004', '082335623028', '3511100', 7, 'jln.pamnjaitan', NULL, 'upload/nasabah/3511110301010004/202107191327293_ktp.jpg', 'upload/nasabah/3511110301010004/202107191327293_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 0, 'masapin68@gmail.com', NULL, '$2y$10$5WbtrY.xsST5D55i/kpQ0e6tAjVZ8ayMZO5izzm7FyGqQtMhO0buC', NULL, 1, 52, 'Lainnya', 0, 0, '', NULL, '2021-07-19 06:08:26', '2021-07-28 14:44:57'),
-(7, 'Dafrin Maulana', 0, 0, '1998-05-10', 'Bondowoso', 'Lainnya', 'Developer', 'Developer', 'Bondowoso', '102934234', '41230192830219', '082335623028', '3511100', 7, 'Bondowoso', NULL, 'upload/nasabah/41230192830219/202108121248347_ktp.jpg', 'upload/nasabah/41230192830219/202108121248347_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 609134, 'dafrinm@gmail.com', NULL, '$2y$10$171sgZ3KgbMAjUSrWFOhMu.r88E9T2zDanFWPRtQSuU7kcc0tz4eS', NULL, 1, 62, 'Lainnya', 0, 0, '', NULL, '2021-07-29 17:00:32', '2021-08-12 06:25:08');
+INSERT INTO `nasabah` (`id`, `nama`, `limit_pinjaman`, `temp_limit`, `tanggal_lahir`, `tempat_lahir`, `jenis_kelamin`, `pekerjaan`, `jabatan`, `alamat_perusahaan`, `kontak_perusahaan`, `nik`, `nip`, `ibu_kandung`, `no_hp`, `kecamatan_id`, `id_kantor_cabang`, `alamat`, `foto_profil`, `scan_ktp`, `selfie_ktp`, `npwp`, `surat_nikah`, `surat_jaminan`, `surat_domisili_usaha`, `saldo`, `hutang`, `email`, `username`, `password`, `id_tipe_nasabah`, `is_verified`, `skor`, `status_nikah`, `syarat_pinjaman_umroh`, `kelengkapan_data`, `alasan_penolakan`, `token`, `created_at`, `updated_at`, `email_verified_at`) VALUES
+(1, 'Sinta Rozani', 1290000, 0, '1991-07-24', 'Bondowoso', 'Perempuan', 'Pengusaha', 'Direktur', 'Bondowoso', '031452121', '3511185656000011', NULL, NULL, '081554556223', '3511100', 7, 'Bondowoso', NULL, 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_dengan_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 'upload/nasabah/3511185656000011/202107042342451_ktp.jpg', 0, 0, 'sinta@gmail.com', NULL, '$2y$10$va8ShlVkfvlV6tBU4wN/2Ohd0h5lQNJ5/.Ji8LPFJPntz3PlBL02u', NULL, 1, 86, 'Lainnya', 1, 1, '', NULL, '2021-07-04 16:37:52', '2021-07-13 09:03:12', NULL),
+(2, 'Tegar Shallahudin', 1000000, 0, '1991-07-09', 'Bondowoso', 'Lainnya', 'PNS', 'PNS', 'Bondowoso', '032152145', '3511186757100001', NULL, NULL, '087554225332', '3512020', 7, 'Situbondo', 'upload/nasabah/3511186757100001/profile/202108011442512_foto_profil.jfif', 'upload/nasabah/3511186757100001/202107132001322_ktp.jpg', 'upload/nasabah/3511186757100001/202107132001322_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 0, 'tegar@gmail.com', NULL, '$2y$10$171sgZ3KgbMAjUSrWFOhMu.r88E9T2zDanFWPRtQSuU7kcc0tz4eS', NULL, 1, 66, 'Lainnya', 0, 0, '', NULL, '2021-07-04 18:26:08', '2021-08-12 14:59:07', NULL),
+(3, 'dafrin maulana', 780000, 0, '2001-03-01', 'Lamongan', 'Lainnya', 'freelance', 'leadership', 'bondowoso', '085853656272', '3511110301010004', NULL, NULL, '082335623028', '3511100', 7, 'jln.pamnjaitan', NULL, 'upload/nasabah/3511110301010004/202107191327293_ktp.jpg', 'upload/nasabah/3511110301010004/202107191327293_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 0, 'masapin68@gmail.com', NULL, '$2y$10$5WbtrY.xsST5D55i/kpQ0e6tAjVZ8ayMZO5izzm7FyGqQtMhO0buC', NULL, 1, 52, 'Lainnya', 0, 0, '', NULL, '2021-07-19 06:08:26', '2021-07-28 14:44:57', NULL),
+(7, 'Dafrin Maulana', 0, 0, '1998-05-10', 'Bondowoso', 'Lainnya', 'Developer', 'Developer', 'Bondowoso', '102934234', '41230192830219', NULL, NULL, '082335623028', '3511100', 7, 'Bondowoso', NULL, 'upload/nasabah/41230192830219/202108121248347_ktp.jpg', 'upload/nasabah/41230192830219/202108121248347_dengan_ktp.jpg', NULL, NULL, NULL, NULL, 0, 609134, 'dafrinm@gmail.com', NULL, '$2y$10$171sgZ3KgbMAjUSrWFOhMu.r88E9T2zDanFWPRtQSuU7kcc0tz4eS', NULL, 1, 62, 'Lainnya', 0, 0, '', NULL, '2021-07-29 17:00:32', '2021-08-12 06:25:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -746,6 +796,7 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `pelunasan` (
   `id` int(10) UNSIGNED NOT NULL,
   `kode_pelunasan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_user` int(10) UNSIGNED DEFAULT NULL,
   `id_pinjaman` int(10) UNSIGNED NOT NULL,
   `jatuh_tempo_cicilan` date NOT NULL,
   `nominal_pembayaran` double(11,2) UNSIGNED NOT NULL,
@@ -762,26 +813,26 @@ CREATE TABLE `pelunasan` (
 -- Dumping data for table `pelunasan`
 --
 
-INSERT INTO `pelunasan` (`id`, `kode_pelunasan`, `id_pinjaman`, `jatuh_tempo_cicilan`, `nominal_pembayaran`, `bunga`, `tanggal_pembayaran`, `cicilan_ke`, `metode_pembayaran`, `status`, `created_at`, `updated_at`) VALUES
-(1, '', 3, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-04 17:42:21', '2021-07-04 18:03:50'),
-(2, '', 3, '2021-09-05', 0.00, 0.00, '2021-07-05', 2, 'Bank UMKM', 'Lunas', '2021-07-04 17:42:21', '2021-07-04 18:16:22'),
-(3, '', 4, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-04 18:17:53', '2021-07-04 18:18:42'),
-(4, '', 5, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-05 15:00:11', '2021-07-05 15:09:00'),
-(5, '', 5, '2021-09-05', 0.00, 0.00, '2021-07-05', 2, 'Bank UMKM', 'Lunas', '2021-07-05 15:00:11', '2021-07-05 15:09:15'),
-(8, '', 10, '2021-09-01', 489550.00, 44550.00, '2021-08-01', 1, 'Bank UMKM', 'Lunas', '2021-08-01 08:12:20', '2021-08-01 09:40:17'),
-(9, '', 10, '2021-10-01', 489550.00, 44550.00, '2021-08-01', 2, 'Bank UMKM', 'Lunas', '2021-08-01 08:12:20', '2021-08-01 09:51:04'),
-(10, '', 11, '2021-09-01', 326367.00, 29700.00, '2021-08-01', 1, 'Bank UMKM', 'Lunas', '2021-08-01 09:52:00', '2021-08-01 09:58:39'),
-(11, '', 11, '2021-10-01', 326367.00, 29700.00, NULL, 2, NULL, 'Belum', '2021-08-01 09:52:00', '2021-08-01 09:52:00'),
-(12, '', 11, '2021-11-01', 326367.00, 29700.00, NULL, 3, NULL, 'Belum', '2021-08-01 09:52:00', '2021-08-01 09:52:00'),
-(13, 'INV2021081200001', 12, '2021-09-12', 304567.00, 0.00, '2021-08-12', 1, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 06:25:08'),
-(14, 'INV2021081200002', 12, '2021-10-12', 304567.00, 0.00, '2021-08-12', 2, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 05:58:49'),
-(15, 'INV2021081200003', 12, '2021-11-12', 304567.00, 0.00, '2021-08-12', 3, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 05:58:49'),
-(16, 'INV2021081200004', 14, '2021-09-12', 545000.00, 45000.00, NULL, 1, NULL, 'Belum', '2021-08-12 14:40:36', '2021-08-12 14:40:36'),
-(17, 'INV2021081200005', 14, '2021-10-12', 545000.00, 45000.00, NULL, 2, NULL, 'Belum', '2021-08-12 14:40:36', '2021-08-12 14:40:36'),
-(18, 'INV2021081200006', 14, '2021-09-12', 545000.00, 0.00, NULL, 1, NULL, 'Belum', '2021-08-12 14:53:30', '2021-08-12 14:53:30'),
-(19, 'INV2021081200007', 14, '2021-10-12', 545000.00, 0.00, NULL, 2, NULL, 'Belum', '2021-08-12 14:53:30', '2021-08-12 14:53:30'),
-(20, 'INV2021081200008', 14, '2021-09-12', 545000.00, 45000.00, NULL, 1, 'bank_transfer', 'Lunas', '2021-08-12 14:59:07', '2021-08-12 14:59:07'),
-(21, 'INV2021081200009', 14, '2021-10-12', 545000.00, 45000.00, NULL, 2, 'bank_transfer', 'Lunas', '2021-08-12 14:59:07', '2021-08-12 14:59:07');
+INSERT INTO `pelunasan` (`id`, `kode_pelunasan`, `id_user`, `id_pinjaman`, `jatuh_tempo_cicilan`, `nominal_pembayaran`, `bunga`, `tanggal_pembayaran`, `cicilan_ke`, `metode_pembayaran`, `status`, `created_at`, `updated_at`) VALUES
+(1, '', NULL, 3, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-04 17:42:21', '2021-07-04 18:03:50'),
+(2, '', NULL, 3, '2021-09-05', 0.00, 0.00, '2021-07-05', 2, 'Bank UMKM', 'Lunas', '2021-07-04 17:42:21', '2021-07-04 18:16:22'),
+(3, '', NULL, 4, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-04 18:17:53', '2021-07-04 18:18:42'),
+(4, '', NULL, 5, '2021-08-05', 0.00, 0.00, '2021-07-05', 1, 'Bank UMKM', 'Lunas', '2021-07-05 15:00:11', '2021-07-05 15:09:00'),
+(5, '', NULL, 5, '2021-09-05', 0.00, 0.00, '2021-07-05', 2, 'Bank UMKM', 'Lunas', '2021-07-05 15:00:11', '2021-07-05 15:09:15'),
+(8, '', NULL, 10, '2021-09-01', 489550.00, 44550.00, '2021-08-01', 1, 'Bank UMKM', 'Lunas', '2021-08-01 08:12:20', '2021-08-01 09:40:17'),
+(9, '', NULL, 10, '2021-10-01', 489550.00, 44550.00, '2021-08-01', 2, 'Bank UMKM', 'Lunas', '2021-08-01 08:12:20', '2021-08-01 09:51:04'),
+(10, '', NULL, 11, '2021-09-01', 326367.00, 29700.00, '2021-08-01', 1, 'Bank UMKM', 'Lunas', '2021-08-01 09:52:00', '2021-08-01 09:58:39'),
+(11, '', NULL, 11, '2021-10-01', 326367.00, 29700.00, NULL, 2, NULL, 'Belum', '2021-08-01 09:52:00', '2021-08-01 09:52:00'),
+(12, '', NULL, 11, '2021-11-01', 326367.00, 29700.00, NULL, 3, NULL, 'Belum', '2021-08-01 09:52:00', '2021-08-01 09:52:00'),
+(13, 'INV2021081200001', NULL, 12, '2021-09-12', 304567.00, 0.00, '2021-08-12', 1, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 06:25:08'),
+(14, 'INV2021081200002', NULL, 12, '2021-10-12', 304567.00, 0.00, '2021-08-12', 2, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 05:58:49'),
+(15, 'INV2021081200003', NULL, 12, '2021-11-12', 304567.00, 0.00, '2021-08-12', 3, 'bank_transfer', 'Lunas', '2021-08-12 05:58:49', '2021-08-12 05:58:49'),
+(16, 'INV2021081200004', NULL, 14, '2021-09-12', 545000.00, 45000.00, NULL, 1, NULL, 'Belum', '2021-08-12 14:40:36', '2021-08-12 14:40:36'),
+(17, 'INV2021081200005', NULL, 14, '2021-10-12', 545000.00, 45000.00, NULL, 2, NULL, 'Belum', '2021-08-12 14:40:36', '2021-08-12 14:40:36'),
+(18, 'INV2021081200006', NULL, 14, '2021-09-12', 545000.00, 0.00, NULL, 1, NULL, 'Belum', '2021-08-12 14:53:30', '2021-08-12 14:53:30'),
+(19, 'INV2021081200007', NULL, 14, '2021-10-12', 545000.00, 0.00, NULL, 2, NULL, 'Belum', '2021-08-12 14:53:30', '2021-08-12 14:53:30'),
+(20, 'INV2021081200008', NULL, 14, '2021-09-12', 545000.00, 45000.00, NULL, 1, 'bank_transfer', 'Lunas', '2021-08-12 14:59:07', '2021-08-12 14:59:07'),
+(21, 'INV2021081200009', NULL, 14, '2021-10-12', 545000.00, 45000.00, NULL, 2, 'bank_transfer', 'Lunas', '2021-08-12 14:59:07', '2021-08-12 14:59:07');
 
 -- --------------------------------------------------------
 
@@ -922,6 +973,8 @@ CREATE TABLE `pinjaman` (
   `tanggal_pengajuan` date NOT NULL,
   `status` enum('Pending','Terima','Tolak','Lunas') COLLATE utf8mb4_unicode_ci NOT NULL,
   `status_pencairan` enum('Pending','Terima','Tolak') COLLATE utf8mb4_unicode_ci DEFAULT 'Pending',
+  `id_staff_pencairan` int(11) DEFAULT NULL,
+  `tanggal_pencairan` date DEFAULT NULL,
   `id_kantor_cabang` bigint(20) UNSIGNED NOT NULL,
   `asuransi_pinjaman` int(11) DEFAULT NULL,
   `alasan_penolakan_pencairan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -939,14 +992,14 @@ CREATE TABLE `pinjaman` (
 -- Dumping data for table `pinjaman`
 --
 
-INSERT INTO `pinjaman` (`id`, `kode_pinjaman`, `id_nasabah`, `id_user`, `id_jenis_pinjaman`, `nominal`, `jangka_waktu`, `tanggal_pengajuan`, `status`, `status_pencairan`, `id_kantor_cabang`, `asuransi_pinjaman`, `alasan_penolakan_pencairan`, `alasan_penolakan`, `tanggal_diterima`, `jatuh_tempo`, `tanggal_lunas`, `terbayar`, `view`, `created_at`, `updated_at`) VALUES
-(3, 'PC2021070500001', 1, 1, 2, 0.00, 2, '2021-07-05', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-07-05', '2021-09-05', '2021-07-05', 1406100, '0', '2021-07-04 17:06:07', '2021-07-04 18:16:22'),
-(4, 'PC2021070500002', 1, 1, 2, 0.00, 1, '2021-07-05', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-07-05', '2021-08-05', '2021-07-05', 1406100, '0', '2021-07-04 18:16:53', '2021-07-04 18:18:42'),
-(5, 'PC2021070500003', 1, 3, 2, 0.00, 2, '2021-07-05', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-07-05', '2021-09-05', '2021-07-05', 1406100, '0', '2021-07-05 13:27:02', '2021-07-05 15:09:15'),
-(10, 'PC2021080100004', 2, 1, 2, 1079100.00, 2, '2021-08-01', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-08-01', '2021-10-01', '2021-08-01', 1079100, '0', '2021-08-01 08:10:37', '2021-08-01 09:51:04'),
-(11, 'PC2021080100005', 2, 1, 2, 1079100.00, 3, '2021-08-01', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-08-01', '2021-11-01', '2021-08-12', 1079100, '0', '2021-08-01 09:51:24', '2021-08-01 09:58:39'),
-(12, 'PC2021081200006', 7, 1, 2, 1013700.00, 3, '2021-08-12', 'Terima', 'Terima', 7, 100000, NULL, '-', '2021-08-12', '2021-11-12', NULL, 1218268, '0', '2021-08-12 05:55:01', '2021-08-12 06:25:08'),
-(14, 'PC2021081200007', 2, 1, 2, 1090000.00, 2, '2021-08-12', 'Lunas', 'Terima', 7, 100000, NULL, '-', '2021-08-12', '2021-10-12', '2021-08-13', 1090000, '0', '2021-08-12 14:30:35', '2021-08-12 14:59:07');
+INSERT INTO `pinjaman` (`id`, `kode_pinjaman`, `id_nasabah`, `id_user`, `id_jenis_pinjaman`, `nominal`, `jangka_waktu`, `tanggal_pengajuan`, `status`, `status_pencairan`, `id_staff_pencairan`, `tanggal_pencairan`, `id_kantor_cabang`, `asuransi_pinjaman`, `alasan_penolakan_pencairan`, `alasan_penolakan`, `tanggal_diterima`, `jatuh_tempo`, `tanggal_lunas`, `terbayar`, `view`, `created_at`, `updated_at`) VALUES
+(3, 'PC2021070500001', 1, 1, 2, 0.00, 2, '2021-07-05', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-07-05', '2021-09-05', '2021-07-05', 1406100, '0', '2021-07-04 17:06:07', '2021-07-04 18:16:22'),
+(4, 'PC2021070500002', 1, 1, 2, 0.00, 1, '2021-07-05', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-07-05', '2021-08-05', '2021-07-05', 1406100, '0', '2021-07-04 18:16:53', '2021-07-04 18:18:42'),
+(5, 'PC2021070500003', 1, 3, 2, 0.00, 2, '2021-07-05', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-07-05', '2021-09-05', '2021-07-05', 1406100, '0', '2021-07-05 13:27:02', '2021-07-05 15:09:15'),
+(10, 'PC2021080100004', 2, 1, 2, 1079100.00, 2, '2021-08-01', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-08-01', '2021-10-01', '2021-08-01', 1079100, '0', '2021-08-01 08:10:37', '2021-08-01 09:51:04'),
+(11, 'PC2021080100005', 2, 1, 2, 1079100.00, 3, '2021-08-01', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-08-01', '2021-11-01', '2021-08-12', 1079100, '0', '2021-08-01 09:51:24', '2021-08-01 09:58:39'),
+(12, 'PC2021081200006', 7, 1, 2, 1013700.00, 3, '2021-08-12', 'Terima', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-08-12', '2021-11-12', NULL, 1218268, '0', '2021-08-12 05:55:01', '2021-08-12 06:25:08'),
+(14, 'PC2021081200007', 2, 1, 2, 1090000.00, 2, '2021-08-12', 'Lunas', 'Terima', NULL, NULL, 7, 100000, NULL, '-', '2021-08-12', '2021-10-12', '2021-08-13', 1090000, '0', '2021-08-12 14:30:35', '2021-08-12 14:59:07');
 
 -- --------------------------------------------------------
 
@@ -8596,6 +8649,13 @@ ALTER TABLE `data_tambahan_nasabah`
   ADD KEY `data_tambahan_nasabah_id_nasabah_foreign` (`id_nasabah`);
 
 --
+-- Indexes for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `email_verification_id_nasabah_foreign` (`id_nasabah`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -8717,7 +8777,8 @@ ALTER TABLE `password_resets`
 --
 ALTER TABLE `pelunasan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `pelunasan_id_pinjaman_foreign` (`id_pinjaman`);
+  ADD KEY `pelunasan_id_pinjaman_foreign` (`id_pinjaman`),
+  ADD KEY `pelunasan_id_user_foreign` (`id_user`);
 
 --
 -- Indexes for table `pencairan`
@@ -8819,6 +8880,12 @@ ALTER TABLE `data_tambahan_nasabah`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -8840,7 +8907,7 @@ ALTER TABLE `jenis_pinjaman`
 -- AUTO_INCREMENT for table `kantor_cabang`
 --
 ALTER TABLE `kantor_cabang`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `kategori_kriteria`
@@ -8864,7 +8931,7 @@ ALTER TABLE `master_bank`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `nasabah`
@@ -8973,6 +9040,12 @@ ALTER TABLE `data_tambahan_nasabah`
   ADD CONSTRAINT `data_tambahan_nasabah_id_nasabah_foreign` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id`);
 
 --
+-- Constraints for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD CONSTRAINT `email_verification_id_nasabah_foreign` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id`);
+
+--
 -- Constraints for table `informasi_bank`
 --
 ALTER TABLE `informasi_bank`
@@ -9015,7 +9088,8 @@ ALTER TABLE `option`
 -- Constraints for table `pelunasan`
 --
 ALTER TABLE `pelunasan`
-  ADD CONSTRAINT `pelunasan_id_pinjaman_foreign` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id`);
+  ADD CONSTRAINT `pelunasan_id_pinjaman_foreign` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id`),
+  ADD CONSTRAINT `pelunasan_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `pencairan`

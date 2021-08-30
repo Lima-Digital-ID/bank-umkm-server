@@ -62,149 +62,159 @@ class PinjamanController extends Controller
         $currentPinjaman = 0;
 
         try {
-            $currentPinjaman = Pinjaman::where('id_nasabah', auth()->user()->id)->whereIn('status', ['Pending', 'Terima'])->orderBy('kode_pinjaman', 'DESC')->count();
-            if($currentPinjaman > 0) {
+            $nasabah = Nasabah::find(auth()->user()->id);
+            $now = strtotime(date('Y-m-d'));
+            $kembaliPinjam = strtotime($nasabah->kembali_pinjam_pada);
+            if($nasabah->kembali_pinjam_pada != null && $now < $kembaliPinjam) {
+                // belum bisa melakukan pinjaman
                 $status = 'failed';
-                $message = 'Tidak boleh melakukan lebih dari 1 pinjaman secara bersamaan.';
+                $message = 'Anda belum bisa mengajukan pinjaman, karena pengajuan yang sebelumnya ditolak. Anda bisa melakukan pinjaman kembali pada '.$nasabah->kembali_pinjam_pada.' .';                
             }
             else {
-                if($request->get('id_jenis_pinjaman') != null) {
-                    $user = User::where('id_kantor_cabang', auth()->user()->id_kantor_cabang)->first();                
-                    $kodePinjaman = '';
-                    $noPinjaman = '00001';
-                    $kode = '';
-                    if($request->get('id_jenis_pinjaman') == 1)
-                        $kode = 'PU';
-                    elseif($request->get('id_jenis_pinjaman') == 2)
-                        $kode = 'PC';
-                    else
-                        $kode = 'PM';
-
-                    $countPinjaman = Pinjaman::select('kode_pinjaman')->where('kode_pinjaman', 'LIKE', $kode.'%')->count();
-                    $getDate = date('Ymd');
-
-                    if($countPinjaman > 0){
-                        $lastPinjaman = Pinjaman::where('kode_pinjaman', 'LIKE', $kode.'%')
-                                                ->orderBy('created_at', 'desc')
-                                                ->first()
-                                                ->kode_pinjaman;
-        
-                        $lastIncreament = substr($lastPinjaman, 10);
-        
-                        $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
-                    }
-                    $newPinjaman = new Pinjaman;
-                    /** Rumus Baru */
-                    $limit = $request->get('nominal');
-                    $bunga = 9 / 100 * $limit;
-                    $totalPinjaman = $limit + $bunga;
-                    /** END Rumus Baru */
-
-                    // Pinjaman Dana Umroh
-                    if($request->get('id_jenis_pinjaman') == 1) {
-                        $kodePinjaman = 'PU'.$getDate.$noPinjaman;
-                        // proses perhitungan cicilan
-                        // nilai 3 = jangka waktu cicilan 3 tahun
-
-                        $notifTitle = 'Pengajuan Pinjaman Berhasil.';
-                        $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
-                    }
-                    // END Pinjaman Dana Umroh
-                    // Pinjaman Cepat
-                    if($request->get('id_jenis_pinjaman') == 2) {
-                        if (auth()->user()->skor < 60) {
-                            $notifTitle = 'Pengajuan Pinjaman Gagal.';
-                            $notifMessage = 'Maaf pengajuan pinjaman anda gagal, anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
+                // mengecek apakah sedang melakukan pengajuan pinjaman atau belum
+                $currentPinjaman = Pinjaman::where('id_nasabah', auth()->user()->id)->whereIn('status', ['Pending', 'Terima'])->orderBy('kode_pinjaman', 'DESC')->count();
+                if($currentPinjaman > 0) {
+                    $status = 'failed';
+                    $message = 'Tidak boleh melakukan lebih dari 1 pinjaman secara bersamaan.';
+                }
+                else {
+                    if($request->get('id_jenis_pinjaman') != null) {
+                        $user = User::where('id_kantor_cabang', auth()->user()->id_kantor_cabang)->first();                
+                        $kodePinjaman = '';
+                        $noPinjaman = '00001';
+                        $kode = '';
+                        if($request->get('id_jenis_pinjaman') == 1)
+                            $kode = 'PU';
+                        elseif($request->get('id_jenis_pinjaman') == 2)
+                            $kode = 'PC';
+                        else
+                            $kode = 'PM';
+    
+                        $countPinjaman = Pinjaman::select('kode_pinjaman')->where('kode_pinjaman', 'LIKE', $kode.'%')->count();
+                        $getDate = date('Ymd');
+    
+                        if($countPinjaman > 0){
+                            $lastPinjaman = Pinjaman::where('kode_pinjaman', 'LIKE', $kode.'%')
+                                                    ->orderBy('created_at', 'desc')
+                                                    ->first()
+                                                    ->kode_pinjaman;
+            
+                            $lastIncreament = substr($lastPinjaman, 10);
+            
+                            $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
                         }
-                        else{
-                            // $user = User::where('id_kantor_cabang', auth()->user()->id_kantor_cabang)->first();                
-                            // $kodePinjaman = '';
-                            // $noPinjaman = '00001';
-                            // $countPinjaman = Pinjaman::select('kode_pinjaman')->count();
-                            // $getDate = date('Ymd');
-            
-                            // if($countPinjaman > 0){
-                            //     $lastPinjaman = Pinjaman::orderBy('kode_pinjaman', 'desc')->first()->kode_pinjaman;
-                
-                            //     $lastIncreament = substr($lastPinjaman, 10);
-                
-                            //     $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
-                
-                            // }
-            
-                            $kodePinjaman = 'PC'.$getDate.$noPinjaman;
-                                        
-                            if (auth()->user()->skor >= 80) {
-                                $newPinjaman->status = 'Terima';
-                                $date = date('Y-m-d');
-                                $newPinjaman->tanggal_diterima = $date;
-                                
-                                // $newPinjaman->id_user = auth()->user()->id;
-                                $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
-            
-                                $cabang = KantorCabang::where('id', auth()->user()->id_kantor_cabang)->get();
-                                $kantorCabang = '';
-                                
-                                if(count($cabang) == 0) {
-                                    $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda untuk mencairkan dana.';
-                                }
-                                else {
-                                    $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera untuk mencairkan dana.'.$cabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
-                                }
-            
-                                $notifTitle = 'Pengajuan Pinjaman Berhasil.';
-                                $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang;
+                        $newPinjaman = new Pinjaman;
+                        /** Rumus Baru */
+                        $limit = $request->get('nominal');
+                        $bunga = 9 / 100 * $limit;
+                        $totalPinjaman = $limit + $bunga;
+                        /** END Rumus Baru */
+    
+                        // Pinjaman Dana Umroh
+                        if($request->get('id_jenis_pinjaman') == 1) {
+                            $kodePinjaman = 'PU'.$getDate.$noPinjaman;
+                            // proses perhitungan cicilan
+                            // nilai 3 = jangka waktu cicilan 3 tahun
+    
+                            $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                            $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
+                        }
+                        // END Pinjaman Dana Umroh
+                        // Pinjaman Cepat
+                        if($request->get('id_jenis_pinjaman') == 2) {
+                            if (auth()->user()->skor < 60) {
+                                $notifTitle = 'Pengajuan Pinjaman Gagal.';
+                                $notifMessage = 'Maaf pengajuan pinjaman anda gagal, anda belum memenuhi syarat untuk mengajukan pinjaman cepat.';
                             }
-                            elseif (auth()->user()->skor < 80) {
-                                $newPinjaman->status = 'Pending';
-            
-                                $notifTitle = 'Pengajuan Pinjaman Berhasil.';
-                                $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
-                            }                            
-                        }
-                    }
-                    // END Pinjaman Cepat
-                    // Pinjaman Modal
-                    if($request->get('id_jenis_pinjaman') == 3) {
-                        $kodePinjaman = 'PM'.$getDate.$noPinjaman;
-                        // proses perhitungan cicilan
-                        // nilai 3 = jangka waktu cicilan 3 tahun
-                        $notifTitle = 'Pengajuan Pinjaman Berhasil.';
-                        $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
-                    }
-
-                    $status = 'success';
-                    $message = 'Pengajuan pinjaman berhasil.';
+                            else{
+                                // $user = User::where('id_kantor_cabang', auth()->user()->id_kantor_cabang)->first();                
+                                // $kodePinjaman = '';
+                                // $noPinjaman = '00001';
+                                // $countPinjaman = Pinjaman::select('kode_pinjaman')->count();
+                                // $getDate = date('Ymd');
+                
+                                // if($countPinjaman > 0){
+                                //     $lastPinjaman = Pinjaman::orderBy('kode_pinjaman', 'desc')->first()->kode_pinjaman;
                     
-                    // END Pinjaman Modal
-                    $newPinjaman->id_nasabah = auth()->user()->id;
-                    $newPinjaman->kode_pinjaman = $kodePinjaman;
-                    $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
-                    $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
-                    $newPinjaman->nominal = $totalPinjaman;
-                    $newPinjaman->tanggal_pengajuan = date('Y-m-d');
-                    // $newPinjaman->id_kantor_cabang = $request->get('id_kantor_cabang');
-                    if($user != null) {
-                        $newPinjaman->id_user = $user->id;
-                    }
-                    $newPinjaman->id_kantor_cabang = auth()->user()->id_kantor_cabang;
-                    $newPinjaman->alasan_penolakan = '-';
-
-                    $newPinjaman->save();
-                    $idPinjaman = $newPinjaman->id;
-
-                    $newNotification = new Notification;
+                                //     $lastIncreament = substr($lastPinjaman, 10);
+                    
+                                //     $noPinjaman = str_pad($lastIncreament + 1, 5, 0, STR_PAD_LEFT);
+                    
+                                // }
+                
+                                $kodePinjaman = 'PC'.$getDate.$noPinjaman;
+                                            
+                                if (auth()->user()->skor >= 80) {
+                                    $newPinjaman->status = 'Terima';
+                                    $date = date('Y-m-d');
+                                    $newPinjaman->tanggal_diterima = $date;
+                                    
+                                    // $newPinjaman->id_user = auth()->user()->id;
+                                    $newPinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$newPinjaman->jangka_waktu months", strtotime($date)));
+                
+                                    $cabang = KantorCabang::where('id', auth()->user()->id_kantor_cabang)->get();
+                                    $kantorCabang = '';
+                                    
+                                    if(count($cabang) == 0) {
+                                        $kantorCabang = 'Harap datang ke kantor terdekat di daerah anda untuk mencairkan dana.';
+                                    }
+                                    else {
+                                        $kantorCabang = 'Harap datang ke kantor cabang yang sudah tertera untuk mencairkan dana.'.$cabang[0]->alamat.'(Buka setiap Senin-Jumat 08.00-15.00)';
+                                    }
+                
+                                    $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil.'.$kantorCabang;
+                                }
+                                elseif (auth()->user()->skor < 80) {
+                                    $newPinjaman->status = 'Pending';
+                
+                                    $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                                    $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
+                                }                            
+                            }
+                        }
+                        // END Pinjaman Cepat
+                        // Pinjaman Modal
+                        if($request->get('id_jenis_pinjaman') == 3) {
+                            $kodePinjaman = 'PM'.$getDate.$noPinjaman;
+                            // proses perhitungan cicilan
+                            // nilai 3 = jangka waktu cicilan 3 tahun
+                            $notifTitle = 'Pengajuan Pinjaman Berhasil.';
+                            $notifMessage = 'Selamat pengajuan pinjaman anda berhasil, mohon menunggu persetujuan dari admin.';
+                        }
+    
+                        $status = 'success';
+                        $message = 'Pengajuan pinjaman berhasil.';
+                        
+                        // END Pinjaman Modal
+                        $newPinjaman->id_nasabah = auth()->user()->id;
+                        $newPinjaman->kode_pinjaman = $kodePinjaman;
+                        $newPinjaman->id_jenis_pinjaman = $request->get('id_jenis_pinjaman');
+                        $newPinjaman->jangka_waktu = $request->get('jangka_waktu');
+                        $newPinjaman->nominal = $totalPinjaman;
+                        $newPinjaman->tanggal_pengajuan = date('Y-m-d');
+                        // $newPinjaman->id_kantor_cabang = $request->get('id_kantor_cabang');
+                        if($user != null) {
+                            $newPinjaman->id_user = $user->id;
+                        }
+                        $newPinjaman->id_kantor_cabang = auth()->user()->id_kantor_cabang;
+                        $newPinjaman->alasan_penolakan = '-';
+    
+                        $newPinjaman->save();
+                        $idPinjaman = $newPinjaman->id;
+    
+                        $newNotification = new Notification;
+                
+                        $newNotification->id_nasabah = auth()->user()->id;
+                        $newNotification->title = $notifTitle;
+                        $newNotification->message = $notifMessage;
+                        $newNotification->jenis = "Pinjaman";
+                        $newNotification->device = "mobile";
             
-                    $newNotification->id_nasabah = auth()->user()->id;
-                    $newNotification->title = $notifTitle;
-                    $newNotification->message = $notifMessage;
-                    $newNotification->jenis = "Pinjaman";
-                    $newNotification->device = "mobile";
-        
-                    $newNotification->save();
+                        $newNotification->save();
+                    }
                 }
             }
-
         } catch(\Exception $e){
             $status = 'failed';
             $message = 'Pengajuan pinjaman gagal ' . $e->getMessage();

@@ -332,6 +332,12 @@ class PinjamanController extends Controller
                 $pinjaman->jatuh_tempo =  date('Y-m-d', strtotime("+$pinjaman->jangka_waktu months", strtotime($date)));               
             }
             if($setStatus=='Tolak'){
+                $kembaliPinjam = date("Y-m-d", strtotime('+3 months')); // variabel 3 bulan dari hari ini
+
+                $nasabah = Nasabah::find($pinjaman->id_nasabah);
+                $nasabah->kembali_pinjam_pada = $kembaliPinjam;
+                $nasabah->save();
+                
                 $notifTitle = 'Maaf, pengajuan pinjaman anda ditolak.';
                 $notifMessage = 'Harap bersabar ya. Mungkin Anda bisa melihat dibawah ini alasan dari pengajuan Anda ditolak. \n'.'Anda belum memenuhi syarat.';
                 $date = date('Y-m-d');
