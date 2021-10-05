@@ -19,14 +19,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            // AdminSeeder::class,
-            // AsuransiSeeder::class,
-            // MasterBankSeeder::class,
-            // JenisPinjamanSeeder::class,
-            // WilayahProvinsiSeeder::class,
-            // WilayahKabupatenSeeder::class,
-            // WilayahKecamatanSeeder::class,
-            // KantorCabangSeeder::class,
+            AdminSeeder::class,
+            AsuransiSeeder::class,
+            MasterBankSeeder::class,
+            JenisPinjamanSeeder::class,
+            WilayahProvinsiSeeder::class,
+            WilayahKabupatenSeeder::class,
+            WilayahKecamatanSeeder::class,
+            KantorCabangSeeder::class,
         ]);
     }
 }
