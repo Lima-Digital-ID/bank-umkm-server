@@ -14,7 +14,7 @@ class AddIdUserToPelunasanTable extends Migration
     public function up()
     {
         Schema::table('pelunasan', function (Blueprint $table) {
-            $table->integer('id_user')->unsigned()->nullable()->after('kode_pelunasan');
+            $table->integer('id_user')->unsigned()->nullable();
             $table->foreign('id_user')->references('id')->on('users');
         });
     }
